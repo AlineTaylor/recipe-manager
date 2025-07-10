@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeaderComponent } from './shared/layout/header/header.component';
 import { FooterComponent } from './shared/layout/footer/footer.component';
-import { SidebarComponent } from './shared/layout/sidebar/sidebar.component';
 import { RecipeCardComponent } from './shared/layout/recipe-card/recipe-card.component';
 
 @Component({
@@ -11,7 +10,6 @@ import { RecipeCardComponent } from './shared/layout/recipe-card/recipe-card.com
     HeaderComponent,
     FooterComponent,
     DashboardComponent,
-    SidebarComponent,
     RecipeCardComponent,
   ],
   templateUrl: './app.component.html',

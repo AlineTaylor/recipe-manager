@@ -15,6 +15,7 @@ body {
   --accent-hover: #a14519;
   --shadow: 0 2px 12px 0 rgba(60, 72, 88, 0.1);
   --border-radius: 18px;
+  --dark-border: rgba(0, 0, 0, 0.5);
   --font-main: "Inter", Arial, sans-serif;
   --font-size-lg: 1.25rem;
   --font-size-md: 1rem;
