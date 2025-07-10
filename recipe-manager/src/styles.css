@@ -1,4 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+  --primary-bg: #f8f6f3;
+  --sidebar-bg: #f3eadd;
+  --card-bg: #fff;
+  --accent: #b2592d;
+  --accent-hover: #a14519;
+  --shadow: 0 2px 12px 0 rgba(60, 72, 88, 0.1);
+  --border-radius: 18px;
+  --font-main: "Inter", Arial, sans-serif;
+  --font-size-lg: 1.25rem;
+  --font-size-md: 1rem;
+  --font-size-sm: 0.92rem;
+}

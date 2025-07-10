@@ -1,1 +1,8 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <ng-content select="app-sidebar" />
+  <main class="dashboard-main">
+    <section class="recipe-cards">
+      <ng-content select="app-recipe-card" />
+    </section>
+  </main>
+</div>
