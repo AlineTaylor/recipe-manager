@@ -1,10 +1,10 @@
 <mat-drawer-container class="dashboard-container" autosize>
   <!-- Angular Material Sidenav -->
   <mat-drawer #drawer class="sidebar" mode="side"> <app-sidebar /> </mat-drawer>
-  <ng-content select="app-header" />
+  <!-- Main dashboard content -->
   <main class="dashboard-main">
     <div class="toggle-menu">
-      <button type="button" matButton (click)="drawer.toggle()">Menu</button>
+      <button type="button" mat-button (click)="drawer.toggle()">Menu</button>
     </div>
     <section class="recipe-cards">
       <ng-content select="app-recipe-card" />

@@ -5,11 +5,8 @@ body {
 }
 
 .dashboard-container {
-  width: 500px;
-  height: 300px;
   border: 1px solid var(--dark-border);
   display: grid;
-  grid-template-columns: 260px 1fr;
   min-height: 100vh;
   background: var(--primary-bg);
 }
