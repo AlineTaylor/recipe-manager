@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
   selector: 'app-all-recipes',
-  imports: [],
+  standalone: true,
+  imports: [SharedModule],
   templateUrl: './all-recipes.component.html',
-  styleUrl: './all-recipes.component.css'
+  styleUrl: './all-recipes.component.css',
 })
-export class AllRecipesComponent {
-
-}
+export class AllRecipesComponent {}

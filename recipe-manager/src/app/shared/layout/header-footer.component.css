@@ -1,0 +1,21 @@
+.header,
+.footer {
+  background: var(--sidebar-bg);
+  padding: 1.2rem 2.5rem;
+  font-weight: 500;
+  color: #704a29;
+}
+
+.header {
+  grid-column: 1 / -1;
+  font-size: 1.6rem;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #ebdfd0;
+}
+
+.footer {
+  grid-column: 1 / -1;
+  font-size: var(--font-size-sm);
+  border-top: 1px solid #ebdfd0;
+  text-align: center;
+}

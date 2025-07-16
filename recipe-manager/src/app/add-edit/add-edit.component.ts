@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
   selector: 'app-add-edit',
-  imports: [],
+  standalone: true,
+  imports: [SharedModule],
   templateUrl: './add-edit.component.html',
-  styleUrl: './add-edit.component.css'
+  styleUrl: './add-edit.component.css',
 })
-export class AddEditComponent {
-
-}
+export class AddEditComponent {}

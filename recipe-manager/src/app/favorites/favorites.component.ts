@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
   selector: 'app-favorites',
-  imports: [],
+  standalone: true,
+  imports: [SharedModule],
   templateUrl: './favorites.component.html',
-  styleUrl: './favorites.component.css'
+  styleUrl: './favorites.component.css',
 })
-export class FavoritesComponent {
-
-}
+export class FavoritesComponent {}
