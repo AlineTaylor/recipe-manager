@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { SharedModule } from '../../shared.module';
 @Component({
   selector: 'app-sidebar',
-  imports: [MatSidenavModule, MatButtonModule],
+  standalone: true,
+  imports: [SharedModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })

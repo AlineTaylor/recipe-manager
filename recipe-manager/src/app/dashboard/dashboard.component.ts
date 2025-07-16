@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { SidebarComponent } from '../shared/layout/sidebar/sidebar.component';
+import { SharedModule } from '../shared/shared.module';
 @Component({
   selector: 'app-dashboard',
-  imports: [MatSidenavModule, MatButtonModule, SidebarComponent],
+  standalone: true,
+  imports: [SharedModule],
   templateUrl: './dashboard.component.html',
   styleUrls: [
     './dashboard.component.css',

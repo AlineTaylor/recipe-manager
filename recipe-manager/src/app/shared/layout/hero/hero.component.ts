@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { SharedModule } from '../../shared.module';
 
 @Component({
   selector: 'app-hero',
-  imports: [],
+  standalone: true,
+  imports: [SharedModule],
   templateUrl: './hero.component.html',
-  styleUrl: './hero.component.css'
+  styleUrl: './hero.component.css',
 })
-export class HeroComponent {
-
-}
+export class HeroComponent {}

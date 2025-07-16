@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
   selector: 'app-recipe-expand',
-  imports: [],
+  standalone: true,
+  imports: [SharedModule],
   templateUrl: './recipe-expand.component.html',
-  styleUrl: './recipe-expand.component.css'
+  styleUrl: './recipe-expand.component.css',
 })
-export class RecipeExpandComponent {
-
-}
+export class RecipeExpandComponent {}
