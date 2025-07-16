@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
+import { SidebarComponent } from '../shared/layout/sidebar/sidebar.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SidebarComponent, SharedModule],
   templateUrl: './dashboard.component.html',
   styleUrls: [
     './dashboard.component.css',
