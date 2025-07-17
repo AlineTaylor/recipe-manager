@@ -19,7 +19,10 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
     SidebarComponent,
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrls: [
+    './app.component.css',
+    './shared/layout/sidebar/sidebar.component.css',
+  ],
 })
 export class AppComponent {
   title = 'recipe-manager';

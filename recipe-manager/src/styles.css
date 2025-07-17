@@ -40,3 +40,10 @@ button.icon {
 button.icon:hover {
   color: var(--font-color-bright);
 }
+
+.mat-drawer {
+  top: 64px !important; /* match header height */
+  height: calc(
+    100vh - 120px
+  ) !important; /*sidebar height to match amin content's*/
+}
