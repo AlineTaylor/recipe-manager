@@ -1,12 +1,4 @@
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
+/* global color palette */
 :root {
   --primary-bg: #f8f6f3;
   --sidebar-bg: #f3eadd;
@@ -20,4 +12,31 @@ body {
   --font-size-lg: 1.25rem;
   --font-size-md: 1rem;
   --font-size-sm: 0.92rem;
+  --font-color-std: #61361f;
+  --font-color-bright: #623f27;
+}
+
+/* global styling ruleset for consistency */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+button {
+  cursor: pointer;
+}
+
+button.icon {
+  background: none;
+  border: none;
+  color: var(--font-color-std);
+}
+
+button.icon:hover {
+  color: var(--font-color-bright);
 }

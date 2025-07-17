@@ -13,6 +13,10 @@
   border-bottom: 1px solid #ebdfd0;
 }
 
+.header-spacer {
+  flex: 1 1 auto;
+}
+
 .footer {
   grid-column: 1 / -1;
   font-size: var(--font-size-sm);
