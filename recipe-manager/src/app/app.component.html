@@ -1,5 +1,20 @@
-<app-header />
-<app-dashboard>
-  <app-recipe-card />
-</app-dashboard>
+<mat-drawer-container class="drawer-container" autosize>
+  <!-- sidebar (mat-drawer) -->
+  <mat-drawer
+    #drawer
+    class="sidebar"
+    [mode]="isSmallScreen ? 'over' : 'side'"
+    [opened]="!isSmallScreen"
+  >
+    <app-sidebar />
+  </mat-drawer>
+  <!-- main content -->
+  <div class="main-content">
+    <app-header [drawer]="drawer" />
+    <!-- <router-outlet> -->
+    <app-dashboard> <app-recipe-card /></app-dashboard>
+    <!-- </router-outlet> -->
+    <!-- TODO dynamically load main content via routing once ready - defaulting to dashboard for now -->
+  </div>
+</mat-drawer-container>
 <app-footer />

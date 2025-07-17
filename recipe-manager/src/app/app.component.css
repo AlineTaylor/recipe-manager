@@ -1,0 +1,10 @@
+.drawer-container {
+  border: 1px solid var(--dark-border);
+  min-height: 100vh;
+  background: var(--primary-bg);
+}
+
+.main-content {
+  padding-top: 64px;
+  padding-bottom: 32px;
+}

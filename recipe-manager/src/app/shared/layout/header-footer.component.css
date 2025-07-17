@@ -7,15 +7,27 @@
 }
 
 .header {
-  grid-column: 1 / -1;
   font-size: 1.6rem;
   letter-spacing: 0.5px;
   border-bottom: 1px solid #ebdfd0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1001;
+}
+
+.header-spacer {
+  flex: 1 1 auto;
 }
 
 .footer {
-  grid-column: 1 / -1;
   font-size: var(--font-size-sm);
   border-top: 1px solid #ebdfd0;
   text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1001;
 }

@@ -1,20 +1,12 @@
-.toggle-menu {
-  display: none;
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-}
-
 .sidebar {
   background: var(--sidebar-bg);
   padding: 20px;
   box-shadow: 2px 0 16px rgba(0, 0, 0, 0.04);
   min-width: 220px;
+  width: 260px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  transition: all 0.3s;
 }
 
 .sidebar h2 {
@@ -57,16 +49,11 @@
   background: var(--accent);
   color: #fff;
 }
-@media (max-width: 600px) {
-  .sidebar {
-    min-width: 100%;
-    padding: 1rem;
-  }
-}
 
 @media (max-width: 900px) {
-  .toggle-menu {
-    display: block;
-    margin: 1rem;
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    padding: 1rem;
   }
 }

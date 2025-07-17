@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SharedModule } from '../../shared.module';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-header',
@@ -8,4 +9,6 @@ import { SharedModule } from '../../shared.module';
   templateUrl: './header.component.html',
   styleUrl: '../header-footer.component.css',
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  @Input() drawer!: MatDrawer; // take drawer from parent
+}
