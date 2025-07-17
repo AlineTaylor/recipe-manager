@@ -1,0 +1,12 @@
+.drawer-container {
+  border: 1px solid var(--dark-border);
+  display: grid;
+  min-height: 100vh;
+  background: var(--primary-bg);
+}
+
+@media (max-width: 600px) {
+  .drawer-container {
+    grid-template-columns: 1fr;
+  }
+}

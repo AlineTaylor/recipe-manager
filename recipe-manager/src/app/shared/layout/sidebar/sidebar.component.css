@@ -1,11 +1,3 @@
-.toggle-menu {
-  display: none;
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-}
-
 .sidebar {
   background: var(--sidebar-bg);
   padding: 20px;
@@ -61,12 +53,5 @@
   .sidebar {
     min-width: 100%;
     padding: 1rem;
-  }
-}
-
-@media (max-width: 900px) {
-  .toggle-menu {
-    display: block;
-    margin: 1rem;
   }
 }

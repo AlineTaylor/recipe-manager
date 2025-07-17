@@ -1,5 +1,12 @@
 <mat-toolbar class="header">
-  <button matIconButton class="icon" matTooltip="Menu" aria-label="Menu button">
+  <button
+    type="button"
+    matIconButton
+    (click)="drawer.toggle()"
+    class="icon toggle-menu"
+    matTooltip="Menu"
+    aria-label="Menu button"
+  >
     <mat-icon>menu</mat-icon>
   </button>
   <span>My Recipe Manager</span>
@@ -21,3 +28,4 @@
     <mat-icon>share</mat-icon>
   </button>
 </mat-toolbar>
+<mat-drawer #drawer class="sidebar" mode="side"> <app-sidebar /> </mat-drawer>

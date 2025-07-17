@@ -4,26 +4,13 @@ body {
   margin: 0;
 }
 
-.dashboard-container {
-  border: 1px solid var(--dark-border);
-  display: grid;
-  min-height: 100vh;
-  background: var(--primary-bg);
-}
-
 .dashboard-main {
   padding: 2.2rem 2.5rem;
   background: var(--primary-bg);
 }
 
-.recipe-cards {
+.recipe-cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.6rem;
-}
-
-@media (max-width: 600px) {
-  .dashboard-container {
-    grid-template-columns: 1fr;
-  }
 }
