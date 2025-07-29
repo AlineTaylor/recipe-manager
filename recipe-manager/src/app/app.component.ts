@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeaderComponent } from './shared/layout/header/header.component';
 import { FooterComponent } from './shared/layout/footer/footer.component';
 import { RecipeCardComponent } from './shared/layout/recipe-card/recipe-card.component';
@@ -7,6 +6,7 @@ import { SharedModule } from './shared/shared.module';
 import { SidebarComponent } from './shared/layout/sidebar/sidebar.component';
 import { MatDrawer } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +14,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
     SharedModule,
     HeaderComponent,
     FooterComponent,
-    DashboardComponent,
     RecipeCardComponent,
     SidebarComponent,
+    RouterOutlet,
   ],
   templateUrl: './app.component.html',
   styleUrls: [
