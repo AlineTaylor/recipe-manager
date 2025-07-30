@@ -1,10 +1,30 @@
 <div class="sidebar">
   <h2>Recipe Organizer</h2>
   <nav>
-    <a href="#">Home</a>
-    <a href="#">All Recipes</a>
-    <a href="#">Shopping List</a>
-    <a href="#">Info</a>
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Home</a
+    >
+    <a
+      routerLink="/my-recipes"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >All Recipes</a
+    >
+    <a
+      routerLink="/shopping-list"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Shopping List</a
+    >
+    <a
+      routerLink="/info"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Info</a
+    >
     <a href="#">Log out</a>
   </nav>
   <button class="new-recipe-btn">+ New Recipe</button>

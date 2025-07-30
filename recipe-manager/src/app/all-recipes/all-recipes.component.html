@@ -1,1 +1,13 @@
-<p>all-recipes works!</p>
+@defer(on immediate) {
+<div class="recipe-container">
+  @for (recipe of recipes; track recipe.id) {
+  <div class="recipe-preview-container">
+    <div class="recipe-preview-content">
+      <h2>{{ recipe.title }}</h2>
+    </div>
+    <p>{{ recipe.createdAt }}</p>
+    <p>{{ recipe.updatedAt }}</p>
+  </div>
+  }
+</div>
+}

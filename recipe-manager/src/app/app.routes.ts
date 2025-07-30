@@ -6,9 +6,8 @@ import { AllRecipesComponent } from './all-recipes/all-recipes.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'welcome', component: LandingComponent },
-  // might want to think about how to combine login and landing
+  { path: 'login', redirectTo: 'login' },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'my-recipes', component: AllRecipesComponent },
   { path: 'shopping-list', component: ShoppingListComponent },
@@ -16,14 +15,14 @@ export const routes: Routes = [
 
   // lazy loading
   {
-    path: 'login',
-    loadComponent: () =>
-      import('./auth/auth.component').then((m) => m.AuthComponent),
-  },
-  {
     path: 'welcome',
     loadComponent: () =>
       import('./landing/landing.component').then((m) => m.LandingComponent),
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./auth/auth.component').then((m) => m.AuthComponent),
   },
   {
     path: 'dashboard',

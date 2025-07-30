@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterLinkActive } from '@angular/router';
 
 @NgModule({
   declarations: [],
@@ -17,6 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatToolbarModule,
     MatIconModule,
     MatTooltipModule,
+    RouterLinkActive,
   ],
   exports: [
     CommonModule,
@@ -26,6 +28,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatToolbarModule,
     MatIconModule,
     MatTooltipModule,
+    RouterLinkActive,
   ],
 })
 export class SharedModule {}

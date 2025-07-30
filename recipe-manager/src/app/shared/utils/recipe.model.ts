@@ -1,15 +1,17 @@
 export interface Recipe {
-  id: string;
+  id: number;
+  user_id: number;
   title: string;
-  description: string;
-  imageUrl: string;
+  // description: string;
+  // imageUrl: string;
+  servings: number;
+  cookingTime: number; // in min
+  isFavorite: boolean;
+  inShoppingList: boolean;
+  // TODO figure out how to set up nested attributes in this model
   ingredients: string[];
   instructions: string[];
-  prepTime: number; // in min
-  cookTime: number; // in min
-  servings: number;
-  category: string; // TODO create presets for selection later
-  isFavorite: boolean; //TODO create a toggle button for favoriting
-  createdAt?: Date; // optional
-  updatedAt?: Date; // optional
+  labels: boolean[];
+  createdAt: Date;
+  updatedAt: Date;
 }
