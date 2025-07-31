@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -19,6 +19,7 @@ import { RouterLinkActive } from '@angular/router';
     MatIconModule,
     MatTooltipModule,
     RouterLinkActive,
+    ReactiveFormsModule,
   ],
   exports: [
     CommonModule,
@@ -29,6 +30,7 @@ import { RouterLinkActive } from '@angular/router';
     MatIconModule,
     MatTooltipModule,
     RouterLinkActive,
+    ReactiveFormsModule,
   ],
 })
 export class SharedModule {}
