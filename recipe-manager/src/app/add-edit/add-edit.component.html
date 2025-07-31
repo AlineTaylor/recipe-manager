@@ -1,1 +1,59 @@
-<p>add-edit works!</p>
+<!-- <form [formGroup]="recipeForm" (ngSubmit)="save()">
+  <input formControlName="title" placeholder="Title" />
+  <input formControlName="servings" type="number" placeholder="Servings" />
+  <input
+    formControlName="cooking_time"
+    type="number"
+    placeholder="Cooking Time"
+  />
+  <label><input type="checkbox" formControlName="favorite" /> Favorite</label>
+  <label
+    ><input type="checkbox" formControlName="shopping_list" /> Shopping
+    List</label
+  >
+
+  <h3>Ingredients</h3>
+  <div formArrayName="ingredients">
+    <div *ngFor="let ing of ingredients.controls; let i = index"
+      [formGroupName]="i"
+    >
+      <input formControlName="name" placeholder="Ingredient" />
+      <input formControlName="quantity" type="number" placeholder="Quantity" />
+      <input formControlName="unit" placeholder="Unit" />
+      <button type="button" (click)="removeIngredient(i)">🗑️</button>
+    </div>
+  </div>
+  <button type="button" (click)="addIngredient()">+ Ingredient</button>
+
+  <h3>Instructions</h3>
+  <div formArrayName="instructions">
+    <div *ngFor="let ins of instructions.controls; let i = index"
+      [formGroupName]="i"
+    >
+      <input formControlName="step_number" type="number" />
+      <textarea
+        formControlName="step_content"
+        placeholder="Step description"
+      ></textarea>
+      <button type="button" (click)="removeInstruction(i)">🗑️</button>
+    </div>
+  </div>
+  <button type="button" (click)="addInstruction()">+ Step</button>
+
+  <h3>Labels</h3>
+  <div formGroupName="labels">
+    <label
+      ><input type="checkbox" formControlName="vegetarian" /> Vegetarian</label
+    >
+    <label><input type="checkbox" formControlName="vegan" /> Vegan</label>
+    <label
+      ><input type="checkbox" formControlName="gluten_free" /> Gluten
+      Free</label
+    >
+    <label
+      ><input type="checkbox" formControlName="dairy_free" /> Dairy Free</label
+    >
+  </div>
+
+  <button type="submit" [disabled]="recipeForm.invalid">Save Recipe</button>
+</form> -->

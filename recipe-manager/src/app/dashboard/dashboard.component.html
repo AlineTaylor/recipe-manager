@@ -1,5 +1,11 @@
 <main class="dashboard-main">
-  <section class="recipe-cards-container">
-    <ng-content select="app-recipe-card" />
-  </section>
+  <h1 class="dashboard-title">Welcome to Your Recipe Dashboard</h1>
+  <p class="dashboard-description">
+    Here you can manage your recipes, view favorites, and explore new dishes.
+  </p>
+  <p class="dashboard-instructions">Use the navigation menu to get started.</p>
+  <app-favorites>
+    <section class="recipe-cards-container"></section
+  ></app-favorites>
+  <app-latest> <section class="recipe-cards-container"></section></app-latest>
 </main>

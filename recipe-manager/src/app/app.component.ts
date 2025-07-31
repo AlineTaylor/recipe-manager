@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { HeaderComponent } from './shared/layout/header/header.component';
 import { FooterComponent } from './shared/layout/footer/footer.component';
-import { RecipeCardComponent } from './shared/layout/recipe-card/recipe-card.component';
 import { SharedModule } from './shared/shared.module';
 import { SidebarComponent } from './shared/layout/sidebar/sidebar.component';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -14,7 +13,6 @@ import { RouterOutlet } from '@angular/router';
     SharedModule,
     HeaderComponent,
     FooterComponent,
-    RecipeCardComponent,
     SidebarComponent,
     RouterOutlet,
   ],

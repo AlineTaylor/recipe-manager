@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLinkActive } from '@angular/router';
+import { RouterLinkActive, RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [],
@@ -20,6 +20,7 @@ import { RouterLinkActive } from '@angular/router';
     MatTooltipModule,
     RouterLinkActive,
     ReactiveFormsModule,
+    RouterModule,
   ],
   exports: [
     CommonModule,
@@ -31,6 +32,7 @@ import { RouterLinkActive } from '@angular/router';
     MatTooltipModule,
     RouterLinkActive,
     ReactiveFormsModule,
+    RouterModule,
   ],
 })
 export class SharedModule {}

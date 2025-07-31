@@ -1,24 +1,10 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { LandingComponent } from './landing/landing.component';
-import { InfoComponent } from './info/info.component';
-import { AllRecipesComponent } from './all-recipes/all-recipes.component';
-import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 
 export const routes: Routes = [
   { path: 'welcome', component: LandingComponent },
-  { path: 'login', redirectTo: 'login' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'my-recipes', component: AllRecipesComponent },
-  { path: 'shopping-list', component: ShoppingListComponent },
-  { path: 'info', component: InfoComponent },
 
   // lazy loading
-  {
-    path: 'welcome',
-    loadComponent: () =>
-      import('./landing/landing.component').then((m) => m.LandingComponent),
-  },
   {
     path: 'login',
     loadComponent: () =>
@@ -37,6 +23,11 @@ export const routes: Routes = [
       import('./all-recipes/all-recipes.component').then(
         (m) => m.AllRecipesComponent
       ),
+  },
+  {
+    path: 'recipe-editor',
+    loadComponent: () =>
+      import('./add-edit/add-edit.component').then((m) => m.AddEditComponent),
   },
   {
     path: 'shopping-list',
