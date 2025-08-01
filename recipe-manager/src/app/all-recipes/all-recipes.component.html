@@ -1,14 +1,47 @@
-<p>All recipes works!</p>
-@defer(on immediate) {
-<div class="recipe-container">
-  @for (recipe of recipes; track recipe.id) {
-  <div class="recipe-preview-container">
-    <div class="recipe-preview-content">
-      <h2>{{ recipe.title }}</h2>
+<section>
+  <h1>Search Results</h1>
+
+  <div class="results-container">
+    <div class="section-header">
+      <h2>Best Matches</h2>
+      <!-- TODO Update selection once fixed -->
+      <!-- <select (change)="filterByType($event)">
+        <option value="">All Types</option>
+        <option value="vegetarian">Vegetarian</option>
+        <option value="vegan">Vegan</option>
+        <option value="gluten_free">Gluten-free</option>
+        <option value="dairy_free">Dairy-free</option>
+      </select> -->
+      <div class="button-group">
+        <button
+          title="Share via email"
+          matTooltip="Share via email"
+          class="share-button share-results-button"
+          mat-button
+          (click)="openDialog(emailSharingComponent, 'results')"
+        >
+          <i class="fas fa-envelope"></i></button
+        ><button
+          title="Print this page"
+          matTooltip="Print this page"
+          class="share-button"
+          onClick="window.print()"
+        >
+          <i class="fas fa-print"></i>
+        </button>
+      </div>
     </div>
-    <p>{{ recipe.createdAt }}</p>
-    <p>{{ recipe.updatedAt }}</p>
+
+    <ul class="results-list">
+      <app-recipe-card type="recipes" class="results-item"></app-recipe-card>
+    </ul>
+
+    <mat-paginator
+      [length]="100"
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page"
+    >
+    </mat-paginator>
   </div>
-  }
-</div>
-}
+</section>
