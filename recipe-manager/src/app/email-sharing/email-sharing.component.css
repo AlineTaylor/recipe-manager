@@ -1,0 +1,29 @@
+:host {
+  display: block;
+  padding: 16px;
+  max-width: 400px;
+  width: 100%;
+  background-color: var(--secondary-color-light);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 10px;
+}
+
+input {
+  padding: 8px;
+  font-size: 0.95rem;
+  border: 1px solid var(--input-background-color);
+  border-radius: 6px;
+}
+
+button[type="submit"] {
+  font-weight: 600;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
