@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { AuthService } from '../shared/utils/services/auth.service';
 import { Router } from '@angular/router';
@@ -13,9 +13,17 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './auth.component.css',
 })
 export class AuthComponent {
-  email: string = '';
-  email_confirmation: string = '';
-  password: string = '';
+  isSignup = signal(false);
+  showPassword = signal(false);
+  showPasswordConfirm = signal(false);
+
+  email = '';
+  email_confirmation = '';
+  password = '';
+  password_confirmation = '';
+  first_name = '';
+  last_name = '';
+  preferred_system = '';
 
   constructor(
     private authService: AuthService,
@@ -24,6 +32,11 @@ export class AuthComponent {
     private snackBar: MatSnackBar
   ) {}
 
+  toggleAuthForm() {
+    this.isSignup.update((val) => !val);
+  }
+
+  // authentication for existing users
   login() {
     this.authService
       .login(this.email, this.email_confirmation, this.password)
@@ -48,6 +61,53 @@ export class AuthComponent {
               verticalPosition: 'top',
             }
           );
+        },
+      });
+  }
+
+  // signing up new users
+
+  user = {
+    email: '',
+    email_confirmation: '',
+    password: '',
+    password_confirmation: '',
+  };
+  onSubmit() {
+    if (this.password !== this.password_confirmation) {
+      this.snackBar.open('Passwords do not match', 'Dismiss', {
+        duration: 3000,
+      });
+      return;
+    }
+
+    this.authService
+      .signUp({
+        email: this.email,
+        email_confirmation: this.email_confirmation,
+        password: this.password,
+        password_confirmation: this.password_confirmation,
+        first_name: this.first_name,
+        last_name: this.last_name,
+        preferred_system: this.preferred_system,
+      })
+      .subscribe({
+        next: (res) => {
+          this.snackBar.open(
+            'Account created! You can now log in.',
+            'Dismiss',
+            {
+              duration: 3000,
+            }
+          );
+          this.isSignup.set(false); // switch back to login view
+        },
+        error: (err) => {
+          console.error('Signup failed', err);
+          this.snackBar.open('Signup failed. Please try again.', 'Dismiss', {
+            duration: 5000,
+            panelClass: 'snackbar-error',
+          });
         },
       });
   }

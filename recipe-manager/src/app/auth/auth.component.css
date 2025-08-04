@@ -1,12 +1,32 @@
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;
-  overflow: visible;
-  padding: 1.5rem;
-  max-width: 320px;
-  margin: 0 auto;
+  gap: 16px;
+  width: 100%;
+  max-width: 360px;
+  padding: 24px;
 }
+
+.full-width {
+  width: 100%;
+}
+
 h1 {
+  text-align: center;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 1.5rem;
   color: var(--font-color-std);
-  font-weight: normal;
+}
+
+.toggle-btn {
+  margin-top: 4px;
+  font-size: 0.875rem;
+  color: #3f51b5;
 }

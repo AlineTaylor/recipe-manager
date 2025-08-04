@@ -36,5 +36,9 @@ export class AuthService {
     this.token.set(null);
     this.router.navigate(['/welcome']);
   }
+
+  signUp(user: any) {
+    return this.http.post('http://localhost:3000/users', user);
+  }
   readonly tokenSignal = this.token.asReadonly(); // for component binding
 }
