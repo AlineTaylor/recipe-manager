@@ -1,21 +1,25 @@
-export interface IngredientLists {
+export interface Ingredient {
+  id: number;
+  ingredient: string;
+}
+export interface IngredientList {
   id: number;
   ingredient_id: number;
-  recipe_id: number;
   metric_qty: number;
   metric_unit: string;
   imperial_qty: number;
   imperial_unit: string;
+  ingredient: Ingredient | null;
 }
 
-export interface Instructions {
+export interface Instruction {
   id: number;
-  recipe_id: number;
   step_number: number;
   step_content: string;
 }
 
-export interface Labels {
+export interface Label {
+  id?: number;
   vegetarian: boolean;
   vegan: boolean;
   gluten_free: boolean;
@@ -24,7 +28,6 @@ export interface Labels {
 
 export interface Recipe {
   id: number;
-  user_id: number;
   title: string;
   // description: string;
   // imageUrl: string;
@@ -32,9 +35,9 @@ export interface Recipe {
   cooking_time: number; // in min
   favorite: boolean;
   shopping_list: boolean;
-  ingredients: IngredientLists[];
-  instructions: Instructions[];
-  labels: Labels[];
-  createdAt: Date;
-  updatedAt: Date;
+  ingredient_lists: IngredientList[];
+  instructions: Instruction[];
+  label: Label | null;
+  created_at?: Date;
+  updated_at?: Date;
 }
