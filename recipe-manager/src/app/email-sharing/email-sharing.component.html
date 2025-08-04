@@ -1,0 +1,15 @@
+<form (submit)="emailMessage()">
+  <label for="emailAddress">Email address:</label>
+  <input
+    type="email"
+    name="emailAddress"
+    id="emailAddress"
+    required
+    placeholder="Enter your email address"
+    [(ngModel)]="shareService.emailAddress"
+  />
+  <!--established two-way data binding with ngModel then an event listener to handle the result of said interaction (signal update)-->
+  <button title="Email parts list" matTooltip="Email parts list" type="submit">
+    Send
+  </button>
+</form>

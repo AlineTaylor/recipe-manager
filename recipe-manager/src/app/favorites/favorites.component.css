@@ -1,0 +1,89 @@
+:host {
+  display: block;
+  padding: 2rem;
+  background-color: var(--secondary-color-light);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--secondary-color-dark);
+}
+
+.favorites-container {
+  background-color: var(--background-color-light);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px var(--shadow-color-light);
+}
+
+/* section headers */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-color-dark);
+}
+
+/* share button */
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.share-button {
+  color: var(--text-color-dark);
+  border: none;
+  background-color: var(--background-color-light);
+  cursor: pointer;
+  font-size: xx-large;
+  transition: all 0.3s ease-in-out;
+  text-shadow: 0 1px 6px var(--shadow-color-dark);
+}
+
+.share-button:hover {
+  transform: scale(1.1);
+}
+
+.favorite-items-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding: 0;
+}
+
+.favorite-item {
+  flex: 1 1 250px;
+  background-color: var(--primary-color-light);
+  border-radius: 10px;
+  padding: 1rem;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .favorites-container {
+    max-width: 100%;
+    margin: auto;
+    margin-top: 2rem;
+  }
+
+  :host {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
