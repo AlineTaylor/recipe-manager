@@ -7,6 +7,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLinkActive, RouterModule } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [],
@@ -21,6 +23,8 @@ import { RouterLinkActive, RouterModule } from '@angular/router';
     RouterLinkActive,
     ReactiveFormsModule,
     RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   exports: [
     CommonModule,
@@ -33,6 +37,8 @@ import { RouterLinkActive, RouterModule } from '@angular/router';
     RouterLinkActive,
     ReactiveFormsModule,
     RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
 })
 export class SharedModule {}

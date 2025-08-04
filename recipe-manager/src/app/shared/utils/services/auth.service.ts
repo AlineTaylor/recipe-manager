@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private token = signal<string | null>(localStorage.getItem('token'));
+  public attemptedUrl: string | null = null;
 
   constructor(private http: HttpClient, private router: Router) {}
 

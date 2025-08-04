@@ -47,3 +47,9 @@ button.icon:hover {
     100vh - 120px
   ) !important; /*sidebar height to match amin content's*/
 }
+
+.snackbar-error {
+  background-color: #d32f2f;
+  color: white;
+  font-weight: 500;
+}
