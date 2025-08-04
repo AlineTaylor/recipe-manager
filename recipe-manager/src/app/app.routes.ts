@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LandingComponent } from './landing/landing.component';
+import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
   { path: 'welcome', component: LandingComponent },
@@ -12,6 +13,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./dashboard/dashboard.component').then(
         (m) => m.DashboardComponent
@@ -19,6 +21,7 @@ export const routes: Routes = [
   },
   {
     path: 'my-recipes',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./all-recipes/all-recipes.component').then(
         (m) => m.AllRecipesComponent
@@ -26,11 +29,13 @@ export const routes: Routes = [
   },
   {
     path: 'recipe-editor',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./add-edit/add-edit.component').then((m) => m.AddEditComponent),
   },
   {
     path: 'shopping-list',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./shopping-list/shopping-list.component').then(
         (m) => m.ShoppingListComponent

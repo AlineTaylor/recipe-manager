@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { AuthService } from '../shared/utils/services/auth.service';
 import { Router } from '@angular/router';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-auth',
@@ -15,7 +16,11 @@ export class AuthComponent {
   email_confirmation: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private dialogRef: MatDialogRef<AuthComponent>
+  ) {}
 
   login() {
     this.authService
@@ -30,5 +35,6 @@ export class AuthComponent {
           console.error('Login error', error);
         },
       });
+    this.dialogRef.close();
   }
 }

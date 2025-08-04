@@ -11,14 +11,31 @@
   </button>
   <span>My Recipe Manager</span>
   <span class="header-spacer"></span>
-  <button
-    matIconButton
-    class="icon favorite-icon"
-    matTooltip="Favorites"
-    aria-label="Favorite button"
+  <span
+    >@if (authService.isLoggedIn()){
+    <button
+      matIconButton
+      class="icon logout-icon"
+      matTooltip="Logout"
+      aria-label="Logout button"
+      mat-button
+      (click)="logout()"
+    >
+      <mat-icon>logout</mat-icon>
+    </button>
+    }@else {
+    <button
+      matIconButton
+      class="icon login-icon"
+      matTooltip="Login"
+      aria-label="Login button"
+      mat-button
+      (click)="openDialog(authComponent)"
+    >
+      <mat-icon>login</mat-icon>
+    </button>
+    }</span
   >
-    <mat-icon>favorite</mat-icon>
-  </button>
   <button
     matIconButton
     class="icon"

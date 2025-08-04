@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly tokenSubject = new BehaviorSubject<string | null>(null);
+  private token = signal<string | null>(localStorage.getItem('token'));
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -20,20 +20,21 @@ export class AuthService {
 
   setToken(token: string) {
     localStorage.setItem('token', token);
-    this.tokenSubject.next(token);
+    this.token.set(token);
   }
 
   getToken() {
-    return localStorage.getItem('token');
+    return this.token();
   }
 
   isLoggedIn() {
-    return !!this.getToken();
+    return !!this.token();
   }
 
   logout() {
     localStorage.removeItem('token');
-    this.tokenSubject.next(null);
-    this.router.navigate(['/login']);
+    this.token.set(null);
+    this.router.navigate(['/welcome']);
   }
+  readonly tokenSignal = this.token.asReadonly(); // for component binding
 }

@@ -24,9 +24,7 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'recipe-manager';
-
   @ViewChild('drawer') drawer!: MatDrawer;
-
   isSmallScreen = false;
 
   constructor(private breakpointObserver: BreakpointObserver) {
