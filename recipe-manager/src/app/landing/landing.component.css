@@ -1,0 +1,8 @@
+.landing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+  background-color: #fef8f1;
+  min-height: 100vh;
+}

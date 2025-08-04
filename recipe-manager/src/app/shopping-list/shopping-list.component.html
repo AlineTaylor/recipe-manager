@@ -1,1 +1,25 @@
-<p>shopping-list works!</p>
+<div class="shopping-list-container">
+  <h1>🛒 Shopping List</h1>
+  <p class="subtitle">All the ingredients you need from your saved recipes.</p>
+
+  @for(item of shoppingList(); track item.id){
+  <div class="ingredient-group">
+    <div class="ingredient-card">
+      <p class="ingredient-name">{{ item.ingredient }}</p>
+      <p class="ingredient-qty">
+        {{ item.metric_qty }}
+        {{ item.metric_unit }} @if(item.imperial_qty){<span
+          >| {{ item.imperial_qty }} {{ item.imperial_unit }}</span
+        >}
+      </p>
+    </div>
+  </div>
+  } @if(!shoppingList.length){
+  <div class="empty-state">
+    <p>Your shopping list is empty.</p>
+    <a routerLink="/my-recipes" routerLinkActive="active-link" class="back-link"
+      >← Back to Recipes</a
+    >
+  </div>
+  }
+</div>
