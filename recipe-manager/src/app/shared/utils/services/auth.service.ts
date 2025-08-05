@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(email: string, email_confirmation: string, password: string) {
-    return this.http.post<{ token: string }>('http://localhost:3000/login', {
+    return this.http.post<{ token: string }>(`${environment.apiUrl}/login`, {
       email,
       password,
     });
@@ -37,8 +38,8 @@ export class AuthService {
     this.router.navigate(['/welcome']);
   }
 
-  signUp(user: any) {
-    return this.http.post('http://localhost:3000/users', user);
+  signUp(data: any) {
+    return this.http.post(`${environment.apiUrl}/users`, data);
   }
   readonly tokenSignal = this.token.asReadonly(); // for component binding
 }

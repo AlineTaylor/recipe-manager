@@ -3,9 +3,15 @@ import { jwtDecode } from 'jwt-decode';
 
 interface DecodedToken {
   user_id: number;
-  first_name: string;
-  email: string;
   exp: number;
+}
+
+export interface User {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  preferred_system: string;
 }
 
 @Injectable({
@@ -28,6 +34,7 @@ export class UserService {
   }
 
   getFirstName(): string {
+    console.log(this.getUser()?.first_name);
     return this.getUser()?.first_name ?? '';
   }
 }

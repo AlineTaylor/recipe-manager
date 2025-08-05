@@ -7,13 +7,7 @@ import {
 } from '@angular/core';
 import { SharedModule } from '../../shared.module';
 import { MatDrawer } from '@angular/material/sidenav';
-import {
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogTitle,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthComponent } from '../../../auth/auth.component';
 import { ComponentType } from '@angular/cdk/overlay';
 import { AuthService } from '../../utils/services/auth.service';

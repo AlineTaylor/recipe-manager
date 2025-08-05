@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, ViewChild } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { Recipe } from '../shared/utils/recipe.model';
 import { ComponentType } from '@angular/cdk/overlay';
@@ -6,19 +6,42 @@ import { MatDialog } from '@angular/material/dialog';
 import { EmailSharingComponent } from '../email-sharing/email-sharing.component';
 import { RecipeService } from '../shared/utils/services/recipe.service';
 import { RecipeCardComponent } from '../shared/layout/recipe-card/recipe-card.component';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-all-recipes',
   standalone: true,
-  imports: [SharedModule, RecipeCardComponent, MatPaginator],
+  imports: [SharedModule, RecipeCardComponent],
   templateUrl: './all-recipes.component.html',
   styleUrl: './all-recipes.component.css',
 })
 export class AllRecipesComponent {
   @Input({ required: true }) recipes: Recipe[] = [];
-  //result filtering
+  paginatedRecipes: Recipe[] = [];
   private recipeService = inject(RecipeService);
+
+  //displaying cards
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  ngOnInit() {
+    this.recipeService.getRecipes().subscribe((data) => {
+      this.recipes = data;
+      this.setPaginatedData();
+    });
+  }
+
+  onPageChange(event: PageEvent) {
+    this.setPaginatedData(event.pageIndex, event.pageSize);
+  }
+
+  setPaginatedData(pageIndex: number = 0, pageSize: number = 5) {
+    const start = pageIndex * pageSize;
+    const end = start + pageSize;
+    this.paginatedRecipes = this.recipes.slice(start, end);
+  }
+
+  //result filtering
+
   // results = this.searchService.filteredResults;
 
   // updateSearch(type: string) {

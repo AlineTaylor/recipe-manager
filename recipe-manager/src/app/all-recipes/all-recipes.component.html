@@ -32,16 +32,18 @@
       </div>
     </div>
 
-    <ul class="results-list">
-      <app-recipe-card type="recipes" class="results-item"></app-recipe-card>
-    </ul>
+    <div class="recipe-grid results-list">
+      @for (recipe of paginatedRecipes; track recipe.id) {
+      <app-recipe-card [recipe]="recipe" type="recipes" class="results-item" />
+      }
+    </div>
 
     <mat-paginator
-      [length]="100"
+      [length]="recipes.length"
       [pageSize]="10"
       [pageSizeOptions]="[5, 10, 25, 100]"
       aria-label="Select page"
-    >
-    </mat-paginator>
+      (page)="onPageChange($event)"
+    ></mat-paginator>
   </div>
 </section>

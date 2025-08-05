@@ -10,6 +10,8 @@ import { RouterLinkActive, RouterModule } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import { MatPaginator } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [],
@@ -27,6 +29,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatCardModule,
+    MatPaginator,
   ],
   exports: [
     CommonModule,
@@ -42,6 +46,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatCardModule,
+    MatPaginator,
   ],
 })
 export class SharedModule {}
