@@ -7,7 +7,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root',
 })
 export class AuthService {
-  private token = signal<string | null>(localStorage.getItem('token'));
+  private token = signal<string | null>(localStorage.getItem('jwt_token'));
   public attemptedUrl: string | null = null;
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -20,7 +20,7 @@ export class AuthService {
   }
 
   setToken(token: string) {
-    localStorage.setItem('token', token);
+    localStorage.setItem('jwt_token', token);
     this.token.set(token);
   }
 
@@ -33,7 +33,7 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('jwt_token');
     this.token.set(null);
     this.router.navigate(['/welcome']);
   }

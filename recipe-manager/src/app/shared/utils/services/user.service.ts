@@ -1,40 +1,49 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
+import { User } from '../user.model';
+import { environment } from '../../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from './auth.service';
 
 interface DecodedToken {
   user_id: number;
   exp: number;
 }
 
-export interface User {
-  id: number;
-  email: string;
-  first_name: string;
-  last_name: string;
-  preferred_system: string;
-}
-
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private tokenKey = 'jwt_token';
+  private authService = inject(AuthService);
+  private http = inject(HttpClient);
+  private user = signal<User | null>(null);
 
-  constructor() {}
-
-  getUser(): DecodedToken | null {
-    const token = localStorage.getItem(this.tokenKey);
+  getDecodedToken(): DecodedToken | null {
+    const token = this.authService.getToken();
     if (!token) return null;
 
     try {
       return jwtDecode<DecodedToken>(token);
-    } catch (e) {
+    } catch {
       return null;
     }
   }
 
-  getFirstName(): string {
-    console.log(this.getUser()?.first_name);
-    return this.getUser()?.first_name ?? '';
+  // load and expose user data
+
+  loadUser(): void {
+    const decoded = this.getDecodedToken();
+    if (!decoded?.user_id) return;
+
+    this.http
+      .get<User>(`${environment.apiUrl}/users/${decoded.user_id}`)
+      .subscribe({
+        next: (userData) => this.user.set(userData),
+        error: (err) => console.error('Error fetching user:', err),
+      });
+  }
+
+  getUserSignal() {
+    return this.user.asReadonly();
   }
 }
