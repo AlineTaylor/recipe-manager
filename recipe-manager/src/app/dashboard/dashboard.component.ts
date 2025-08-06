@@ -3,7 +3,6 @@ import { SharedModule } from '../shared/shared.module';
 import { FavoritesComponent } from '../favorites/favorites.component';
 import { LatestComponent } from '../latest/latest.component';
 import { UserService } from '../shared/utils/services/user.service';
-import { User } from '../shared/utils/user.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,

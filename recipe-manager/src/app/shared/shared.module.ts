@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [],
@@ -31,6 +32,7 @@ import { MatPaginator } from '@angular/material/paginator';
     MatSelectModule,
     MatCardModule,
     MatPaginator,
+    MatButtonToggleModule,
   ],
   exports: [
     CommonModule,
@@ -48,6 +50,7 @@ import { MatPaginator } from '@angular/material/paginator';
     MatSelectModule,
     MatCardModule,
     MatPaginator,
+    MatButtonToggleModule,
   ],
 })
 export class SharedModule {}

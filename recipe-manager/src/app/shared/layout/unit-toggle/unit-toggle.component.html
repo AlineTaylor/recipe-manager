@@ -1,0 +1,8 @@
+<mat-button-toggle-group
+  [value]="unitSystem()"
+  (change)="setSystem($event.value)"
+  exclusive
+>
+  <mat-button-toggle value="metric">Metric</mat-button-toggle>
+  <mat-button-toggle value="imperial">Imperial</mat-button-toggle>
+</mat-button-toggle-group>
