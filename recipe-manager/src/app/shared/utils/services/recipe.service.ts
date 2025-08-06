@@ -20,14 +20,18 @@ export class RecipeService {
     );
   }
 
-  createRecipe(recipe: Recipe): Observable<Recipe> {
-    return this.http.post<Recipe>(`${environment.apiUrl}/recipes`, { recipe });
+  createRecipe(payload: { recipe: Partial<Recipe> }): Observable<Recipe> {
+    return this.http.post<Recipe>(`${environment.apiUrl}/recipes`, payload);
   }
 
-  updateRecipe(id: number, recipe: Recipe): Observable<Recipe> {
-    return this.http.put<Recipe>(`${environment.apiUrl}/recipes/${id}`, {
-      recipe,
-    });
+  updateRecipe(
+    id: number,
+    payload: { recipe: Partial<Recipe> }
+  ): Observable<Recipe> {
+    return this.http.put<Recipe>(
+      `${environment.apiUrl}/recipes/${id}`,
+      payload
+    );
   }
 
   deleteRecipe(id: number): Observable<void> {

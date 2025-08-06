@@ -27,5 +27,12 @@
     >
     <a href="#">Log out</a>
   </nav>
-  <button class="new-recipe-btn">+ New Recipe</button>
+  <button class="new-recipe-btn">
+    <a
+      routerLink="/recipe-editor"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >+ New Recipe</a
+    >
+  </button>
 </div>
