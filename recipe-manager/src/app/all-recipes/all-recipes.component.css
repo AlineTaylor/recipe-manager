@@ -62,7 +62,7 @@ h1 {
   padding: 0;
 }
 
-.results-item {
+.recipe-card {
   flex: 1 1 250px;
   background-color: var(--primary-color-light);
   border-radius: 10px;
@@ -73,6 +73,12 @@ h1 {
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+.recipe-card :hover {
+  /* TODO fix this */
+  height: 50%;
+  cursor: pointer;
 }
 
 select {

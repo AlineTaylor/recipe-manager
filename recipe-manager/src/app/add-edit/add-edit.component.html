@@ -20,10 +20,8 @@
 
   <h2>Ingredients</h2>
   <div formArrayName="ingredient_lists">
-    <div
-      *ngFor="let ing of ingredients.controls; let i = index"
-      [formGroupName]="i"
-    >
+    @for (ing of ingredients.controls; track ing; let i = $index) {
+    <div [formGroupName]="i">
       <mat-form-field appearance="fill">
         <mat-label>Qty</mat-label>
         <input
@@ -49,16 +47,15 @@
         <mat-icon>delete</mat-icon>
       </button>
     </div>
+    }
   </div>
 
   <button mat-button (click)="addIngredient()">+ Add Ingredient</button>
 
   <h2>Instructions</h2>
   <div formArrayName="instructions">
-    <div
-      *ngFor="let inst of instructions.controls; let i = index"
-      [formGroupName]="i"
-    >
+    @for(step of instructions.controls; track step; let i = $index){
+    <div [formGroupName]="i">
       <mat-form-field appearance="fill">
         <mat-label>Step {{ i + 1 }}</mat-label>
         <textarea matInput formControlName="step_content"></textarea>
@@ -68,6 +65,7 @@
         <mat-icon>delete</mat-icon>
       </button>
     </div>
+    }
   </div>
 
   <button mat-button (click)="addInstruction()">+ Add Instruction</button>

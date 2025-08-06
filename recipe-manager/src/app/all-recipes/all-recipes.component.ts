@@ -7,6 +7,7 @@ import { EmailSharingComponent } from '../email-sharing/email-sharing.component'
 import { RecipeService } from '../shared/utils/services/recipe.service';
 import { RecipeCardComponent } from '../shared/layout/recipe-card/recipe-card.component';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { RecipeExpandComponent } from '../shared/layout/recipe-expand/recipe-expand.component';
 
 @Component({
   selector: 'app-all-recipes',
@@ -19,7 +20,7 @@ export class AllRecipesComponent {
   @Input({ required: true }) recipes: Recipe[] = [];
   paginatedRecipes: Recipe[] = [];
   private recipeService = inject(RecipeService);
-
+  readonly dialog = inject(MatDialog);
   //displaying cards
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -40,6 +41,17 @@ export class AllRecipesComponent {
     this.paginatedRecipes = this.recipes.slice(start, end);
   }
 
+  //expanded recipe view
+
+  expandRecipe(recipe: Recipe) {
+    this.dialog.open(RecipeExpandComponent, {
+      width: '600px',
+      maxHeight: '90vh',
+      data: recipe,
+      panelClass: 'recipe-expand',
+    });
+  }
+
   //result filtering
 
   // results = this.searchService.filteredResults;
@@ -54,7 +66,7 @@ export class AllRecipesComponent {
   // }
 
   //emailing sharing
-  readonly dialog = inject(MatDialog);
+
   emailSharingComponent = EmailSharingComponent;
   openDialog(
     component: ComponentType<any>,

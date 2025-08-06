@@ -1,1 +1,47 @@
-<p>recipe-expand works!</p>
+<h2>{{ recipe.title }}</h2>
+<p><strong>Servings:</strong> {{ recipe.servings }}</p>
+<p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} min</p>
+
+<mat-divider></mat-divider>
+
+<h3>Ingredients</h3>
+<ul>
+  @for(ing of recipe.ingredient_lists; track ing.id){
+  <li>
+    {{ ing.metric_qty }} {{ ing.metric_unit }} —
+    {{ ing.ingredient?.ingredient }}
+  </li>
+  }
+</ul>
+
+<h3>Instructions</h3>
+<ol>
+  @for(step of recipe.instructions; track step.id){
+  <li>
+    {{ step.step_content }}
+  </li>
+  }
+</ol>
+
+<h3>Labels</h3>
+<ul class="label-list">
+  @if(recipe.label?.vegetarian){
+  <li>🥕 Vegetarian</li>
+  } @if(recipe.label?.vegan) {
+  <li>🌱 Vegan</li>
+  } @if(recipe.label?.gluten_free) {
+  <li>🚫🌾 Gluten Free</li>
+  } @if(recipe.label?.dairy_free) {
+  <li>🥛❌ Dairy Free</li>
+  }
+</ul>
+
+<div class="dialog-actions">
+  <button mat-button color="primary" (click)="editRecipe()">
+    <mat-icon>edit</mat-icon> Edit
+  </button>
+  <button mat-button color="warn" (click)="deleteRecipe()">
+    <mat-icon>delete</mat-icon> Delete
+  </button>
+  <button mat-button (click)="close()"><mat-icon>close</mat-icon> Close</button>
+</div>

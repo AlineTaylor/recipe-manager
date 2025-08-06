@@ -34,7 +34,12 @@
 
     <div class="recipe-grid results-list">
       @for (recipe of paginatedRecipes; track recipe.id) {
-      <app-recipe-card [recipe]="recipe" type="recipes" class="results-item" />
+      <app-recipe-card
+        [recipe]="recipe"
+        (click)="expandRecipe(recipe)"
+        type="recipes"
+        class="recipe-card"
+      />
       }
     </div>
 
