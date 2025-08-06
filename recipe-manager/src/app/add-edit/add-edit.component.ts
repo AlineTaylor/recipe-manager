@@ -12,11 +12,17 @@ import { IngredientList, Recipe } from '../shared/utils/recipe.model';
 import { RecipeService } from '../shared/utils/services/recipe.service';
 import { UnitToggleComponent } from '../shared/layout/unit-toggle/unit-toggle.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [SharedModule, UnitToggleComponent, MatCheckboxModule],
+  imports: [
+    SharedModule,
+    UnitToggleComponent,
+    MatCheckboxModule,
+    MatSnackBarModule,
+  ],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css',
 })
@@ -25,6 +31,7 @@ export class AddEditComponent implements OnInit {
   private recipeService = inject(RecipeService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private snackBar = inject(MatSnackBar);
 
   recipeForm!: FormGroup;
   isEdit = signal(false);
@@ -50,6 +57,7 @@ export class AddEditComponent implements OnInit {
     });
 
     this.recipeId = Number(this.route.snapshot.paramMap.get('id'));
+
     if (this.recipeId) {
       this.isEdit.set(true);
       this.recipeService.getRecipe(this.recipeId).subscribe((res) => {
@@ -101,7 +109,14 @@ export class AddEditComponent implements OnInit {
   }
 
   populateForm(recipe: Recipe) {
-    this.recipeForm.patchValue(recipe);
+    this.recipeForm.patchValue({
+      title: recipe.title,
+      servings: recipe.servings,
+      cooking_time: recipe.cooking_time,
+      favorite: recipe.favorite,
+      shopping_list: recipe.shopping_list,
+      label: recipe.label,
+    });
     recipe.ingredient_lists.forEach((ing) => this.addIngredient(ing));
     recipe.instructions.forEach((inst) => this.addInstruction(inst));
   }
@@ -110,6 +125,8 @@ export class AddEditComponent implements OnInit {
     if (this.recipeForm.invalid) return;
 
     const raw = this.recipeForm.value;
+
+    // clean up payload for smooth backend communication
 
     const payload = {
       title: raw.title,
@@ -133,17 +150,39 @@ export class AddEditComponent implements OnInit {
             metric_unit,
             imperial_qty,
             imperial_unit,
-            ingredient_attributes: ingredient, // ✅ this is the key rename
+            ingredient_attributes: ingredient, // this is the key rename
           };
         }
       ),
       label_attributes: raw.label,
     };
 
-    console.log(
-      'Final payload being sent:',
-      JSON.stringify({ recipe: payload }, null, 2)
-    );
+    const req = this.isEdit()
+      ? this.recipeService.updateRecipe(this.recipeId!, { recipe: payload })
+      : this.recipeService.createRecipe({ recipe: payload });
+
+    req.subscribe({
+      next: () => {
+        this.snackBar.open(
+          this.isEdit() ? 'Recipe updated!' : 'Recipe created!',
+          'Close',
+          { duration: 3000, verticalPosition: 'top' }
+        );
+        this.router.navigate(['/my-recipes']);
+      },
+      error: (err) => {
+        console.error(err);
+        this.snackBar.open(
+          'Something went wrong, please try again',
+          'Dismiss',
+          {
+            duration: 4000,
+            verticalPosition: 'top',
+            panelClass: ['snackbar-error'],
+          }
+        );
+      },
+    });
 
     if (this.isEdit()) {
       this.recipeService

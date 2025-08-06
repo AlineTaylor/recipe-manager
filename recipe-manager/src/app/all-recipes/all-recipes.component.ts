@@ -25,6 +25,10 @@ export class AllRecipesComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit() {
+    this.loadRecipes();
+  }
+
+  loadRecipes() {
     this.recipeService.getRecipes().subscribe((data) => {
       this.recipes = data;
       this.setPaginatedData();
@@ -44,11 +48,18 @@ export class AllRecipesComponent {
   //expanded recipe view
 
   expandRecipe(recipe: Recipe) {
-    this.dialog.open(RecipeExpandComponent, {
+    const dialogRef = this.dialog.open(RecipeExpandComponent, {
       width: '600px',
       maxHeight: '90vh',
       data: recipe,
       panelClass: 'recipe-expand',
+    });
+
+    //refresh recipe list when a recipe is deleted from exp view
+    dialogRef.afterClosed().subscribe((wasDeleted) => {
+      if (wasDeleted) {
+        this.loadRecipes();
+      }
     });
   }
 
