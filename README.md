@@ -45,8 +45,8 @@ This app was developed as a my first project for a full-stack coding bootcamp, f
 
 ## 🚀 Live Demo
 
-🌐 Frontend: [URL pending](URL pending)  
-🔗 Backend API: [URL pending](URL pending)
+🌐 Frontend: [https://recipe-manager-eight-indol.vercel.app](https://recipe-manager-eight-indol.vercel.app)  
+🔗 Backend API: [https://recipe-manager-m2th.onrender.com](https://recipe-manager-m2th.onrender.com)
 
 ---
 
