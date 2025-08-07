@@ -43,4 +43,29 @@ export class RecipeService {
       .get<Recipe[]>(`${environment.apiUrl}/recipes`)
       .pipe(map((recipes) => recipes.filter((r) => r.shopping_list)));
   }
+
+  //favoriting logic
+  getFavoriteRecipes(): Observable<Recipe[]> {
+    return this.getRecipes().pipe(
+      map((recipes) => recipes.filter((r) => r.favorite))
+    );
+  }
+
+  toggleFavorite(recipe: Recipe): void {
+    const updated = { ...recipe, favorite: !recipe.favorite };
+    this.updateRecipe(recipe.id, {
+      recipe: { favorite: updated.favorite },
+    }).subscribe({
+      next: () => {
+        recipe.favorite = updated.favorite; // Update locally so UI responds instantly
+      },
+      error: (err) => {
+        console.error('Failed to toggle favorite:', err);
+      },
+    });
+  }
+
+  isFavorited(recipe: Recipe): boolean {
+    return recipe.favorite === true;
+  }
 }

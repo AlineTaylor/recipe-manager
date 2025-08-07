@@ -21,7 +21,25 @@
       </button>
     </div>
   </div>
-  <ul class="favorite-items-list">
-    <app-recipe-card type="favorites" class="favorite-item"></app-recipe-card>
-  </ul>
+  <div class="recipe-grid results-list">
+    @for (recipe of paginatedRecipes; track recipe.id) {
+    <app-recipe-card [recipe]="recipe" type="recipes" class="recipe-card" />
+    }
+  </div>
+  @if(!paginatedRecipes.length){
+  <div class="empty-state">
+    <p>Your recipe list is empty.</p>
+    <a routerLink="/my-recipes" routerLinkActive="active-link" class="back-link"
+      >← Back to Recipes</a
+    >
+  </div>
+  }
+
+  <mat-paginator
+    [length]="recipes.length"
+    [pageSize]="5"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page"
+    (page)="onPageChange($event)"
+  ></mat-paginator>
 </div>

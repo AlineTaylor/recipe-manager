@@ -22,65 +22,37 @@
   </div>
   <p class="subtitle">All your culinary creations in one place.</p>
 
-  <div class="results-container">
-    <div class="section-header">
-      <h2>Best Matches</h2>
-      <!-- TODO Update selection once fixed -->
-      <!-- <select (change)="filterByType($event)">
+  <!-- TODO Update selection once fixed -->
+  <!-- <select (change)="filterByType($event)">
         <option value="">All Types</option>
         <option value="vegetarian">Vegetarian</option>
         <option value="vegan">Vegan</option>
         <option value="gluten_free">Gluten-free</option>
         <option value="dairy_free">Dairy-free</option>
       </select> -->
-      <div class="button-group">
-        <button
-          title="Share via email"
-          matTooltip="Share via email"
-          class="share-button share-results-button"
-          mat-button
-          (click)="openDialog(emailSharingComponent, 'results')"
-        >
-          <i class="fas fa-envelope"></i></button
-        ><button
-          title="Print this page"
-          matTooltip="Print this page"
-          class="share-button"
-          onClick="window.print()"
-        >
-          <i class="fas fa-print"></i>
-        </button>
-      </div>
-    </div>
 
-    <div class="recipe-grid results-list">
-      @for (recipe of paginatedRecipes; track recipe.id) {
-      <app-recipe-card
-        [recipe]="recipe"
-        (click)="expandRecipe(recipe)"
-        type="recipes"
-        class="recipe-card"
-      />
-      }
-    </div>
-    @if(!paginatedRecipes.length){
-    <div class="empty-state">
-      <p>Your recipe list is empty.</p>
-      <a
-        routerLink="/recipe-editor"
-        routerLinkActive="active-link"
-        class="back-link"
-        >+ Add a new recipe</a
-      >
-    </div>
+  <div class="recipe-grid results-list">
+    @for (recipe of paginatedRecipes; track recipe.id) {
+    <app-recipe-card [recipe]="recipe" type="recipes" class="recipe-card" />
     }
-
-    <mat-paginator
-      [length]="recipes.length"
-      [pageSize]="10"
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      aria-label="Select page"
-      (page)="onPageChange($event)"
-    ></mat-paginator>
   </div>
+  @if(!paginatedRecipes.length){
+  <div class="empty-state">
+    <p>Your recipe list is empty.</p>
+    <a
+      routerLink="/recipe-editor"
+      routerLinkActive="active-link"
+      class="back-link"
+      >+ Add a new recipe</a
+    >
+  </div>
+  }
+
+  <mat-paginator
+    [length]="recipes.length"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page"
+    (page)="onPageChange($event)"
+  ></mat-paginator>
 </section>

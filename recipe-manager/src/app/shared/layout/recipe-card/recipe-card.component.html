@@ -1,25 +1,26 @@
 @if(recipe){<mat-card class="recipe-card">
-  <img
-    mat-card-image
-    src="https://images.unsplash.com/photo-1504674900247-0877df9cc836"
-    alt="Spaghetti Carbonara"
-  />
-  <mat-card-header>
-    <mat-card-title>{{ recipe.title }}</mat-card-title>
+  <div class="recipe-info" (click)="expandRecipe(recipe)">
+    <img
+      mat-card-image
+      src="https://images.unsplash.com/photo-1504674900247-0877df9cc836"
+      alt="Spaghetti Carbonara"
+    />
+    <mat-card-header>
+      <mat-card-title>{{ recipe.title }}</mat-card-title>
 
-    <mat-card-subtitle>
-      Created:
-      {{ recipe.created_at | date : "mediumDate" }}<br />
-      Updated: {{ recipe.updated_at | date : "mediumDate" }}
-    </mat-card-subtitle>
-    <p>{{ recipe.created_at }}</p>
-    <p>{{ recipe.updated_at }}</p>
-  </mat-card-header>
+      <mat-card-subtitle>
+        Created:
+        {{ recipe.created_at | date : "mediumDate" }}<br />
+        Updated: {{ recipe.updated_at | date : "mediumDate" }}
+      </mat-card-subtitle>
+      <p>{{ recipe.created_at }}</p>
+      <p>{{ recipe.updated_at }}</p>
+    </mat-card-header>
 
-  <mat-card-content>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-  </mat-card-content>
-
+    <mat-card-content>
+      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+    </mat-card-content>
+  </div>
   <mat-card-actions class="card-actions">
     <button
       type="button"
@@ -28,6 +29,8 @@
       matTooltip="Favorite"
       aria-label="Favorite button"
       mat-button
+      [ngClass]="{ active: isFavorited(recipe) }"
+      (click)="toggleFavorite(recipe)"
     >
       <mat-icon fontIcon="favorite"></mat-icon>
     </button>

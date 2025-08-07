@@ -54,7 +54,6 @@ h1 {
   transform: scale(1.1);
 }
 
-/* responsive layout */
 .recently-viewed-list {
   display: flex;
   flex-wrap: wrap;
@@ -76,6 +75,12 @@ h1 {
   text-align: center;
 }
 
+.empty-state {
+  margin-top: 2rem;
+  color: #a36b58;
+}
+
+/* responsive layout */
 @media (min-width: 1024px) {
   .recently-viewed-container {
     max-width: 100%;
