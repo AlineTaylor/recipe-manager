@@ -2,8 +2,10 @@ import {
   Component,
   computed,
   effect,
+  EnvironmentInjector,
   inject,
   Input,
+  runInInjectionContext,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -26,6 +28,8 @@ import { RecipeService } from '../shared/utils/services/recipe.service';
 export class FavoritesComponent {
   readonly dialog = inject(MatDialog);
   private recipeService = inject(RecipeService);
+  private injector = inject(EnvironmentInjector);
+
   emailSharingComponent = EmailSharingComponent;
 
   recipes = signal<Recipe[]>([]);
@@ -44,9 +48,11 @@ export class FavoritesComponent {
 
   ngOnInit() {
     this.loadRecipes();
-    effect(() => {
-      this.recipeService.favoritesChanged(); // watch signal
-      this.loadRecipes();
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        this.recipeService.favoritesChanged(); // track changes
+        this.loadRecipes(); // re-fetch on toggle
+      });
     });
   }
 

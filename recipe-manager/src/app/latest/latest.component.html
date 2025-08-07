@@ -21,11 +21,12 @@
     </div>
   </div>
   <div class="recipe-grid results-list">
-    @for (recipe of paginatedRecipes; track recipe.id) {
+    @for (recipe of paginatedRecipes(); track recipe.id) {
     <app-recipe-card [recipe]="recipe" type="recipes" class="recipe-card" />
     }
   </div>
-  @if(!paginatedRecipes.length){
+
+  @if (!paginatedRecipes().length) {
   <div class="empty-state">
     <p>No recent recipes to display.</p>
     <a
@@ -38,7 +39,7 @@
   }
 
   <mat-paginator
-    [length]="recipes.length"
+    [length]="latestRecipes().length"
     [pageSize]="5"
     [pageSizeOptions]="[5, 10, 25, 100]"
     aria-label="Select page"

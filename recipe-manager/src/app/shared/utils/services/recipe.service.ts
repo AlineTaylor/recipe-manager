@@ -1,14 +1,24 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import {
+  EnvironmentInjector,
+  inject,
+  Injectable,
+  runInInjectionContext,
+  Signal,
+  signal,
+  WritableSignal,
+} from '@angular/core';
+import { map, Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Recipe } from '../recipe.model';
 import { persistentSignal } from '../../persistent-signal';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecipeService {
+  private userService = inject(UserService);
   //favorites signals
   private _favoritesChanged = signal(0); // increment to trigger effects
   readonly favoritesChanged = this._favoritesChanged.asReadonly();
@@ -18,10 +28,27 @@ export class RecipeService {
   readonly shoppingListChanged = this._shoppingListChanged.asReadonly();
 
   //persistent signal for latest
-  private latestSignal = persistentSignal<Recipe[]>('recentlyViewed', []);
-  readonly latestRecipes = this.latestSignal.asReadonly();
+  private _latestSignal: WritableSignal<Recipe[]> | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private injector: EnvironmentInjector
+  ) {}
+
+  get latestRecipes(): Signal<Recipe[]> {
+    if (!this._latestSignal) {
+      const user = this.userService.getUserSignal()();
+      const userId = user?.id ?? 'anonymous';
+
+      const signalRef = runInInjectionContext(this.injector, () =>
+        persistentSignal<Recipe[]>(`recentlyViewed-${userId}`, [])
+      );
+
+      this._latestSignal = signalRef; // now has .set() and .update()
+    }
+
+    return this._latestSignal; // no .asReadonly() needed
+  }
 
   getRecipes(): Observable<Recipe[]> {
     return this.http.get<Recipe[]>(`${environment.apiUrl}/recipes`);
@@ -32,7 +59,9 @@ export class RecipeService {
   }
 
   createRecipe(payload: { recipe: Partial<Recipe> }): Observable<Recipe> {
-    return this.http.post<Recipe>(`${environment.apiUrl}/recipes`, payload);
+    return this.http
+      .post<Recipe>(`${environment.apiUrl}/recipes`, payload)
+      .pipe(tap((recipe) => this.addToLatest(recipe)));
   }
 
   updateRecipe(
@@ -104,7 +133,8 @@ export class RecipeService {
   // latest recipes logic
 
   addToLatest(recipe: Recipe) {
-    const current = this.latestSignal().filter((i) => i.id !== recipe.id);
-    this.latestSignal.set([recipe, ...current].slice(0, 10));
+    const current = this._latestSignal!(); // non-null assertion
+    const filtered = current.filter((r) => r.id !== recipe.id);
+    this._latestSignal!.set([recipe, ...filtered].slice(0, 10));
   }
 }

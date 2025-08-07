@@ -1,4 +1,12 @@
-import { Component, inject, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  Input,
+  Signal,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { ComponentType } from '@angular/cdk/overlay';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,30 +27,27 @@ export class LatestComponent {
   readonly dialog = inject(MatDialog);
   private recipeService = inject(RecipeService);
 
-  @Input() recipes: Recipe[] = [];
-  paginatedRecipes: Recipe[] = [];
+  // source signal from service
+  latestRecipes = this.recipeService.latestRecipes;
+
+  // pagination controls
+  pageIndex = signal(0);
+  pageSize = signal(5);
+
+  // derived paginated recipe list
+  paginatedRecipes: Signal<Recipe[]> = computed(() => {
+    const recipes = this.latestRecipes();
+    const start = this.pageIndex() * this.pageSize();
+    const end = start + this.pageSize();
+    return recipes.slice(start, end);
+  });
 
   //displaying cards
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngOnInit() {
-    this.loadRecipes();
-  }
-
-  loadRecipes() {
-    const data = this.recipeService.latestRecipes();
-    this.recipes = data;
-    this.setPaginatedData();
-  }
-
   onPageChange(event: PageEvent) {
-    this.setPaginatedData(event.pageIndex, event.pageSize);
-  }
-
-  setPaginatedData(pageIndex: number = 0, pageSize: number = 5) {
-    const start = pageIndex * pageSize;
-    const end = start + pageSize;
-    this.paginatedRecipes = this.recipes.slice(start, end);
+    this.pageIndex.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
   }
 
   //email sharing
