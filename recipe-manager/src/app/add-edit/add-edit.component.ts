@@ -46,10 +46,16 @@ export class AddEditComponent implements OnInit {
   recipeId: number | null = null;
 
   ngOnInit() {
+    this.initializeForm();
+    this.setupRouteHandling();
+    this.setupUnitConversion();
+  }
+
+  private initializeForm() {
     this.recipeForm = this.fb.group({
       title: ['', Validators.required],
-      servings: [1, Validators.required],
-      cooking_time: [0, Validators.required],
+      servings: [1, [Validators.required, Validators.min(1)]],
+      cooking_time: [0, [Validators.required, Validators.min(0)]],
       favorite: [false],
       shopping_list: [false],
       label: this.fb.group({
@@ -61,7 +67,9 @@ export class AddEditComponent implements OnInit {
       ingredient_lists: this.fb.array([]),
       instructions: this.fb.array([]),
     });
+  }
 
+  private setupRouteHandling() {
     this.recipeId = Number(this.route.snapshot.paramMap.get('id'));
 
     if (this.recipeId) {
@@ -90,6 +98,9 @@ export class AddEditComponent implements OnInit {
       this.addIngredient(); // start with one ingredient
       this.addInstruction(); // start with one instruction
     }
+  }
+
+  private setupUnitConversion() {
     // auto-trigger when unit conversion toggle changes
     runInInjectionContext(this.injector, () => {
       effect(() => {
@@ -298,9 +309,12 @@ export class AddEditComponent implements OnInit {
   // Helper method to get field validation errors
   getFieldError(fieldName: string): string {
     const field = this.recipeForm.get(fieldName);
-    if (field?.hasError('required')) return `${fieldName} is required`;
-    if (field?.hasError('min')) return `${fieldName} must be greater than 0`;
-    if (field?.hasError('max')) return `${fieldName} exceeds maximum value`;
+    if (field?.hasError('required'))
+      return `${this.getFieldDisplayName(fieldName)} is required`;
+    if (field?.hasError('min'))
+      return `${this.getFieldDisplayName(fieldName)} must be greater than 0`;
+    if (field?.hasError('max'))
+      return `${this.getFieldDisplayName(fieldName)} exceeds maximum value`;
     return '';
   }
 
@@ -308,5 +322,24 @@ export class AddEditComponent implements OnInit {
   hasFieldError(fieldName: string): boolean {
     const field = this.recipeForm.get(fieldName);
     return !!(field?.invalid && field?.touched);
+  }
+
+  // Helper method to get user-friendly field names
+  private getFieldDisplayName(fieldName: string): string {
+    const fieldNames: Record<string, string> = {
+      title: 'Recipe title',
+      servings: 'Number of servings',
+      cooking_time: 'Cooking time',
+    };
+    return fieldNames[fieldName] || fieldName;
+  }
+
+  // Helper method to check if form is ready to submit
+  isFormValid(): boolean {
+    return (
+      this.recipeForm.valid &&
+      this.ingredients.length > 0 &&
+      this.instructions.length > 0
+    );
   }
 }

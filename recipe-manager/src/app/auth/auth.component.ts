@@ -42,7 +42,6 @@ export class AuthComponent {
       .login(this.email, this.email_confirmation, this.password)
       .subscribe({
         next: (res: any) => {
-          console.log('Logged in with token:', res.token);
           this.authService.setToken(res.token);
           const redirect = this.authService.attemptedUrl || '/dashboard';
           this.authService.attemptedUrl = null;
@@ -56,7 +55,7 @@ export class AuthComponent {
             'Dismiss',
             {
               duration: 5000,
-              panelClass: 'snackbar-error',
+              panelClass: ['snackbar-error'],
               horizontalPosition: 'right',
               verticalPosition: 'top',
             }
@@ -106,7 +105,7 @@ export class AuthComponent {
           console.error('Signup failed', err);
           this.snackBar.open('Signup failed. Please try again.', 'Dismiss', {
             duration: 5000,
-            panelClass: 'snackbar-error',
+            panelClass: ['snackbar-error'],
           });
         },
       });
