@@ -3,7 +3,9 @@ import {
   Component,
   Input,
   computed,
+  effect,
   inject,
+  signal,
 } from '@angular/core';
 import { SharedModule } from '../../shared.module';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -11,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthComponent } from '../../../auth/auth.component';
 import { ComponentType } from '@angular/cdk/overlay';
 import { AuthService } from '../../utils/services/auth.service';
+import { UserService } from '../../utils/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -22,6 +25,7 @@ import { AuthService } from '../../utils/services/auth.service';
 })
 export class HeaderComponent {
   public authService = inject(AuthService);
+  private userService = inject(UserService);
   // TODO is this okay???
   @Input() drawer!: MatDrawer; // take drawer from parent
 
@@ -35,5 +39,17 @@ export class HeaderComponent {
   }
   logout() {
     this.authService.logout();
+  }
+
+  // user greeting
+  firstName = signal('');
+  // watching the get use signal for changes!
+  effect = effect(() => {
+    const user = this.userService.getUserSignal()();
+    if (user) this.firstName.set(user.first_name);
+  });
+
+  ngOnInit(): void {
+    this.userService.loadUser();
   }
 }

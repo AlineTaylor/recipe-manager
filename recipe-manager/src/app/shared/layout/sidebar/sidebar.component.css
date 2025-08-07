@@ -21,6 +21,7 @@
 }
 
 .sidebar nav a {
+  transition: 0.2s ease-in-out;
   display: block;
   color: #704a29;
   text-decoration: none;
@@ -30,7 +31,9 @@
 }
 
 .sidebar nav a:hover {
+  transition: 0.2s ease-in-out;
   color: var(--accent);
+  font-size: var(--font-size-lg);
 }
 
 .new-recipe-btn {
@@ -47,10 +50,17 @@
 }
 .new-recipe-btn:hover {
   background: var(--accent);
-  color: #fff;
 }
 
-@media (max-width: 900px) {
+.new-recipe-btn a {
+  text-decoration: none;
+  color: var(--accent);
+}
+
+.new-recipe-btn a:hover {
+  color: #fff;
+}
+@media (max-width: 600px) {
   .sidebar {
     width: 100%;
     min-width: unset;

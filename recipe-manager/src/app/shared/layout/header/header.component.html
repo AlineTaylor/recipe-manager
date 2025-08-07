@@ -9,7 +9,11 @@
   >
     <mat-icon>menu</mat-icon>
   </button>
-  <span>My Recipe Manager</span>
+
+  @if (authService.isLoggedIn()){
+  <span>{{ firstName() }}'s Recipe Manager</span>} @else {<span
+    >My Recipe Manager</span
+  >}
   <span class="header-spacer"></span>
   <span
     >@if (authService.isLoggedIn()){

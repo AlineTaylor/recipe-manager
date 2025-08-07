@@ -1,23 +1,61 @@
+:host {
+  display: block;
+  padding: 2rem;
+  padding-top: 0;
+  background-color: var(--secondary-color-light);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .shopping-list-container {
+  background-color: var(--primary-bg);
+  margin-bottom: 2rem;
   max-width: 700px;
   margin: 3rem auto;
   padding: 1.5rem;
-  background-color: #fff;
+  background-color: #fcf9f9;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow);
   text-align: center;
 }
 
 h1 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  color: #4e342e;
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--font-color-std);
 }
 
 .subtitle {
   color: #7b5c51;
   font-size: 1.1rem;
   margin-bottom: 2rem;
+}
+/* section headers */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* share button */
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.share-button {
+  color: var(--text-color-dark);
+  border: none;
+  background-color: var(--background-color-light);
+  cursor: pointer;
+  font-size: xx-large;
+  transition: all 0.3s ease-in-out;
+  text-shadow: 0 1px 6px var(--shadow-color-dark);
+}
+
+.share-button:hover {
+  transform: scale(1.1);
 }
 
 .ingredient-group {

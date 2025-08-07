@@ -25,7 +25,12 @@
       [routerLinkActiveOptions]="{ exact: true }"
       >Info</a
     >
-    <a href="#">Log out</a>
+
+    @if (authService.isLoggedIn()){
+    <a (click)="logout()">Log out </a>
+    }@else {
+    <a (click)="openDialog(authComponent)">Log in</a>
+    }
   </nav>
   <button class="new-recipe-btn">
     <a

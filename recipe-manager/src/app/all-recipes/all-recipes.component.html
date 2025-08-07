@@ -1,5 +1,26 @@
-<section>
-  <h1>My Recipes</h1>
+<section class="all-recipes-container">
+  <div class="section-header">
+    <h1>🍲 All Recipes</h1>
+    <div class="button-group">
+      <button
+        title="Share via email"
+        matTooltip="Share via email"
+        class="share-button share-recently-viewed-button"
+        mat-button
+        (click)="openDialog(emailSharingComponent, 'recently-viewed')"
+      >
+        <mat-icon>mail</mat-icon></button
+      ><button
+        title="Print this page"
+        matTooltip="Print this page"
+        class="share-button"
+        onClick="window.print()"
+      >
+        <mat-icon>print</mat-icon>
+      </button>
+    </div>
+  </div>
+  <p class="subtitle">All your culinary creations in one place.</p>
 
   <div class="results-container">
     <div class="section-header">
@@ -42,6 +63,17 @@
       />
       }
     </div>
+    @if(!paginatedRecipes.length){
+    <div class="empty-state">
+      <p>Your recipe list is empty.</p>
+      <a
+        routerLink="/recipe-editor"
+        routerLinkActive="active-link"
+        class="back-link"
+        >+ Add a new recipe</a
+      >
+    </div>
+    }
 
     <mat-paginator
       [length]="recipes.length"
