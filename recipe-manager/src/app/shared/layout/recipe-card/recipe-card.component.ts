@@ -9,6 +9,8 @@ import { Recipe } from '../../utils/recipe.model';
 import { RecipeExpandComponent } from '../recipe-expand/recipe-expand.component';
 import { MatDialog } from '@angular/material/dialog';
 import { RecipeService } from '../../utils/services/recipe.service';
+import { FavoritesComponent } from '../../../favorites/favorites.component';
+import { ShoppingListComponent } from '../../../shopping-list/shopping-list.component';
 
 @Component({
   selector: 'app-recipe-card',
@@ -22,6 +24,8 @@ export class RecipeCardComponent {
   readonly dialog = inject(MatDialog);
   recipeService = inject(RecipeService);
   @Input() recipe!: Recipe;
+  favoritesComponent = FavoritesComponent;
+  shoppingListComponent = ShoppingListComponent;
 
   //expand recipe view
   expandRecipe(recipe: Recipe) {
@@ -40,10 +44,18 @@ export class RecipeCardComponent {
     // });
   }
 
+  //shopping list logic
+  toggleShoppingList(recipe: Recipe) {
+    this.recipeService.toggleShoppingList(recipe);
+  }
+
+  isShoppingListed(recipe: Recipe): boolean {
+    return this.recipeService.isShoppingListed(recipe);
+  }
+
   //favoriting logic
   toggleFavorite(recipe: Recipe) {
     this.recipeService.toggleFavorite(recipe);
-    // this.recipeService.addToRecentlyViewed(recipe);
   }
 
   isFavorited(recipe: Recipe): boolean {

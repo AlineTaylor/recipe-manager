@@ -1,4 +1,4 @@
-import { Component, inject, Input, ViewChild } from '@angular/core';
+import { Component, effect, inject, Input, ViewChild } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { ComponentType } from '@angular/cdk/overlay';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,6 +19,7 @@ export class FavoritesComponent {
   readonly dialog = inject(MatDialog);
   private recipeService = inject(RecipeService);
   emailSharingComponent = EmailSharingComponent;
+
   @Input({ required: true }) recipes: Recipe[] = [];
   paginatedRecipes: Recipe[] = [];
 
@@ -27,6 +28,10 @@ export class FavoritesComponent {
 
   ngOnInit() {
     this.loadRecipes();
+    effect(() => {
+      this.recipeService.favoritesChanged(); // depend on signal
+      this.loadRecipes();
+    });
   }
 
   loadRecipes() {

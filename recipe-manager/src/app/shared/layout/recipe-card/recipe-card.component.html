@@ -25,7 +25,7 @@
     <button
       type="button"
       matIconButton
-      class="icon favorite-icon"
+      class="icon favorite-icon favorite-button"
       matTooltip="Favorite"
       aria-label="Favorite button"
       mat-button
@@ -37,10 +37,12 @@
     <button
       type="button"
       matIconButton
-      class="icon shopping-list-icon"
+      class="icon shopping-list-icon shopping-list-button"
       matTooltip="Shopping list"
       aria-label="Shopping list button"
       mat-button
+      [ngClass]="{ active: isShoppingListed(recipe) }"
+      (click)="toggleShoppingList(recipe)"
     >
       <mat-icon fontIcon="shopping_cart"></mat-icon>
     </button>

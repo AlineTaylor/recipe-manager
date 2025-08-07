@@ -30,10 +30,9 @@ export class LatestComponent {
   }
 
   loadRecipes() {
-    this.recipeService.getFavoriteRecipes().subscribe((data) => {
-      this.recipes = data;
-      this.setPaginatedData();
-    });
+    const data = this.recipeService.latestRecipes();
+    this.recipes = data;
+    this.setPaginatedData();
   }
 
   onPageChange(event: PageEvent) {
