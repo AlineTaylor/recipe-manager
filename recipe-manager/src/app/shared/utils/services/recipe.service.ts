@@ -27,10 +27,8 @@ export class RecipeService {
     return this.http.get<Recipe[]>(`${environment.apiUrl}/recipes`);
   }
 
-  getRecipe(id: number): Observable<{ recipe: Recipe }> {
-    return this.http.get<{ recipe: Recipe }>(
-      `${environment.apiUrl}/recipes/${id}`
-    );
+  getRecipe(id: number): Observable<Recipe> {
+    return this.http.get<Recipe>(`${environment.apiUrl}/recipes/${id}`);
   }
 
   createRecipe(payload: { recipe: Partial<Recipe> }): Observable<Recipe> {

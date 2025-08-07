@@ -33,7 +33,14 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Unit</mat-label>
-        <input matInput [formControlName]="unitSystem() + '_unit'" />
+        <mat-select [formControlName]="unitSystem() + '_unit'">
+          <mat-option
+            *ngFor="let unit of getUnits(unitSystem())"
+            [value]="unit"
+          >
+            {{ unit }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <div formGroupName="ingredient">

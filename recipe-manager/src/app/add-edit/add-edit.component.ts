@@ -4,6 +4,9 @@ import {
   OnInit,
   signal,
   WritableSignal,
+  effect,
+  runInInjectionContext,
+  EnvironmentInjector,
 } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
@@ -13,6 +16,7 @@ import { RecipeService } from '../shared/utils/services/recipe.service';
 import { UnitToggleComponent } from '../shared/layout/unit-toggle/unit-toggle.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { convertUnits } from '../shared/utils/convert-units';
 
 @Component({
   selector: 'app-add-edit',
@@ -32,6 +36,7 @@ export class AddEditComponent implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private snackBar = inject(MatSnackBar);
+  private injector = inject(EnvironmentInjector);
 
   recipeForm!: FormGroup;
   isEdit = signal(false);
@@ -60,13 +65,39 @@ export class AddEditComponent implements OnInit {
 
     if (this.recipeId) {
       this.isEdit.set(true);
-      this.recipeService.getRecipe(this.recipeId).subscribe((res) => {
-        this.populateForm(res.recipe);
+      this.recipeService.getRecipe(this.recipeId).subscribe({
+        next: (recipe) => {
+          if (recipe) {
+            this.populateForm(recipe);
+          } else {
+            console.error('Recipe not found or malformed response');
+            this.router.navigate(['/my-recipes']);
+          }
+        },
+        error: (err) => {
+          console.error('Error retrieving recipe:', err);
+          this.snackBar.open(
+            'Unable to load recipe. Please try again.',
+            'Close',
+            {
+              duration: 3000,
+              panelClass: ['snackbar-error'],
+            }
+          );
+          this.router.navigate(['/my-recipes']);
+        },
       });
     } else {
       this.addIngredient(); // start with one ingredient
       this.addInstruction(); // start with one instruction
     }
+    // auto-trigger when unit conversion toggle changes
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        const system = this.unitSystem();
+        this.convertAllUnits(system);
+      });
+    });
   }
 
   get ingredients(): FormArray {
@@ -80,11 +111,13 @@ export class AddEditComponent implements OnInit {
   addIngredient(data: any = null) {
     this.ingredients.push(
       this.fb.group({
+        id: [data?.id || null], // ✅ include the ID of the ingredient_list if editing
         metric_qty: [data?.metric_qty || null, Validators.required],
         metric_unit: [data?.metric_unit || '', Validators.required],
         imperial_qty: [data?.imperial_qty || null],
         imperial_unit: [data?.imperial_unit || ''],
         ingredient: this.fb.group({
+          id: [data?.ingredient?.id || null], // ✅ already done in previous step
           ingredient: [data?.ingredient?.ingredient || '', Validators.required],
         }),
       })
@@ -98,6 +131,7 @@ export class AddEditComponent implements OnInit {
   addInstruction(data: any = null) {
     this.instructions.push(
       this.fb.group({
+        id: [data?.id || null], // ✅ Add this line
         step_number: [data?.step_number || this.instructions.length + 1],
         step_content: [data?.step_content || '', Validators.required],
       })
@@ -109,6 +143,10 @@ export class AddEditComponent implements OnInit {
   }
 
   populateForm(recipe: Recipe) {
+    if (!recipe) {
+      console.warn('populateForm received undefined!');
+      return;
+    }
     this.recipeForm.patchValue({
       title: recipe.title,
       servings: recipe.servings,
@@ -125,6 +163,7 @@ export class AddEditComponent implements OnInit {
     if (this.recipeForm.invalid) return;
 
     const raw = this.recipeForm.value;
+    console.log(raw.ingredient_lists.map((i: any) => i.ingredient));
 
     // clean up payload for smooth backend communication
 
@@ -134,10 +173,17 @@ export class AddEditComponent implements OnInit {
       cooking_time: raw.cooking_time,
       favorite: raw.favorite,
       shopping_list: raw.shopping_list,
-      instructions_attributes: raw.instructions,
+      instructions_attributes: raw.instructions.map(
+        (i: any, index: number) => ({
+          step_number: index + 1,
+          step_content: i.step_content,
+        })
+      ),
+
       ingredient_lists_attributes: raw.ingredient_lists.map(
         (i: IngredientList) => {
           const {
+            id, // ✅ ingredient_list ID
             metric_qty,
             metric_unit,
             imperial_qty,
@@ -145,13 +191,18 @@ export class AddEditComponent implements OnInit {
             ingredient,
           } = i;
 
-          return {
+          const base = {
+            id, // ✅ Include this so Rails knows to update this list item
             metric_qty,
             metric_unit,
             imperial_qty,
             imperial_unit,
-            ingredient_attributes: ingredient, // this is the key rename
           };
+
+          // ✅ If the ingredient has an ID, associate it. If not, create it.
+          return ingredient?.id
+            ? { ...base, ingredient_id: ingredient.id }
+            : { ...base, ingredient_attributes: ingredient };
         }
       ),
       label_attributes: raw.label,
@@ -195,5 +246,46 @@ export class AddEditComponent implements OnInit {
         this.router.navigate(['/my-recipes']);
       });
     }
+  }
+
+  //unit conversion
+  convertAllUnits(system: 'metric' | 'imperial') {
+    this.ingredients.controls.forEach((ctrl) => {
+      const group = ctrl as FormGroup;
+
+      const fromQty = group.get(
+        system === 'metric' ? 'imperial_qty' : 'metric_qty'
+      )?.value;
+      const fromUnit = group.get(
+        system === 'metric' ? 'imperial_unit' : 'metric_unit'
+      )?.value;
+      const toUnit = group.get(
+        system === 'metric' ? 'metric_unit' : 'imperial_unit'
+      )?.value;
+
+      if (
+        fromQty != null &&
+        fromUnit &&
+        toUnit &&
+        fromUnit !== 'count' &&
+        toUnit !== 'count'
+      ) {
+        const converted = convertUnits(fromQty, fromUnit, toUnit);
+        if (converted != null) {
+          const targetControlName =
+            system === 'metric' ? 'metric_qty' : 'imperial_qty';
+          group.get(targetControlName)?.setValue(converted);
+        }
+      }
+    });
+  }
+  getUnits(system: 'metric' | 'imperial'): string[] {
+    const common = ['count'];
+    const metricUnits = ['g', 'kg', 'ml', 'l'];
+    const imperialUnits = ['oz', 'lb', 'fl oz', 'cups', 'tsp', 'tbsp'];
+
+    return system === 'metric'
+      ? [...metricUnits, ...common]
+      : [...imperialUnits, ...common];
   }
 }
