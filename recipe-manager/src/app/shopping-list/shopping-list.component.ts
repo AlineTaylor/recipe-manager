@@ -29,11 +29,19 @@ export class ShoppingListComponent {
   });
 
   constructor() {
+    // Load initial data
+    this.loadShoppingRecipes();
+
+    // React to changes in shopping list
     effect(() => {
       this.recipeService.shoppingListChanged();
-      this.recipeService.getShoppingListRecipes().subscribe((recipes) => {
-        this.shoppingRecipes.set(recipes);
-      });
+      this.loadShoppingRecipes(); // reload when something changes
+    });
+  }
+
+  private loadShoppingRecipes() {
+    this.recipeService.getShoppingListRecipes().subscribe((recipes) => {
+      this.shoppingRecipes.set(recipes);
     });
   }
 
