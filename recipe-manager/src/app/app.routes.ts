@@ -29,11 +29,20 @@ export const routes: Routes = [
       ),
   },
   {
+    // recipe creation
     path: 'recipe-editor',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./add-edit/add-edit.component').then((m) => m.AddEditComponent),
   },
+  {
+    // recipe editing
+    path: 'recipe-editor/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./add-edit/add-edit.component').then((m) => m.AddEditComponent),
+  },
+
   {
     path: 'shopping-list',
     canActivate: [authGuard],

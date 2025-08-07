@@ -48,8 +48,13 @@ button.icon:hover {
   ) !important; /*sidebar height to match amin content's*/
 }
 
+.snackbar-success {
+  background-color: #4caf50; /* green */
+  color: #fff;
+}
+
 .snackbar-error {
-  background-color: #d32f2f;
+  background-color: #f44336;
   color: white;
   font-weight: 500;
 }

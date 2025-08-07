@@ -1,0 +1,87 @@
+<div class="form-container" [formGroup]="recipeForm">
+  <h1>{{ isEdit() ? "Edit Recipe" : "Add Recipe" }}</h1>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Title</mat-label>
+    <input matInput formControlName="title" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Servings</mat-label>
+    <input matInput type="number" formControlName="servings" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Cooking Time (min)</mat-label>
+    <input matInput type="number" formControlName="cooking_time" />
+  </mat-form-field>
+
+  <app-unit-toggle [unitSystem]="unitSystem" />
+
+  <h2>Ingredients</h2>
+  <div formArrayName="ingredient_lists">
+    @for (ing of ingredients.controls; track ing; let i = $index) {
+    <div [formGroupName]="i">
+      <mat-form-field appearance="fill">
+        <mat-label>Qty</mat-label>
+        <input
+          matInput
+          type="number"
+          [formControlName]="unitSystem() + '_qty'"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Unit</mat-label>
+        <input matInput [formControlName]="unitSystem() + '_unit'" />
+      </mat-form-field>
+
+      <div formGroupName="ingredient">
+        <mat-form-field appearance="fill">
+          <mat-label>Ingredient</mat-label>
+          <input matInput formControlName="ingredient" />
+        </mat-form-field>
+      </div>
+
+      <button mat-icon-button color="warn" (click)="removeIngredient(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
+
+  <button mat-button (click)="addIngredient()">+ Add Ingredient</button>
+
+  <h2>Instructions</h2>
+  <div formArrayName="instructions">
+    @for(step of instructions.controls; track step; let i = $index){
+    <div [formGroupName]="i">
+      <mat-form-field appearance="fill">
+        <mat-label>Step {{ i + 1 }}</mat-label>
+        <textarea matInput formControlName="step_content"></textarea>
+      </mat-form-field>
+
+      <button mat-icon-button color="warn" (click)="removeInstruction(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
+
+  <button mat-button (click)="addInstruction()">+ Add Instruction</button>
+
+  <h2>Labels</h2>
+  <div formGroupName="label">
+    <mat-checkbox formControlName="vegetarian">Vegetarian</mat-checkbox>
+    <mat-checkbox formControlName="vegan">Vegan</mat-checkbox>
+    <mat-checkbox formControlName="gluten_free">Gluten Free</mat-checkbox>
+    <mat-checkbox formControlName="dairy_free">Dairy Free</mat-checkbox>
+  </div>
+
+  <mat-checkbox formControlName="favorite">Favorite</mat-checkbox>
+  <mat-checkbox formControlName="shopping_list">Shopping List</mat-checkbox>
+
+  <button mat-raised-button color="primary" (click)="saveRecipe()">
+    {{ isEdit() ? "Update Recipe" : "Create Recipe" }}
+  </button>
+</div>

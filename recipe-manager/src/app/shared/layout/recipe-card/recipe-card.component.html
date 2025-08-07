@@ -1,31 +1,46 @@
-<div class="recipe-card">
+@if(recipe){<mat-card class="recipe-card">
   <img
+    mat-card-image
     src="https://images.unsplash.com/photo-1504674900247-0877df9cc836"
     alt="Spaghetti Carbonara"
   />
-  <h3>Spaghetti Carbonara</h3>
-  <p>
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis nulla
-    soluta error ullam consequuntur provident ex et iusto qui placeat, dolorum
-    consequatur atque distinctio unde sint magnam animi magni facere.
-  </p>
-  <div class="card-actions">
-    <button class="edit-btn">Edit</button>
-    <button class="delete-btn">Delete</button>
-  </div>
-</div>
+  <mat-card-header>
+    <mat-card-title>{{ recipe.title }}</mat-card-title>
 
-<!-- TODO integrate logic -->
-<!-- @defer(on immediate) {
-<div class="recipe-container">
-  @for (recipe of recipes; track recipe.id) {
-  <div class="recipe-preview-container">
-    <div class="recipe-preview-content">
-      <h2>{{ recipe.title }}</h2>
-    </div>
-    <p>{{ recipe.createdAt }}</p>
-    <p>{{ recipe.updatedAt }}</p>
-  </div>
-  }
-</div>
-} -->
+    <mat-card-subtitle>
+      Created:
+      {{ recipe.created_at | date : "mediumDate" }}<br />
+      Updated: {{ recipe.updated_at | date : "mediumDate" }}
+    </mat-card-subtitle>
+    <p>{{ recipe.created_at }}</p>
+    <p>{{ recipe.updated_at }}</p>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+  </mat-card-content>
+
+  <mat-card-actions class="card-actions">
+    <button
+      type="button"
+      matIconButton
+      class="icon favorite-icon"
+      matTooltip="Favorite"
+      aria-label="Favorite button"
+      mat-button
+    >
+      <mat-icon fontIcon="favorite"></mat-icon>
+    </button>
+    <button
+      type="button"
+      matIconButton
+      class="icon shopping-list-icon"
+      matTooltip="Shopping list"
+      aria-label="Shopping list button"
+      mat-button
+    >
+      <mat-icon fontIcon="shopping_cart"></mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
+}

@@ -1,0 +1,103 @@
+:host {
+  display: block;
+  padding: 2rem;
+  padding-top: 0;
+  background-color: var(--secondary-color-light);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.shopping-list-container {
+  background-color: var(--primary-bg);
+  margin-bottom: 2rem;
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 1.5rem;
+  background-color: #fcf9f9;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--font-color-std);
+}
+
+.subtitle {
+  color: #7b5c51;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+/* section headers */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* share button */
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.share-button {
+  color: var(--text-color-dark);
+  border: none;
+  background-color: var(--background-color-light);
+  cursor: pointer;
+  font-size: xx-large;
+  transition: all 0.3s ease-in-out;
+  text-shadow: 0 1px 6px var(--shadow-color-dark);
+}
+
+.share-button:hover {
+  transform: scale(1.1);
+}
+
+.ingredient-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ingredient-card {
+  background-color: #fffaf6;
+  border: 1px solid #f2e0d3;
+  border-left: 6px solid #d66a33;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.ingredient-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #5d4037;
+}
+
+.ingredient-qty {
+  font-size: 0.95rem;
+  color: #6b4b3e;
+  margin-top: 0.25rem;
+}
+
+.empty-state {
+  margin-top: 2rem;
+  color: #a36b58;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  text-decoration: none;
+  color: #d66a33;
+  font-weight: bold;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}

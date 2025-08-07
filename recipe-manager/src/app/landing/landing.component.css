@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  padding: 2rem;
+  padding-top: 0;
+  background-color: var(--secondary-color-light);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.landing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+  background-color: #fef8f1;
+  min-height: 100vh;
+}

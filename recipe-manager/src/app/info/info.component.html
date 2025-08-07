@@ -1,5 +1,5 @@
-<section>
-  <h1>Contact Us</h1>
+<section class="info-container">
+  <h1>ℹ️ Info</h1>
   <!-- Contact Form-->
   <div class="contact-us-container">
     <div class="section-header">
@@ -10,61 +10,73 @@
       #contactForm="ngForm"
       (ngSubmit)="onSubmit(contactForm)"
     >
-      <div class="label-row">
-        <label for="name">Name:</label>
-        @if (contactForm.submitted && contactForm.controls['name'].invalid){
-        <span><small class="error">*required</small></span>
-        }
-      </div>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        required
-        placeholder="What is your name?"
-        [(ngModel)]="name"
-      />
-      <div class="label-row">
-        <label for="email">Email:</label>
-        @if (contactForm.submitted && contactForm.controls['email'].invalid){
-        <span><small class="error">*required</small></span>
-        }
-      </div>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        required
-        placeholder="How can we reach you?"
-        [(ngModel)]="email"
-      />
-      <div class="label-row">
-        <label for="subject">Subject:</label>
-        @if (contactForm.submitted && contactForm.controls['subject'].invalid){
-        <span><small class="error">*required</small></span>
-        }
-      </div>
-      <input
-        type="text"
-        id="subject"
-        name="subject"
-        required
-        [(ngModel)]="subject"
-      />
-      <div class="label-row">
-        <label for="message">Message:</label>
-        @if (contactForm.submitted && contactForm.controls['message'].invalid){
-        <span><small class="error">*required</small></span>
-        }
-      </div>
-      <textarea
-        id="message"
-        name="message"
-        required
-        [(ngModel)]="message"
-      ></textarea>
+      <mat-form-field appearance="fill">
+        <div class="label-row">
+          <label for="name">Name:</label>
+          @if (contactForm.submitted && contactForm.controls['name'].invalid){
+          <span><small class="error">*required</small></span>
+          }
+        </div>
 
-      <button type="submit" title="Send">Send</button>
+        <input
+          matInput
+          type="text"
+          id="name"
+          name="name"
+          required
+          placeholder="What is your name?"
+          [(ngModel)]="name"
+      /></mat-form-field>
+      <mat-form-field appearance="fill">
+        <div class="label-row">
+          <label for="email">Email:</label>
+          @if (contactForm.submitted && contactForm.controls['email'].invalid){
+          <span><small class="error">*required</small></span>
+          }
+        </div>
+        <input
+          matInput
+          type="email"
+          id="email"
+          name="email"
+          required
+          placeholder="How can we reach you?"
+          [(ngModel)]="email" /></mat-form-field
+      ><mat-form-field appearance="fill">
+        <div class="label-row">
+          <label for="subject">Subject:</label>
+          @if (contactForm.submitted &&
+          contactForm.controls['subject'].invalid){
+          <span><small class="error">*required</small></span>
+          }
+        </div>
+        <input
+          matInput
+          type="text"
+          id="subject"
+          name="subject"
+          required
+          [(ngModel)]="subject" /></mat-form-field
+      ><mat-form-field appearance="fill">
+        <div class="label-row">
+          <label for="message">Message:</label>
+          @if (contactForm.submitted &&
+          contactForm.controls['message'].invalid){
+          <span><small class="error">*required</small></span>
+          }
+        </div>
+        <textarea
+          matInput
+          id="message"
+          name="message"
+          required
+          [(ngModel)]="message"
+        ></textarea>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" title="Send">
+        Send
+      </button>
     </form>
   </div>
   <!-- Meet the team section-->
@@ -81,7 +93,7 @@
             matToolTip="Connect with Aline on LinkedIn"
           >
             <a href="https://www.linkedin.com/in/aline-taylor/" target="_blank"
-              ><img src="/assets/linkedin-logo.png" height="40rem"
+              ><img src="/linkedin-logo.png" height="40rem"
             /></a>
           </button>
           <button
@@ -90,7 +102,7 @@
             matToolTip="See Aline's work on GitHub"
           >
             <a href="https://github.com/AlineTaylor" target="_blank"
-              ><img src="/assets/github-logo.png" height="40rem"
+              ><img src="/github-logo.png" height="40rem"
             /></a>
           </button>
         </div>
@@ -98,7 +110,7 @@
           title="Aline Taylor"
           matTooltip="Aline Taylor"
           class="profile-picture"
-          src="/assets/aline.png"
+          src="/aline.png"
           alt="Aline Taylor"
           height="50px"
         />

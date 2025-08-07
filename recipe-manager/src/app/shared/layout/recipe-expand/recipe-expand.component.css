@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  padding: 1rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+ul,
+ol {
+  margin-left: 1rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.label-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
