@@ -3,17 +3,38 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Title</mat-label>
-    <input matInput formControlName="title" />
+    <input
+      matInput
+      formControlName="title"
+      placeholder="Enter a descriptive recipe title"
+    />
+    @if (recipeForm.get('title')?.invalid && recipeForm.get('title')?.touched) {
+    <mat-error>Recipe title is required</mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field appearance="fill">
     <mat-label>Servings</mat-label>
-    <input matInput type="number" formControlName="servings" />
+    <input matInput type="number" formControlName="servings" min="1" max="20" />
+    @if (recipeForm.get('servings')?.invalid &&
+    recipeForm.get('servings')?.touched) {
+    <mat-error>Please enter a valid number of servings (1-20)</mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field appearance="fill">
     <mat-label>Cooking Time (min)</mat-label>
-    <input matInput type="number" formControlName="cooking_time" />
+    <input
+      matInput
+      type="number"
+      formControlName="cooking_time"
+      min="0"
+      max="1440"
+    />
+    @if (recipeForm.get('cooking_time')?.invalid &&
+    recipeForm.get('cooking_time')?.touched) {
+    <mat-error>Please enter a valid cooking time</mat-error>
+    }
   </mat-form-field>
 
   <app-unit-toggle [unitSystem]="unitSystem" />

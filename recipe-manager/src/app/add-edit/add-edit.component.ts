@@ -67,12 +67,7 @@ export class AddEditComponent implements OnInit {
       this.isEdit.set(true);
       this.recipeService.getRecipe(this.recipeId).subscribe({
         next: (recipe) => {
-          if (recipe) {
-            this.populateForm(recipe);
-          } else {
-            console.error('Recipe not found or malformed response');
-            this.router.navigate(['/my-recipes']);
-          }
+          this.populateForm(recipe);
         },
         error: (err) => {
           console.error('Error retrieving recipe:', err);
@@ -108,7 +103,7 @@ export class AddEditComponent implements OnInit {
     return this.recipeForm.get('instructions') as FormArray;
   }
 
-  addIngredient(data: any = null) {
+  addIngredient(data: Partial<IngredientList> | null = null) {
     this.ingredients.push(
       this.fb.group({
         id: [data?.id || null], // ✅ include the ID of the ingredient_list if editing
@@ -128,7 +123,13 @@ export class AddEditComponent implements OnInit {
     this.ingredients.removeAt(i);
   }
 
-  addInstruction(data: any = null) {
+  addInstruction(
+    data: Partial<{
+      id: number;
+      step_number: number;
+      step_content: string;
+    }> | null = null
+  ) {
     this.instructions.push(
       this.fb.group({
         id: [data?.id || null], // ✅ Add this line
@@ -163,7 +164,6 @@ export class AddEditComponent implements OnInit {
     if (this.recipeForm.invalid) return;
 
     const raw = this.recipeForm.value;
-    console.log(raw.ingredient_lists.map((i: any) => i.ingredient));
 
     // clean up payload for smooth backend communication
 
@@ -174,9 +174,10 @@ export class AddEditComponent implements OnInit {
       favorite: raw.favorite,
       shopping_list: raw.shopping_list,
       instructions_attributes: raw.instructions.map(
-        (i: any, index: number) => ({
+        (instruction: any, index: number) => ({
+          id: instruction.id || null,
           step_number: index + 1,
-          step_content: i.step_content,
+          step_content: instruction.step_content,
         })
       ),
 
@@ -234,18 +235,6 @@ export class AddEditComponent implements OnInit {
         );
       },
     });
-
-    if (this.isEdit()) {
-      this.recipeService
-        .updateRecipe(this.recipeId!, { recipe: payload })
-        .subscribe(() => {
-          this.router.navigate(['/my-recipes']);
-        });
-    } else {
-      this.recipeService.createRecipe({ recipe: payload }).subscribe(() => {
-        this.router.navigate(['/my-recipes']);
-      });
-    }
   }
 
   //unit conversion
