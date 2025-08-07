@@ -7,7 +7,6 @@ import {
   Signal,
   signal,
   WritableSignal,
-  computed,
 } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -48,43 +47,31 @@ export class RecipeService {
       this._latestSignal = signalRef; // now has .set() and .update()
     }
 
-    // Return a computed signal that transforms dates from localStorage
-    return computed(() => {
-      const current = this._latestSignal!();
-      return current.map((recipe) => this.transformDates(recipe));
-    });
+    return this._latestSignal; // no .asReadonly() needed
   }
 
   getRecipes(): Observable<Recipe[]> {
-    return this.http
-      .get<Recipe[]>(`${environment.apiUrl}/recipes`)
-      .pipe(
-        map((recipes) => recipes.map((recipe) => this.transformDates(recipe)))
-      );
+    return this.http.get<Recipe[]>(`${environment.apiUrl}/recipes`);
   }
 
   getRecipe(id: number): Observable<Recipe> {
-    return this.http
-      .get<Recipe>(`${environment.apiUrl}/recipes/${id}`)
-      .pipe(map((recipe) => this.transformDates(recipe)));
+    return this.http.get<Recipe>(`${environment.apiUrl}/recipes/${id}`);
   }
 
   createRecipe(payload: { recipe: Partial<Recipe> }): Observable<Recipe> {
     return this.http
       .post<Recipe>(`${environment.apiUrl}/recipes`, payload)
-      .pipe(
-        map((recipe) => this.transformDates(recipe)),
-        tap((recipe) => this.addToLatest(recipe))
-      );
+      .pipe(tap((recipe) => this.addToLatest(recipe)));
   }
 
   updateRecipe(
     id: number,
     payload: { recipe: Partial<Recipe> }
   ): Observable<Recipe> {
-    return this.http
-      .put<Recipe>(`${environment.apiUrl}/recipes/${id}`, payload)
-      .pipe(map((recipe) => this.transformDates(recipe)));
+    return this.http.put<Recipe>(
+      `${environment.apiUrl}/recipes/${id}`,
+      payload
+    );
   }
 
   deleteRecipe(id: number): Observable<void> {
@@ -97,10 +84,7 @@ export class RecipeService {
     // For now, we'll cache the result to avoid repeated full fetches
     return this.http
       .get<Recipe[]>(`${environment.apiUrl}/recipes?shopping_list=true`)
-      .pipe(
-        map((recipes) => recipes.map((recipe) => this.transformDates(recipe))),
-        map((recipes) => recipes.filter((r) => r.shopping_list))
-      );
+      .pipe(map((recipes) => recipes.filter((r) => r.shopping_list)));
   }
 
   toggleShoppingList(recipe: Recipe): void {
@@ -130,10 +114,7 @@ export class RecipeService {
     // For now, we'll add query param (may not work until backend supports it)
     return this.http
       .get<Recipe[]>(`${environment.apiUrl}/recipes?favorite=true`)
-      .pipe(
-        map((recipes) => recipes.map((recipe) => this.transformDates(recipe))),
-        map((recipes) => recipes.filter((r) => r.favorite))
-      );
+      .pipe(map((recipes) => recipes.filter((r) => r.favorite)));
   }
 
   toggleFavorite(recipe: Recipe): void {
@@ -166,9 +147,7 @@ export class RecipeService {
   addToLatest(recipe: Recipe) {
     const latestSignal = this.getLatestSignalWritable();
     const current = latestSignal();
-    // Transform dates in case they were serialized/deserialized from localStorage
-    const transformedCurrent = current.map((r) => this.transformDates(r));
-    const filtered = transformedCurrent.filter((r) => r.id !== recipe.id);
+    const filtered = current.filter((r) => r.id !== recipe.id);
     latestSignal.set([recipe, ...filtered].slice(0, 10));
   }
 
@@ -177,13 +156,5 @@ export class RecipeService {
     const current = latestSignal();
     const filtered = current.filter((r) => r.id !== recipeId);
     latestSignal.set(filtered);
-  }
-
-  private transformDates(recipe: any): Recipe {
-    return {
-      ...recipe,
-      created_at: recipe.created_at ? new Date(recipe.created_at) : undefined,
-      updated_at: recipe.updated_at ? new Date(recipe.updated_at) : undefined,
-    };
   }
 }
