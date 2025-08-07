@@ -72,6 +72,10 @@ h1 {
   padding: 1rem;
   border-radius: 8px;
   text-align: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: baseline;
 }
 
 .ingredient-name {
