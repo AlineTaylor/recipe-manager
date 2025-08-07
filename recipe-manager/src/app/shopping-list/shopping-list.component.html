@@ -15,7 +15,7 @@
         title="Print this page"
         matTooltip="Print this page"
         class="share-button"
-        onClick="window.print()"
+        (click)="printPage()"
       >
         <mat-icon>print</mat-icon>
       </button>
@@ -26,16 +26,24 @@
   @for(item of shoppingList(); track item.id){
   <div class="ingredient-group">
     <div class="ingredient-card">
-      <p class="ingredient-name">{{ item.ingredient }}</p>
+      <p class="ingredient-name">{{ item.ingredient?.ingredient }}</p>
+
       <p class="ingredient-qty">
         {{ item.metric_qty }}
         {{ item.metric_unit }} @if(item.imperial_qty){<span
           >| {{ item.imperial_qty }} {{ item.imperial_unit }}</span
         >}
       </p>
+      <button
+        mat-icon-button
+        title="Remove from shopping list"
+        (click)="removeFromShoppingList(item.recipe)"
+      >
+        <mat-icon>remove_shopping_cart</mat-icon>
+      </button>
     </div>
   </div>
-  } @if(!shoppingList.length){
+  } @if(!shoppingList().length){
   <div class="empty-state">
     <p>Your shopping list is empty.</p>
     <a routerLink="/my-recipes" routerLinkActive="active-link" class="back-link"

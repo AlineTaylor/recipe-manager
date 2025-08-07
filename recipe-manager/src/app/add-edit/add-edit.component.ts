@@ -4,6 +4,9 @@ import {
   OnInit,
   signal,
   WritableSignal,
+  effect,
+  runInInjectionContext,
+  EnvironmentInjector,
 } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
@@ -13,6 +16,7 @@ import { RecipeService } from '../shared/utils/services/recipe.service';
 import { UnitToggleComponent } from '../shared/layout/unit-toggle/unit-toggle.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { convertUnits } from '../shared/utils/convert-units';
 
 @Component({
   selector: 'app-add-edit',
@@ -32,18 +36,26 @@ export class AddEditComponent implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private snackBar = inject(MatSnackBar);
+  private injector = inject(EnvironmentInjector);
 
   recipeForm!: FormGroup;
   isEdit = signal(false);
+  isLoading = signal(false);
   unitSystem: WritableSignal<'metric' | 'imperial'> = signal('metric');
 
   recipeId: number | null = null;
 
   ngOnInit() {
+    this.initializeForm();
+    this.setupRouteHandling();
+    this.setupUnitConversion();
+  }
+
+  private initializeForm() {
     this.recipeForm = this.fb.group({
       title: ['', Validators.required],
-      servings: [1, Validators.required],
-      cooking_time: [0, Validators.required],
+      servings: [1, [Validators.required, Validators.min(1)]],
+      cooking_time: [0, [Validators.required, Validators.min(0)]],
       favorite: [false],
       shopping_list: [false],
       label: this.fb.group({
@@ -55,18 +67,47 @@ export class AddEditComponent implements OnInit {
       ingredient_lists: this.fb.array([]),
       instructions: this.fb.array([]),
     });
+  }
 
+  private setupRouteHandling() {
     this.recipeId = Number(this.route.snapshot.paramMap.get('id'));
 
     if (this.recipeId) {
       this.isEdit.set(true);
-      this.recipeService.getRecipe(this.recipeId).subscribe((res) => {
-        this.populateForm(res.recipe);
+      this.isLoading.set(true);
+      this.recipeService.getRecipe(this.recipeId).subscribe({
+        next: (recipe) => {
+          this.populateForm(recipe);
+          this.isLoading.set(false);
+        },
+        error: (err) => {
+          console.error('Error retrieving recipe:', err);
+          this.isLoading.set(false);
+          this.snackBar.open(
+            'Unable to load recipe. Please try again.',
+            'Close',
+            {
+              duration: 3000,
+              panelClass: ['snackbar-error'],
+            }
+          );
+          this.router.navigate(['/my-recipes']);
+        },
       });
     } else {
       this.addIngredient(); // start with one ingredient
       this.addInstruction(); // start with one instruction
     }
+  }
+
+  private setupUnitConversion() {
+    // auto-trigger when unit conversion toggle changes
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        const system = this.unitSystem();
+        this.convertAllUnits(system);
+      });
+    });
   }
 
   get ingredients(): FormArray {
@@ -77,14 +118,16 @@ export class AddEditComponent implements OnInit {
     return this.recipeForm.get('instructions') as FormArray;
   }
 
-  addIngredient(data: any = null) {
+  addIngredient(data: Partial<IngredientList> | null = null) {
     this.ingredients.push(
       this.fb.group({
+        id: [data?.id || null], // ✅ include the ID of the ingredient_list if editing
         metric_qty: [data?.metric_qty || null, Validators.required],
         metric_unit: [data?.metric_unit || '', Validators.required],
         imperial_qty: [data?.imperial_qty || null],
         imperial_unit: [data?.imperial_unit || ''],
         ingredient: this.fb.group({
+          id: [data?.ingredient?.id || null], // ✅ already done in previous step
           ingredient: [data?.ingredient?.ingredient || '', Validators.required],
         }),
       })
@@ -95,9 +138,16 @@ export class AddEditComponent implements OnInit {
     this.ingredients.removeAt(i);
   }
 
-  addInstruction(data: any = null) {
+  addInstruction(
+    data: Partial<{
+      id: number;
+      step_number: number;
+      step_content: string;
+    }> | null = null
+  ) {
     this.instructions.push(
       this.fb.group({
+        id: [data?.id || null], // ✅ Add this line
         step_number: [data?.step_number || this.instructions.length + 1],
         step_content: [data?.step_content || '', Validators.required],
       })
@@ -109,6 +159,10 @@ export class AddEditComponent implements OnInit {
   }
 
   populateForm(recipe: Recipe) {
+    if (!recipe) {
+      console.warn('populateForm received undefined!');
+      return;
+    }
     this.recipeForm.patchValue({
       title: recipe.title,
       servings: recipe.servings,
@@ -122,7 +176,15 @@ export class AddEditComponent implements OnInit {
   }
 
   saveRecipe() {
-    if (this.recipeForm.invalid) return;
+    if (this.recipeForm.invalid) {
+      // Mark all fields as touched to show validation errors
+      this.recipeForm.markAllAsTouched();
+      this.snackBar.open('Please fill in all required fields', 'Close', {
+        duration: 4000,
+        panelClass: ['snackbar-error'],
+      });
+      return;
+    }
 
     const raw = this.recipeForm.value;
 
@@ -134,10 +196,18 @@ export class AddEditComponent implements OnInit {
       cooking_time: raw.cooking_time,
       favorite: raw.favorite,
       shopping_list: raw.shopping_list,
-      instructions_attributes: raw.instructions,
+      instructions_attributes: raw.instructions.map(
+        (instruction: any, index: number) => ({
+          id: instruction.id || null,
+          step_number: index + 1,
+          step_content: instruction.step_content,
+        })
+      ),
+
       ingredient_lists_attributes: raw.ingredient_lists.map(
         (i: IngredientList) => {
           const {
+            id, // ✅ ingredient_list ID
             metric_qty,
             metric_unit,
             imperial_qty,
@@ -145,13 +215,18 @@ export class AddEditComponent implements OnInit {
             ingredient,
           } = i;
 
-          return {
+          const base = {
+            id, // ✅ Include this so Rails knows to update this list item
             metric_qty,
             metric_unit,
             imperial_qty,
             imperial_unit,
-            ingredient_attributes: ingredient, // this is the key rename
           };
+
+          // ✅ If the ingredient has an ID, associate it. If not, create it.
+          return ingredient?.id
+            ? { ...base, ingredient_id: ingredient.id }
+            : { ...base, ingredient_attributes: ingredient };
         }
       ),
       label_attributes: raw.label,
@@ -161,8 +236,10 @@ export class AddEditComponent implements OnInit {
       ? this.recipeService.updateRecipe(this.recipeId!, { recipe: payload })
       : this.recipeService.createRecipe({ recipe: payload });
 
+    this.isLoading.set(true);
     req.subscribe({
       next: () => {
+        this.isLoading.set(false);
         this.snackBar.open(
           this.isEdit() ? 'Recipe updated!' : 'Recipe created!',
           'Close',
@@ -172,6 +249,7 @@ export class AddEditComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
+        this.isLoading.set(false);
         this.snackBar.open(
           'Something went wrong, please try again',
           'Dismiss',
@@ -183,17 +261,85 @@ export class AddEditComponent implements OnInit {
         );
       },
     });
+  }
 
-    if (this.isEdit()) {
-      this.recipeService
-        .updateRecipe(this.recipeId!, { recipe: payload })
-        .subscribe(() => {
-          this.router.navigate(['/my-recipes']);
-        });
-    } else {
-      this.recipeService.createRecipe({ recipe: payload }).subscribe(() => {
-        this.router.navigate(['/my-recipes']);
-      });
-    }
+  //unit conversion
+  convertAllUnits(system: 'metric' | 'imperial') {
+    this.ingredients.controls.forEach((ctrl) => {
+      const group = ctrl as FormGroup;
+
+      const fromQty = group.get(
+        system === 'metric' ? 'imperial_qty' : 'metric_qty'
+      )?.value;
+      const fromUnit = group.get(
+        system === 'metric' ? 'imperial_unit' : 'metric_unit'
+      )?.value;
+      const toUnit = group.get(
+        system === 'metric' ? 'metric_unit' : 'imperial_unit'
+      )?.value;
+
+      // Only convert if we have valid source data and both units are conversion-compatible
+      if (
+        fromQty != null &&
+        fromQty > 0 &&
+        fromUnit &&
+        toUnit &&
+        fromUnit !== 'count' &&
+        toUnit !== 'count'
+      ) {
+        const converted = convertUnits(fromQty, fromUnit, toUnit);
+        if (converted != null && converted > 0) {
+          const targetControlName =
+            system === 'metric' ? 'metric_qty' : 'imperial_qty';
+          group.get(targetControlName)?.setValue(converted);
+        }
+      }
+    });
+  }
+  getUnits(system: 'metric' | 'imperial'): string[] {
+    const common = ['count'];
+    const metricUnits = ['g', 'kg', 'ml', 'l'];
+    const imperialUnits = ['oz', 'lb', 'fl oz', 'cups', 'tsp', 'tbsp'];
+
+    return system === 'metric'
+      ? [...metricUnits, ...common]
+      : [...imperialUnits, ...common];
+  }
+
+  // Helper method to get field validation errors
+  getFieldError(fieldName: string): string {
+    const field = this.recipeForm.get(fieldName);
+    if (field?.hasError('required'))
+      return `${this.getFieldDisplayName(fieldName)} is required`;
+    if (field?.hasError('min'))
+      return `${this.getFieldDisplayName(fieldName)} must be greater than 0`;
+    if (field?.hasError('max'))
+      return `${this.getFieldDisplayName(fieldName)} exceeds maximum value`;
+    return '';
+  }
+
+  // Helper method to check if field has errors and is touched
+  hasFieldError(fieldName: string): boolean {
+    const field = this.recipeForm.get(fieldName);
+    return !!(field?.invalid && field?.touched);
+  }
+
+  // Helper method to get user-friendly field names
+  private getFieldDisplayName(fieldName: string): string {
+    const fieldNames: Record<string, string> = {
+      title: 'Recipe title',
+      servings: 'Number of servings',
+      cooking_time: 'Cooking time',
+    };
+    return fieldNames[fieldName] || fieldName;
+  }
+
+  // Helper method to check if form is ready to submit
+  isFormValid(): boolean {
+    return (
+      this.recipeForm.valid &&
+      this.ingredients.length > 0 &&
+      this.instructions.length > 0
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, signal, WritableSignal } from '@angular/core';
 import { SharedModule } from '../../shared.module';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Recipe } from '../../utils/recipe.model';
@@ -6,15 +6,17 @@ import { Router } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { RecipeService } from '../../utils/services/recipe.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UnitToggleComponent } from '../unit-toggle/unit-toggle.component';
 
 @Component({
   selector: 'app-recipe-expand',
   standalone: true,
-  imports: [SharedModule, MatDividerModule],
+  imports: [SharedModule, MatDividerModule, UnitToggleComponent],
   templateUrl: './recipe-expand.component.html',
   styleUrl: './recipe-expand.component.css',
 })
 export class RecipeExpandComponent {
+  unitSystem: WritableSignal<'metric' | 'imperial'> = signal('metric');
   constructor(
     @Inject(MAT_DIALOG_DATA) public recipe: Recipe,
     private dialogRef: MatDialogRef<RecipeExpandComponent>,

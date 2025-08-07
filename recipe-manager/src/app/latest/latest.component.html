@@ -14,16 +14,35 @@
         title="Print this page"
         matTooltip="Print this page"
         class="share-button"
-        onClick="window.print()"
+        (click)="printPage()"
       >
         <mat-icon>print</mat-icon>
       </button>
     </div>
   </div>
-  <ul class="recently-viewed-list">
-    <app-recipe-card
-      type="recently-viewed"
-      class="recently-viewed-item"
-    ></app-recipe-card>
-  </ul>
+  <div class="recipe-grid results-list">
+    @for (recipe of paginatedRecipes(); track recipe.id) {
+    <app-recipe-card [recipe]="recipe" type="recipes" class="recipe-card" />
+    }
+  </div>
+
+  @if (!paginatedRecipes().length) {
+  <div class="empty-state">
+    <p>No recent recipes to display.</p>
+    <a
+      routerLink="/recipe-editor"
+      routerLinkActive="active-link"
+      class="back-link"
+      >+ Add a new recipe</a
+    >
+  </div>
+  }
+
+  <mat-paginator
+    [length]="latestRecipes().length"
+    [pageSize]="5"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page"
+    (page)="onPageChange($event)"
+  ></mat-paginator>
 </div>

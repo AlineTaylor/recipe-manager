@@ -45,24 +45,6 @@ export class AllRecipesComponent {
     this.paginatedRecipes = this.recipes.slice(start, end);
   }
 
-  //expanded recipe view
-
-  expandRecipe(recipe: Recipe) {
-    const dialogRef = this.dialog.open(RecipeExpandComponent, {
-      width: '600px',
-      maxHeight: '90vh',
-      data: recipe,
-      panelClass: 'recipe-expand',
-    });
-
-    //refresh recipe list when a recipe is deleted from exp view
-    dialogRef.afterClosed().subscribe((wasDeleted) => {
-      if (wasDeleted) {
-        this.loadRecipes();
-      }
-    });
-  }
-
   //result filtering
 
   // results = this.searchService.filteredResults;
@@ -86,5 +68,10 @@ export class AllRecipesComponent {
     this.dialog.open(component, {
       data: { type },
     });
+  }
+
+  //print functionality
+  printPage() {
+    window.print();
   }
 }

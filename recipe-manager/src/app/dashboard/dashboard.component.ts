@@ -8,10 +8,7 @@ import { UserService } from '../shared/utils/services/user.service';
   standalone: true,
   imports: [SharedModule, FavoritesComponent, LatestComponent],
   templateUrl: './dashboard.component.html',
-  styleUrls: [
-    './dashboard.component.css',
-    '../shared/layout/sidebar/sidebar.component.css',
-  ],
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
   private userService = inject(UserService);

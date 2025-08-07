@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RecipeService } from '../shared/utils/services/recipe.service';
 import { Recipe, IngredientList } from '../shared/utils/recipe.model';
 import { SharedModule } from '../shared/shared.module';
@@ -17,17 +17,38 @@ export class ShoppingListComponent {
   private recipeService = inject(RecipeService);
 
   shoppingRecipes = signal<Recipe[]>([]);
-  shoppingList = computed<IngredientList[]>(() => {
+  shoppingList = computed(() => {
     return this.shoppingRecipes()
-      .flatMap((recipe) => recipe.ingredient_lists)
-      .filter((ing) => ing != null); // Optional in case of empty/null
+      .filter((r) => r.shopping_list)
+      .flatMap((r) =>
+        r.ingredient_lists.map((ing) => ({
+          ...ing,
+          recipe: r,
+        }))
+      );
   });
 
   constructor() {
+    // Load initial data
+    this.loadShoppingRecipes();
+
+    // React to changes in shopping list
+    effect(() => {
+      this.recipeService.shoppingListChanged();
+      this.loadShoppingRecipes(); // reload when something changes
+    });
+  }
+
+  private loadShoppingRecipes() {
     this.recipeService.getShoppingListRecipes().subscribe((recipes) => {
       this.shoppingRecipes.set(recipes);
     });
   }
+
+  removeFromShoppingList(recipe: Recipe) {
+    this.recipeService.toggleShoppingList(recipe); // you already have this!
+  }
+
   //sharing button group
   readonly dialog = inject(MatDialog);
   emailSharingComponent = EmailSharingComponent;
@@ -38,5 +59,10 @@ export class ShoppingListComponent {
     this.dialog.open(component, {
       data: { type },
     });
+  }
+
+  //print functionality
+  printPage() {
+    window.print();
   }
 }

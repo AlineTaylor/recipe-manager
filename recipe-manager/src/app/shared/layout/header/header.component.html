@@ -43,9 +43,12 @@
   <button
     matIconButton
     class="icon"
-    matTooltip="Share"
-    aria-label="Share button"
+    matTooltip="home"
+    aria-label="home button"
+    routerLink="/dashboard"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
   >
-    <mat-icon>share</mat-icon>
+    <mat-icon>home</mat-icon>
   </button>
 </mat-toolbar>

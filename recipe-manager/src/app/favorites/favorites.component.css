@@ -77,6 +77,11 @@ h1 {
   text-align: center;
 }
 
+.empty-state {
+  margin-top: 2rem;
+  color: #a36b58;
+}
+
 @media (min-width: 1024px) {
   .favorites-container {
     max-width: 100%;

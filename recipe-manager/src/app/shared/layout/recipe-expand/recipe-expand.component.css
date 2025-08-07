@@ -10,6 +10,17 @@ ol {
   margin-left: 1rem;
 }
 
+.ingredients-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ingredients-header h3 {
+  margin: 0;
+}
+
 .dialog-actions {
   display: flex;
   justify-content: space-between;

@@ -17,10 +17,7 @@ import { RouterOutlet } from '@angular/router';
     RouterOutlet,
   ],
   templateUrl: './app.component.html',
-  styleUrls: [
-    './app.component.css',
-    './shared/layout/sidebar/sidebar.component.css',
-  ],
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'recipe-manager';

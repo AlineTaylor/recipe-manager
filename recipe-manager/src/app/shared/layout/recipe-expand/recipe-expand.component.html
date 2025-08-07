@@ -4,12 +4,24 @@
 
 <mat-divider></mat-divider>
 
-<h3>Ingredients</h3>
+<div class="ingredients-header">
+  <h3>Ingredients</h3>
+  <app-unit-toggle [unitSystem]="unitSystem"></app-unit-toggle>
+</div>
 <ul>
   @for(ing of recipe.ingredient_lists; track ing.id){
   <li>
+    @if(unitSystem() === 'metric') {
     {{ ing.metric_qty }} {{ ing.metric_unit }} —
     {{ ing.ingredient?.ingredient }}
+    } @else { @if(ing.imperial_qty && ing.imperial_unit) {
+    {{ ing.imperial_qty }} {{ ing.imperial_unit }} —
+    {{ ing.ingredient?.ingredient }}
+    } @else {
+    {{ ing.metric_qty }} {{ ing.metric_unit }} —
+    {{ ing.ingredient?.ingredient }}
+    <em>(no imperial conversion available)</em>
+    } }
   </li>
   }
 </ul>

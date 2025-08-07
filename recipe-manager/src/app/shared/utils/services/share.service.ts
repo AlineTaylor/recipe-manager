@@ -1,5 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -35,8 +36,11 @@ export class ShareService {
   }
 
   logSharedItems(items: any[]) {
-    console.log(`Sharing parts list with: ${this.emailAddress()}`);
-    console.log(JSON.stringify(items, null, 2));
+    // Development logging only
+    if (!environment.production) {
+      console.log(`Sharing parts list with: ${this.emailAddress()}`);
+      console.log(JSON.stringify(items, null, 2));
+    }
     this.snackBar.open('Parts list shared!', 'Close', {
       duration: 3000,
       horizontalPosition: 'right',
@@ -45,8 +49,13 @@ export class ShareService {
   }
 
   logMessage(message: any) {
-    console.log(`Message from: ${this.senderName()} (${this.emailAddress()})`);
-    console.log(JSON.stringify(message, null, 2));
+    // Development logging only
+    if (!environment.production) {
+      console.log(
+        `Message from: ${this.senderName()} (${this.emailAddress()})`
+      );
+      console.log(JSON.stringify(message, null, 2));
+    }
     this.snackBar.open(
       'Thank you for your message! One of us will be reaching out to you shortly. ',
       'Close',
