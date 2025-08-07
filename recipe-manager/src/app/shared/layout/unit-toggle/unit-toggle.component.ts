@@ -6,7 +6,7 @@ import { SharedModule } from '../../shared.module';
   standalone: true,
   imports: [SharedModule],
   templateUrl: './unit-toggle.component.html',
-  styleUrls: ['./unit-toggle.component.css'],
+  styleUrl: './unit-toggle.component.css',
 })
 export class UnitToggleComponent {
   @Input({ required: true }) unitSystem!: WritableSignal<'metric' | 'imperial'>;

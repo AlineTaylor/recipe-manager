@@ -40,6 +40,7 @@ export class AddEditComponent implements OnInit {
 
   recipeForm!: FormGroup;
   isEdit = signal(false);
+  isLoading = signal(false);
   unitSystem: WritableSignal<'metric' | 'imperial'> = signal('metric');
 
   recipeId: number | null = null;
@@ -65,12 +66,15 @@ export class AddEditComponent implements OnInit {
 
     if (this.recipeId) {
       this.isEdit.set(true);
+      this.isLoading.set(true);
       this.recipeService.getRecipe(this.recipeId).subscribe({
         next: (recipe) => {
           this.populateForm(recipe);
+          this.isLoading.set(false);
         },
         error: (err) => {
           console.error('Error retrieving recipe:', err);
+          this.isLoading.set(false);
           this.snackBar.open(
             'Unable to load recipe. Please try again.',
             'Close',
@@ -161,7 +165,15 @@ export class AddEditComponent implements OnInit {
   }
 
   saveRecipe() {
-    if (this.recipeForm.invalid) return;
+    if (this.recipeForm.invalid) {
+      // Mark all fields as touched to show validation errors
+      this.recipeForm.markAllAsTouched();
+      this.snackBar.open('Please fill in all required fields', 'Close', {
+        duration: 4000,
+        panelClass: ['snackbar-error'],
+      });
+      return;
+    }
 
     const raw = this.recipeForm.value;
 
@@ -213,8 +225,10 @@ export class AddEditComponent implements OnInit {
       ? this.recipeService.updateRecipe(this.recipeId!, { recipe: payload })
       : this.recipeService.createRecipe({ recipe: payload });
 
+    this.isLoading.set(true);
     req.subscribe({
       next: () => {
+        this.isLoading.set(false);
         this.snackBar.open(
           this.isEdit() ? 'Recipe updated!' : 'Recipe created!',
           'Close',
@@ -224,6 +238,7 @@ export class AddEditComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
+        this.isLoading.set(false);
         this.snackBar.open(
           'Something went wrong, please try again',
           'Dismiss',
@@ -252,15 +267,17 @@ export class AddEditComponent implements OnInit {
         system === 'metric' ? 'metric_unit' : 'imperial_unit'
       )?.value;
 
+      // Only convert if we have valid source data and both units are conversion-compatible
       if (
         fromQty != null &&
+        fromQty > 0 &&
         fromUnit &&
         toUnit &&
         fromUnit !== 'count' &&
         toUnit !== 'count'
       ) {
         const converted = convertUnits(fromQty, fromUnit, toUnit);
-        if (converted != null) {
+        if (converted != null && converted > 0) {
           const targetControlName =
             system === 'metric' ? 'metric_qty' : 'imperial_qty';
           group.get(targetControlName)?.setValue(converted);
@@ -276,5 +293,20 @@ export class AddEditComponent implements OnInit {
     return system === 'metric'
       ? [...metricUnits, ...common]
       : [...imperialUnits, ...common];
+  }
+
+  // Helper method to get field validation errors
+  getFieldError(fieldName: string): string {
+    const field = this.recipeForm.get(fieldName);
+    if (field?.hasError('required')) return `${fieldName} is required`;
+    if (field?.hasError('min')) return `${fieldName} must be greater than 0`;
+    if (field?.hasError('max')) return `${fieldName} exceeds maximum value`;
+    return '';
+  }
+
+  // Helper method to check if field has errors and is touched
+  hasFieldError(fieldName: string): boolean {
+    const field = this.recipeForm.get(fieldName);
+    return !!(field?.invalid && field?.touched);
   }
 }

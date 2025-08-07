@@ -60,4 +60,9 @@ export class LatestComponent {
       data: { type },
     });
   }
+
+  //print functionality
+  printPage() {
+    window.print();
+  }
 }

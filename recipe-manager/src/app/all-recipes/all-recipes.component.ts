@@ -69,4 +69,9 @@ export class AllRecipesComponent {
       data: { type },
     });
   }
+
+  //print functionality
+  printPage() {
+    window.print();
+  }
 }

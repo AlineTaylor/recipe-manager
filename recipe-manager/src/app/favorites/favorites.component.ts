@@ -82,4 +82,9 @@ export class FavoritesComponent {
       data: { type },
     });
   }
+
+  //print functionality
+  printPage() {
+    window.print();
+  }
 }

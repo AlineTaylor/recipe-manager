@@ -52,4 +52,9 @@ export class ShoppingListComponent {
       data: { type },
     });
   }
+
+  //print functionality
+  printPage() {
+    window.print();
+  }
 }
