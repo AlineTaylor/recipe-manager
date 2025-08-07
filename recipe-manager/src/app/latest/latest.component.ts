@@ -19,7 +19,7 @@ export class LatestComponent {
   readonly dialog = inject(MatDialog);
   private recipeService = inject(RecipeService);
 
-  @Input({ required: true }) recipes: Recipe[] = [];
+  @Input() recipes: Recipe[] = [];
   paginatedRecipes: Recipe[] = [];
 
   //displaying cards

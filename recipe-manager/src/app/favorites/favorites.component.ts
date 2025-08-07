@@ -1,4 +1,12 @@
-import { Component, effect, inject, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  Input,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { ComponentType } from '@angular/cdk/overlay';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,8 +28,16 @@ export class FavoritesComponent {
   private recipeService = inject(RecipeService);
   emailSharingComponent = EmailSharingComponent;
 
-  @Input({ required: true }) recipes: Recipe[] = [];
-  paginatedRecipes: Recipe[] = [];
+  recipes = signal<Recipe[]>([]);
+  pageIndex = signal(0);
+  pageSize = signal(5);
+
+  paginatedRecipes = computed(() => {
+    const recipes = this.recipes();
+    const start = this.pageIndex() * this.pageSize();
+    const end = start + this.pageSize();
+    return recipes.slice(start, end);
+  });
 
   //displaying cards
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -29,26 +45,26 @@ export class FavoritesComponent {
   ngOnInit() {
     this.loadRecipes();
     effect(() => {
-      this.recipeService.favoritesChanged(); // depend on signal
+      this.recipeService.favoritesChanged(); // watch signal
       this.loadRecipes();
     });
   }
 
   loadRecipes() {
     this.recipeService.getFavoriteRecipes().subscribe((data) => {
-      this.recipes = data;
-      this.setPaginatedData();
+      this.recipes.set(data); // trigger computed() to run
     });
   }
 
-  onPageChange(event: PageEvent) {
-    this.setPaginatedData(event.pageIndex, event.pageSize);
+  handleFavoriteToggled(recipe: Recipe) {
+    // Remove the unfavorited recipe immediately from the signal
+    const updated = this.recipes().filter((r) => r.id !== recipe.id);
+    this.recipes.set(updated);
   }
 
-  setPaginatedData(pageIndex: number = 0, pageSize: number = 5) {
-    const start = pageIndex * pageSize;
-    const end = start + pageSize;
-    this.paginatedRecipes = this.recipes.slice(start, end);
+  onPageChange(event: PageEvent) {
+    this.pageIndex.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
   }
 
   //email sharing

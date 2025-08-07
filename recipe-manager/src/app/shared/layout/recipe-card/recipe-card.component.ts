@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   inject,
   Input,
+  Output,
 } from '@angular/core';
 import { SharedModule } from '../../shared.module';
 import { Recipe } from '../../utils/recipe.model';
@@ -24,8 +26,8 @@ export class RecipeCardComponent {
   readonly dialog = inject(MatDialog);
   recipeService = inject(RecipeService);
   @Input() recipe!: Recipe;
-  favoritesComponent = FavoritesComponent;
-  shoppingListComponent = ShoppingListComponent;
+  @Output() favoriteToggled = new EventEmitter<Recipe>();
+  @Output() shoppingListToggled = new EventEmitter<Recipe>();
 
   //expand recipe view
   expandRecipe(recipe: Recipe) {
@@ -47,6 +49,7 @@ export class RecipeCardComponent {
   //shopping list logic
   toggleShoppingList(recipe: Recipe) {
     this.recipeService.toggleShoppingList(recipe);
+    this.shoppingListToggled.emit(recipe);
   }
 
   isShoppingListed(recipe: Recipe): boolean {
@@ -56,6 +59,7 @@ export class RecipeCardComponent {
   //favoriting logic
   toggleFavorite(recipe: Recipe) {
     this.recipeService.toggleFavorite(recipe);
+    this.favoriteToggled.emit(recipe);
   }
 
   isFavorited(recipe: Recipe): boolean {

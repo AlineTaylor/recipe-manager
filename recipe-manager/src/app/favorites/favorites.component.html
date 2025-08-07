@@ -21,12 +21,20 @@
       </button>
     </div>
   </div>
+
+  @if (recipes().length) {
+
   <div class="recipe-grid results-list">
-    @for (recipe of paginatedRecipes; track recipe.id) {
-    <app-recipe-card [recipe]="recipe" type="recipes" class="recipe-card" />
+    @for (recipe of paginatedRecipes(); track recipe.id) {
+    <app-recipe-card
+      [recipe]="recipe"
+      type="recipes"
+      (favoriteToggled)="handleFavoriteToggled(recipe)"
+      class="recipe-card"
+    />
     }
   </div>
-  @if(!paginatedRecipes.length){
+  } @if(!paginatedRecipes().length){
   <div class="empty-state">
     <p>Your recipe list is empty.</p>
     <a routerLink="/my-recipes" routerLinkActive="active-link" class="back-link"
