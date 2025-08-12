@@ -1,1 +1,159 @@
-<p>profile works!</p>
+<div class="auth-wrapper">
+  <!-- TODO refactor for user data management feature -->
+  <form
+    (ngSubmit)="isSignup() ? onSubmit() : login()"
+    #form="ngForm"
+    class="auth-form"
+    novalidate
+  >
+    <h1>{{ isSignup() ? "Sign Up" : "Log In" }}</h1>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        required
+        #emailInput="ngModel"
+      />
+      @if (form.submitted && emailInput.invalid) {
+      <mat-error> Email is required </mat-error>
+      }
+    </mat-form-field>
+
+    @if (isSignup()) {
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Confirm Email</mat-label>
+      <input
+        matInput
+        type="email"
+        name="email_confirmation"
+        [(ngModel)]="email_confirmation"
+        required
+        #emailConfirmInput="ngModel"
+      />
+      @if (form.submitted && emailConfirmInput.invalid) {
+      <mat-error> Confirmation is required </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>First Name</mat-label>
+      <input
+        matInput
+        type="text"
+        name="first_name"
+        [(ngModel)]="first_name"
+        required
+        #firstNameInput="ngModel"
+      />
+      @if(form.submitted && firstNameInput.invalid){<mat-error>
+        First name is required
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Last Name</mat-label>
+      <input
+        matInput
+        type="text"
+        name="last_name"
+        [(ngModel)]="last_name"
+        required
+        #lastNameInput="ngModel"
+      />
+      @if(form.submitted && lastNameInput.invalid){<mat-error>
+        Last name is required </mat-error
+      >}
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Preferred Measurement System</mat-label>
+      <mat-select
+        name="preferred_system"
+        [(ngModel)]="preferred_system"
+        required
+        #systemInput="ngModel"
+      >
+        <mat-option value="metric">Metric</mat-option>
+        <mat-option value="imperial">Imperial</mat-option>
+      </mat-select>
+      @if(form.submitted && systemInput.invalid){<mat-error>
+        Please choose a system </mat-error
+      >} </mat-form-field
+    >}
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        [type]="showPassword() ? 'text' : 'password'"
+        name="password"
+        [(ngModel)]="password"
+        required
+        #passwordInput="ngModel"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="showPassword.set(!showPassword())"
+        [attr.aria-label]="'Toggle password visibility'"
+      >
+        <mat-icon>{{
+          showPassword() ? "visibility_off" : "visibility"
+        }}</mat-icon>
+      </button>
+      @if (form.submitted && passwordInput.invalid) {
+      <mat-error> Password is required </mat-error>
+      }
+    </mat-form-field>
+
+    @if (isSignup()) {
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Confirm Password</mat-label>
+      <input
+        matInput
+        [type]="showPasswordConfirm() ? 'text' : 'password'"
+        name="password_confirmation"
+        [(ngModel)]="password_confirmation"
+        required
+        #passwordConfirmInput="ngModel"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="showPasswordConfirm.set(!showPasswordConfirm())"
+        [attr.aria-label]="'Toggle password confirmation visibility'"
+      >
+        <mat-icon>{{
+          showPasswordConfirm() ? "visibility_off" : "visibility"
+        }}</mat-icon>
+      </button>
+      @if(form.submitted && passwordConfirmInput.invalid){
+      <mat-error> Password confirmation is required </mat-error
+      >} </mat-form-field
+    >}
+
+    <button mat-raised-button color="primary" type="submit">
+      {{ isSignup() ? "Sign Up" : "Log In" }}
+    </button>
+
+    <button
+      mat-button
+      type="button"
+      (click)="toggleAuthForm()"
+      class="toggle-btn"
+    >
+      {{
+        isSignup()
+          ? "Already have an account? Log in"
+          : "Need an account? Sign up"
+      }}
+    </button>
+  </form>
+</div>

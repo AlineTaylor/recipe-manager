@@ -121,13 +121,13 @@ export class AddEditComponent implements OnInit {
   addIngredient(data: Partial<IngredientList> | null = null) {
     this.ingredients.push(
       this.fb.group({
-        id: [data?.id || null], // ✅ include the ID of the ingredient_list if editing
+        id: [data?.id || null], // include the ID of the ingredient if editing so that the correct ingredient is referenced when editing
         metric_qty: [data?.metric_qty || null, Validators.required],
         metric_unit: [data?.metric_unit || '', Validators.required],
         imperial_qty: [data?.imperial_qty || null],
         imperial_unit: [data?.imperial_unit || ''],
         ingredient: this.fb.group({
-          id: [data?.ingredient?.id || null], // ✅ already done in previous step
+          id: [data?.ingredient?.id || null],
           ingredient: [data?.ingredient?.ingredient || '', Validators.required],
         }),
       })
@@ -147,7 +147,7 @@ export class AddEditComponent implements OnInit {
   ) {
     this.instructions.push(
       this.fb.group({
-        id: [data?.id || null], // ✅ Add this line
+        id: [data?.id || null], // include the ID of the instruction if editing so that the correct instruction is referenced when editing
         step_number: [data?.step_number || this.instructions.length + 1],
         step_content: [data?.step_content || '', Validators.required],
       })
@@ -204,10 +204,12 @@ export class AddEditComponent implements OnInit {
         })
       ),
 
+      //Including IDs for all nested attributes (create new ones if non-existing) to ensure proper association and correct updates
+
       ingredient_lists_attributes: raw.ingredient_lists.map(
         (i: IngredientList) => {
           const {
-            id, // ✅ ingredient_list ID
+            id,
             metric_qty,
             metric_unit,
             imperial_qty,
@@ -216,14 +218,13 @@ export class AddEditComponent implements OnInit {
           } = i;
 
           const base = {
-            id, // ✅ Include this so Rails knows to update this list item
+            id,
             metric_qty,
             metric_unit,
             imperial_qty,
             imperial_unit,
           };
 
-          // ✅ If the ingredient has an ID, associate it. If not, create it.
           return ingredient?.id
             ? { ...base, ingredient_id: ingredient.id }
             : { ...base, ingredient_attributes: ingredient };
