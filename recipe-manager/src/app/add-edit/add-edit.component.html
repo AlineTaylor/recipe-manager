@@ -55,12 +55,11 @@
       <mat-form-field appearance="fill">
         <mat-label>Unit</mat-label>
         <mat-select [formControlName]="unitSystem() + '_unit'">
-          <mat-option
-            *ngFor="let unit of getUnits(unitSystem())"
+          @for (unit of getUnits(unitSystem()); track unit) {<mat-option
             [value]="unit"
           >
-            {{ unit }}
-          </mat-option>
+            {{ unit }} </mat-option
+          >}
         </mat-select>
       </mat-form-field>
 
