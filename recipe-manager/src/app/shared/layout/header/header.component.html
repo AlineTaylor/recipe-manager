@@ -45,7 +45,15 @@
       <mat-icon>home</mat-icon>
       <span>Home</span>
     </button>
-    <button mat-menu-item>
+    <button
+      mat-menu-item
+      class="icon"
+      matTooltip="profile"
+      aria-label="profile button"
+      routerLink="/profile"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
       <mat-icon>account_circle</mat-icon>
       <span>Profile</span>
     </button>
