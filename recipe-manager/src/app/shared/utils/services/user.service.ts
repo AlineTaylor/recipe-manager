@@ -43,6 +43,14 @@ export class UserService {
       });
   }
 
+  editUser(data: any) {
+    return this.http.patch(`${environment.apiUrl}/users`, data);
+  }
+
+  deleteUser(data: any) {
+    return this.http.delete(`${environment.apiUrl}/users`, data);
+  }
+
   getUserSignal() {
     return this.user.asReadonly();
   }
