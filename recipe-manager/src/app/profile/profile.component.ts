@@ -1,10 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
-import { AuthService } from '../shared/utils/services/auth.service';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { AuthComponent } from '../auth/auth.component';
+import { UserService } from '../shared/utils/services/user.service';
+import { User } from '../shared/utils/user.model';
+import { AuthService } from '../shared/utils/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,102 +12,85 @@ import { AuthComponent } from '../auth/auth.component';
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent {
-  // TODO refactor for user data management feature
-  isSignup = signal(false);
+  userService = inject(UserService);
+  authService = inject(AuthService);
   showPassword = signal(false);
   showPasswordConfirm = signal(false);
 
-  email = '';
-  email_confirmation = '';
-  password = '';
-  password_confirmation = '';
-  first_name = '';
-  last_name = '';
-  preferred_system = '';
+  userData: User = {
+    id: this.userService.getDecodedToken()?.user_id || 0,
+    email: this.userService.getUserSignal()()?.email || '',
+    first_name: this.userService.getUserSignal()()?.first_name || '',
+    last_name: this.userService.getUserSignal()()?.last_name || '',
+    preferred_system:
+      this.userService.getUserSignal()()?.preferred_system || 'metric',
+  };
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private dialogRef: MatDialogRef<AuthComponent>,
-    private snackBar: MatSnackBar
-  ) {}
+  constructor(private snackBar: MatSnackBar) {}
 
-  toggleAuthForm() {
-    this.isSignup.update((val) => !val);
-  }
-
-  // authentication for existing users
-  login() {
-    this.authService
-      .login(this.email, this.email_confirmation, this.password)
-      .subscribe({
-        next: (res: any) => {
-          this.authService.setToken(res.token);
-          const redirect = this.authService.attemptedUrl || '/dashboard';
-          this.authService.attemptedUrl = null;
-          this.dialogRef.close();
-          this.router.navigate([redirect]);
-        },
-        error: (error: any) => {
-          console.error('Login error', error);
-          this.snackBar.open(
-            'Login failed. Please double-check your email and password and try again.',
-            'Dismiss',
-            {
-              duration: 5000,
-              panelClass: ['snackbar-error'],
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-            }
-          );
-        },
-      });
-  }
-
-  // signing up new users
-
-  user = {
+  // edit user profile
+  updatedUser = {
+    first_name: '',
+    last_name: '',
     email: '',
     email_confirmation: '',
     password: '',
     password_confirmation: '',
+    preferred_system: '',
   };
+
   onSubmit() {
-    if (this.password !== this.password_confirmation) {
+    if (this.updatedUser.password !== this.updatedUser.password_confirmation) {
       this.snackBar.open('Passwords do not match', 'Dismiss', {
         duration: 3000,
       });
       return;
     }
 
-    this.authService
-      .signUp({
-        email: this.email,
-        email_confirmation: this.email_confirmation,
-        password: this.password,
-        password_confirmation: this.password_confirmation,
-        first_name: this.first_name,
-        last_name: this.last_name,
-        preferred_system: this.preferred_system,
-      })
-      .subscribe({
+    this.userService.editUser(this.userData).subscribe({
+      next: (res) => {
+        this.snackBar.open('Profile updated successfully!', 'Dismiss', {
+          duration: 3000,
+        });
+      },
+      error: (err) => {
+        console.error('Update failed', err);
+        this.snackBar.open('Update failed. Please try again.', 'Dismiss', {
+          duration: 5000,
+          panelClass: ['snackbar-error'],
+        });
+      },
+    });
+  }
+
+  //delete user profile
+  deleteUser() {
+    if (
+      !confirm(
+        'Are you sure you want to delete your account? This action cannot be undone.'
+      )
+    ) {
+      return;
+    } else {
+      this.userService.deleteUser(this.userData).subscribe({
         next: (res) => {
           this.snackBar.open(
-            'Account created! You can now log in.',
+            'Profile deleted successfully. You will be missed!',
             'Dismiss',
             {
               duration: 3000,
             }
           );
-          this.isSignup.set(false); // switch back to login view
+          this.authService.logout();
         },
         error: (err) => {
-          console.error('Signup failed', err);
-          this.snackBar.open('Signup failed. Please try again.', 'Dismiss', {
+          console.error('Update failed', err);
+          this.snackBar.open('Deletion failed. Please try again.', 'Dismiss', {
             duration: 5000,
             panelClass: ['snackbar-error'],
           });
         },
       });
+    }
   }
 }

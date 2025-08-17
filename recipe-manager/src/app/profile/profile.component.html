@@ -1,12 +1,20 @@
-<div class="auth-wrapper">
-  <!-- TODO refactor for user data management feature -->
+<h1>Profile</h1>
+<p>First name: {{ this.userData.first_name }}</p>
+<p>Last name: {{ this.userData.last_name }}</p>
+<p>Email address: {{ this.userData.email }}</p>
+<p>Preferred System: {{ this.userData.preferred_system }}</p>
+
+<button mat-button>Edit</button>
+<button mat-button (click)="deleteUser()">Delete Account</button>
+
+<!-- <div class="auth-wrapper">
   <form
     (ngSubmit)="isSignup() ? onSubmit() : login()"
     #form="ngForm"
     class="auth-form"
     novalidate
   >
-    <h1>{{ isSignup() ? "Sign Up" : "Log In" }}</h1>
+    <h2>{{ isSignup() ? "Sign Up" : "Log In" }}</h2>
 
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>Email</mat-label>
@@ -156,4 +164,4 @@
       }}
     </button>
   </form>
-</div>
+</div> -->
