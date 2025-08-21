@@ -44,11 +44,18 @@ export class UserService {
   }
 
   editUser(data: any) {
-    return this.http.patch(`${environment.apiUrl}/users`, data);
+    const decoded = this.getDecodedToken();
+    if (!decoded?.user_id) throw new Error('No user ID found');
+    return this.http.patch(
+      `${environment.apiUrl}/users/${decoded.user_id}`,
+      data
+    );
   }
 
-  deleteUser(data: any) {
-    return this.http.delete(`${environment.apiUrl}/users`, data);
+  deleteUser(currentUser: User) {
+    const decoded = this.getDecodedToken();
+    if (!decoded?.user_id) throw new Error('No user ID found');
+    return this.http.delete(`${environment.apiUrl}/users/${decoded.user_id}`);
   }
 
   getUserSignal() {
