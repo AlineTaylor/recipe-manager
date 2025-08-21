@@ -11,44 +11,74 @@
   </button>
 
   @if (authService.isLoggedIn()){
-  <span>{{ firstName() }}'s Recipe Manager</span>} @else {<span
-    >My Recipe Manager</span
-  >}
-  <span class="header-spacer"></span>
   <span
-    >@if (authService.isLoggedIn()){
-    <button
-      matIconButton
-      class="icon logout-icon"
-      matTooltip="Logout"
-      aria-label="Logout button"
-      mat-button
-      (click)="logout()"
-    >
-      <mat-icon>logout</mat-icon>
-    </button>
-    }@else {
-    <button
-      matIconButton
-      class="icon login-icon"
-      matTooltip="Login"
-      aria-label="Login button"
-      mat-button
-      (click)="openDialog(authComponent)"
-    >
-      <mat-icon>login</mat-icon>
-    </button>
-    }</span
-  >
+    ><a
+      mat-menu-item
+      class="icon"
+      matTooltip="home"
+      aria-label="home button"
+      routerLink="/dashboard"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >{{ firstName() }}'s Recipe Manager</a
+    ></span
+  >} @else {<span>My Recipe Manager</span>}
+  <span class="header-spacer"></span>
+
   <button
-    matIconButton
-    class="icon"
-    matTooltip="home"
-    aria-label="home button"
-    routerLink="/dashboard"
-    routerLinkActive="active-link"
-    [routerLinkActiveOptions]="{ exact: true }"
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    aria-label="Example icon-button with a menu"
   >
-    <mat-icon>home</mat-icon>
+    <mat-icon>account_circle</mat-icon>
   </button>
+  <mat-menu #menu="matMenu">
+    <button
+      mat-menu-item
+      class="icon"
+      matTooltip="home"
+      aria-label="home button"
+      routerLink="/dashboard"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon>home</mat-icon>
+      <span>Home</span>
+    </button>
+    <button
+      mat-menu-item
+      class="icon"
+      matTooltip="profile"
+      aria-label="profile button"
+      routerLink="/profile"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon>account_circle</mat-icon>
+      <span>Profile</span>
+    </button>
+    <button mat-menu-item>
+      @if (authService.isLoggedIn()){
+      <span
+        class="icon logout-icon"
+        matTooltip="Logout"
+        aria-label="Logout button"
+        (click)="logout()"
+      >
+        <mat-icon>logout</mat-icon>
+        <span>Log Out</span>
+      </span>
+      }@else {
+      <span
+        class="icon login-icon"
+        matTooltip="Login"
+        aria-label="Login button"
+        (click)="openDialog(authComponent)"
+      >
+        <mat-icon>login</mat-icon>
+        <span>Log In</span>
+      </span>
+      }
+    </button>
+  </mat-menu>
 </mat-toolbar>

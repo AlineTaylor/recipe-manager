@@ -4,7 +4,6 @@ import {
   effect,
   EnvironmentInjector,
   inject,
-  Input,
   runInInjectionContext,
   signal,
   ViewChild,

@@ -6,7 +6,6 @@ import { AuthComponent } from './auth/auth.component';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
-  const router = inject(Router);
   const dialog = inject(MatDialog);
 
   const isLoggedIn = !!authService.tokenSignal();

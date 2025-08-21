@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://recipe-manager-m2th.onrender.com',
+  apiUrl: 'http://localhost:3000',
 };

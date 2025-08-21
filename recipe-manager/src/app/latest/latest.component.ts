@@ -2,7 +2,6 @@ import {
   Component,
   computed,
   inject,
-  Input,
   Signal,
   signal,
   ViewChild,

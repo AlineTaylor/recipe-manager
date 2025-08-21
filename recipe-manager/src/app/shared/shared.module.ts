@@ -13,6 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [],
@@ -33,6 +35,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatCardModule,
     MatPaginator,
     MatButtonToggleModule,
+    MatMenuModule,
+    MatDialogModule,
   ],
   exports: [
     CommonModule,
@@ -51,6 +55,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatCardModule,
     MatPaginator,
     MatButtonToggleModule,
+    MatMenuModule,
+    MatDialogModule,
   ],
 })
 export class SharedModule {}

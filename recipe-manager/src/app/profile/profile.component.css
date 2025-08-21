@@ -1,0 +1,151 @@
+.profile-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.profile-card {
+  margin: 0 auto;
+}
+
+.profile-view {
+  margin: 1rem 0;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+}
+
+.info-row mat-icon {
+  color: #666;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.info-row .label {
+  font-weight: 500;
+  min-width: 120px;
+  color: #555;
+}
+
+.info-row .value {
+  font-weight: 400;
+  color: #333;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  flex: 1;
+}
+
+.password-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.password-section h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.helper-text {
+  margin: 0 0 1rem 0;
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.card-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
+  padding: 1rem 1.5rem;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.loading-spinner mat-icon {
+  font-size: 2rem;
+  height: 2rem;
+  width: 2rem;
+  margin-bottom: 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* adding responsiveness */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 0.5rem;
+    margin: 1rem auto;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .info-row .label {
+    min-width: auto;
+    font-size: 0.9rem;
+  }
+
+  .card-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card-actions button {
+    width: 100%;
+  }
+}

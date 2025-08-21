@@ -43,6 +43,21 @@ export class UserService {
       });
   }
 
+  editUser(data: any) {
+    const decoded = this.getDecodedToken();
+    if (!decoded?.user_id) throw new Error('No user ID found');
+    return this.http.patch(
+      `${environment.apiUrl}/users/${decoded.user_id}`,
+      data
+    );
+  }
+
+  deleteUser(currentUser: User) {
+    const decoded = this.getDecodedToken();
+    if (!decoded?.user_id) throw new Error('No user ID found');
+    return this.http.delete(`${environment.apiUrl}/users/${decoded.user_id}`);
+  }
+
   getUserSignal() {
     return this.user.asReadonly();
   }

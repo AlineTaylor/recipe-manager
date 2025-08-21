@@ -81,7 +81,7 @@ export class RecipeService {
   //shopping list logic
   getShoppingListRecipes(): Observable<Recipe[]> {
     // TODO: Ideally this should be server-side filtering: /recipes?shopping_list=true
-    // For now, we'll cache the result to avoid repeated full fetches
+    // cache the result to avoid repeated full fetches for now
     return this.http
       .get<Recipe[]>(`${environment.apiUrl}/recipes?shopping_list=true`)
       .pipe(map((recipes) => recipes.filter((r) => r.shopping_list)));
@@ -98,8 +98,6 @@ export class RecipeService {
       },
       error: (err) => {
         console.error('Failed to toggle shopping list:', err);
-        // Revert the optimistic update if it fails
-        // (In a real app, you might want to show a snackbar error)
       },
     });
   }
@@ -111,7 +109,6 @@ export class RecipeService {
   //favoriting logic
   getFavoriteRecipes(): Observable<Recipe[]> {
     // TODO: Ideally this should be server-side filtering: /recipes?favorite=true
-    // For now, we'll add query param (may not work until backend supports it)
     return this.http
       .get<Recipe[]>(`${environment.apiUrl}/recipes?favorite=true`)
       .pipe(map((recipes) => recipes.filter((r) => r.favorite)));
@@ -137,13 +134,12 @@ export class RecipeService {
   }
 
   private getLatestSignalWritable(): WritableSignal<Recipe[]> {
-    // Ensure the signal is initialized
+    // initialize signal
     this.latestRecipes;
     return this._latestSignal!;
   }
 
   // latest recipes logic
-
   addToLatest(recipe: Recipe) {
     const latestSignal = this.getLatestSignalWritable();
     const current = latestSignal();
