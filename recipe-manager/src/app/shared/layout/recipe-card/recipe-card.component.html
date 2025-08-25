@@ -1,10 +1,16 @@
 @if(recipe){<mat-card class="recipe-card">
   <div class="recipe-info" (click)="expandRecipe(recipe)">
+    @if(recipe.picture_url){<img
+      mat-card-image
+      [src]="environment.apiUrl + recipe.picture_url"
+      alt="Recipe Picture"
+    />
+    } @else {
     <img
       mat-card-image
       src="https://images.unsplash.com/photo-1504674900247-0877df9cc836"
-      alt="Spaghetti Carbonara"
-    />
+      alt="Default Recipe Picture"
+    />}
     <mat-card-header>
       <mat-card-title>{{ recipe.title }}</mat-card-title>
 

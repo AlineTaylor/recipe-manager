@@ -17,6 +17,7 @@ import { UnitToggleComponent } from '../shared/layout/unit-toggle/unit-toggle.co
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { convertUnits } from '../shared/utils/convert-units';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-add-edit',
@@ -31,6 +32,53 @@ import { convertUnits } from '../shared/utils/convert-units';
   styleUrl: './add-edit.component.css',
 })
 export class AddEditComponent implements OnInit {
+  recipePictureUrl: string | null = null;
+
+  getRecipePictureUrl(): string | null {
+    return this.recipePictureUrl;
+  }
+
+  onRecipeFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    // check if file was selected and if it is in edit mode by checking whether recipeId already exists
+    if (input.files && input.files[0] && this.recipeId) {
+      const file = input.files[0];
+      // create form data obj and append file under 'picture' key for backend via http
+      const formData = new FormData();
+      formData.append('picture', file);
+      this.isLoading.set(true);
+      // send patch request via service
+      this.recipeService
+        .uploadRecipePicture(this.recipeId, formData)
+        .subscribe({
+          next: () => {
+            this.snackBar.open('Recipe picture updated!', 'Close', {
+              duration: 3000,
+              panelClass: ['snackbar-success'],
+            });
+            this.recipeService.getRecipe(this.recipeId!).subscribe({
+              next: (recipe) => {
+                this.recipePictureUrl = recipe.picture_url
+                  ? `${environment.apiUrl}${recipe.picture_url}`
+                  : null;
+                this.isLoading.set(false);
+              },
+              error: () => {
+                this.isLoading.set(false);
+              },
+            });
+          },
+          error: (err) => {
+            console.error('Recipe picture upload failed', err);
+            this.snackBar.open('Failed to upload recipe picture.', 'Close', {
+              duration: 5000,
+              panelClass: ['snackbar-error'],
+            });
+            this.isLoading.set(false);
+          },
+        });
+    }
+  }
   private route = inject(ActivatedRoute);
   private recipeService = inject(RecipeService);
   private router = inject(Router);
@@ -173,6 +221,9 @@ export class AddEditComponent implements OnInit {
     });
     recipe.ingredient_lists.forEach((ing) => this.addIngredient(ing));
     recipe.instructions.forEach((inst) => this.addInstruction(inst));
+    this.recipePictureUrl = recipe.picture_url
+      ? `${environment.apiUrl}${recipe.picture_url}`
+      : null;
   }
 
   saveRecipe() {
