@@ -16,6 +16,15 @@
       } @else if (!isEditing()) {
       <!-- profile viewing -->
       <div class="profile-view">
+        @if(user()?.profile_picture_url){
+        <div class="profile-picture-row">
+          <img
+            [src]="getProfilePictureUrl()"
+            alt="Profile Picture"
+            class="profile-picture"
+          />
+        </div>
+        }
         <div class="profile-info">
           <div class="info-row">
             <mat-icon>person</mat-icon>
@@ -43,6 +52,25 @@
       } @else {
       <!-- editing mode -->
       <form (ngSubmit)="onSubmit()" #profileForm="ngForm" class="edit-form">
+        <div class="form-row">
+          <label for="profilePictureInput">Profile Picture</label>
+          <input
+            type="file"
+            id="profilePictureInput"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            [disabled]="isUpdating()"
+          />
+          @if(user()?.profile_picture_url){
+          <div>
+            <img
+              [src]="getProfilePictureUrl()"
+              alt="Profile Picture"
+              class="profile-picture"
+            />
+          </div>
+          }
+        </div>
         <div class="form-row">
           <mat-form-field appearance="fill" class="half-width">
             <mat-label>First Name</mat-label>
