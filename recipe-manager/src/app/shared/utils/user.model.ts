@@ -4,4 +4,5 @@ export interface User {
   first_name: string;
   last_name: string;
   preferred_system: string;
+  profile_picture_url?: string;
 }

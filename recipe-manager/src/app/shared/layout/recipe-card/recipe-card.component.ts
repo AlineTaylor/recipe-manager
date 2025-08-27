@@ -11,8 +11,7 @@ import { Recipe } from '../../utils/recipe.model';
 import { RecipeExpandComponent } from '../recipe-expand/recipe-expand.component';
 import { MatDialog } from '@angular/material/dialog';
 import { RecipeService } from '../../utils/services/recipe.service';
-import { FavoritesComponent } from '../../../favorites/favorites.component';
-import { ShoppingListComponent } from '../../../shopping-list/shopping-list.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-recipe-card',
@@ -23,6 +22,7 @@ import { ShoppingListComponent } from '../../../shopping-list/shopping-list.comp
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeCardComponent {
+  environment = environment;
   readonly dialog = inject(MatDialog);
   recipeService = inject(RecipeService);
   @Input() recipe!: Recipe;

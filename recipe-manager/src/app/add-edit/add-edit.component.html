@@ -1,4 +1,23 @@
 <div class="form-container" [formGroup]="recipeForm">
+  <div class="recipe-picture-row">
+    <label for="recipePictureInput">Recipe Picture</label>
+    <input
+      type="file"
+      id="recipePictureInput"
+      (change)="onRecipeFileSelected($event)"
+      accept="image/*"
+      [disabled]="isLoading()"
+    />
+    @if(getRecipePictureUrl()){
+    <div>
+      <img
+        [src]="getRecipePictureUrl()"
+        alt="Recipe Picture"
+        class="recipe-picture"
+      />
+    </div>
+    }
+  </div>
   <h1>{{ isEdit() ? "Edit Recipe" : "Add Recipe" }}</h1>
 
   <mat-form-field appearance="fill">

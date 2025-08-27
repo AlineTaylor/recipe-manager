@@ -30,7 +30,6 @@ export interface Recipe {
   id: number;
   title: string;
   // description: string;
-  // imageUrl: string;
   servings: number;
   cooking_time: number; // in min
   favorite: boolean;
@@ -40,4 +39,5 @@ export interface Recipe {
   label: Label | null;
   created_at?: Date;
   updated_at?: Date;
+  picture_url?: string;
 }

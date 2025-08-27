@@ -47,7 +47,7 @@ export class RecipeService {
       this._latestSignal = signalRef; // now has .set() and .update()
     }
 
-    return this._latestSignal; // no .asReadonly() needed
+    return this._latestSignal;
   }
 
   getRecipes(): Observable<Recipe[]> {
@@ -62,6 +62,13 @@ export class RecipeService {
     return this.http
       .post<Recipe>(`${environment.apiUrl}/recipes`, payload)
       .pipe(tap((recipe) => this.addToLatest(recipe)));
+  }
+
+  uploadRecipePicture(recipeId: number, formData: FormData) {
+    return this.http.patch(
+      `${environment.apiUrl}/recipes/${recipeId}`,
+      formData
+    );
   }
 
   updateRecipe(

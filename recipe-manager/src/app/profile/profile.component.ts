@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../shared/utils/services/user.service';
 import { AuthService } from '../shared/utils/services/auth.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-profile',
@@ -60,6 +61,42 @@ export class ProfileComponent implements OnInit {
         preferred_system: currentUser.preferred_system,
       });
       this.isLoading.set(false);
+    }
+  }
+
+  getProfilePictureUrl(): string | null {
+    const user = this.user();
+    // base URL is the backend's API’s root domain since im using active storage for images
+    return user?.profile_picture_url
+      ? `${environment.apiUrl}${user.profile_picture_url}`
+      : null;
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const formData = new FormData();
+      formData.append('profile_picture', file);
+      this.isUpdating.set(true);
+      this.userService.uploadProfilePicture(formData).subscribe({
+        next: () => {
+          this.snackBar.open('Profile picture updated!', 'Dismiss', {
+            duration: 3000,
+            panelClass: ['snackbar-success'],
+          });
+          this.userService.loadUser();
+          this.isUpdating.set(false);
+        },
+        error: (err) => {
+          console.error('Profile picture upload failed', err);
+          this.snackBar.open('Failed to upload profile picture.', 'Dismiss', {
+            duration: 5000,
+            panelClass: ['snackbar-error'],
+          });
+          this.isUpdating.set(false);
+        },
+      });
     }
   }
 
