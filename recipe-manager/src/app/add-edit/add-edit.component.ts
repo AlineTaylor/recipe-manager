@@ -102,6 +102,7 @@ export class AddEditComponent implements OnInit {
   private initializeForm() {
     this.recipeForm = this.fb.group({
       title: ['', Validators.required],
+      description: [''],
       servings: [1, [Validators.required, Validators.min(1)]],
       cooking_time: [0, [Validators.required, Validators.min(0)]],
       favorite: [false],
@@ -206,13 +207,14 @@ export class AddEditComponent implements OnInit {
     this.instructions.removeAt(i);
   }
 
-  populateForm(recipe: Recipe) {
+  private populateForm(recipe: Recipe) {
     if (!recipe) {
       console.warn('populateForm received undefined!');
       return;
     }
     this.recipeForm.patchValue({
       title: recipe.title,
+      description: recipe.description || '',
       servings: recipe.servings,
       cooking_time: recipe.cooking_time,
       favorite: recipe.favorite,
@@ -240,9 +242,9 @@ export class AddEditComponent implements OnInit {
     const raw = this.recipeForm.value;
 
     // clean up payload for smooth backend communication
-
     const payload = {
       title: raw.title,
+      description: raw.description,
       servings: raw.servings,
       cooking_time: raw.cooking_time,
       favorite: raw.favorite,
@@ -256,7 +258,6 @@ export class AddEditComponent implements OnInit {
       ),
 
       //Including IDs for all nested attributes (create new ones if non-existing) to ensure proper association and correct updates
-
       ingredient_lists_attributes: raw.ingredient_lists.map(
         (i: IngredientList) => {
           const {
@@ -348,6 +349,7 @@ export class AddEditComponent implements OnInit {
       }
     });
   }
+
   getUnits(system: 'metric' | 'imperial'): string[] {
     const common = ['count'];
     const metricUnits = ['g', 'kg', 'ml', 'l'];

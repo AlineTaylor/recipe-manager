@@ -29,7 +29,7 @@ export interface Label {
 export interface Recipe {
   id: number;
   title: string;
-  // description: string;
+  description?: string;
   servings: number;
   cooking_time: number; // in min
   favorite: boolean;
