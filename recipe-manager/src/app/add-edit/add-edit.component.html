@@ -127,6 +127,19 @@
   <mat-checkbox formControlName="favorite">Favorite</mat-checkbox>
   <mat-checkbox formControlName="shopping_list">Shopping List</mat-checkbox>
 
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      formControlName="description"
+      placeholder="Enter a short description of your recipe"
+    ></textarea>
+    @if (recipeForm.get('description')?.invalid &&
+    recipeForm.get('description')?.touched) {
+    <mat-error>Description is required</mat-error>
+    }
+  </mat-form-field>
+
   <button mat-raised-button color="primary" (click)="saveRecipe()">
     {{ isEdit() ? "Update Recipe" : "Create Recipe" }}
   </button>

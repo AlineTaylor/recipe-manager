@@ -4,6 +4,10 @@
 
 <mat-divider></mat-divider>
 
+@if(recipe.description){
+<p class="recipe-description">{{ recipe.description }}</p>
+}
+
 <div class="ingredients-header">
   <h3>Ingredients</h3>
   <app-unit-toggle [unitSystem]="unitSystem"></app-unit-toggle>

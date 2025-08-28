@@ -13,19 +13,14 @@
     />}
     <mat-card-header>
       <mat-card-title>{{ recipe.title }}</mat-card-title>
-
-      <!-- <mat-card-subtitle>
-        Created:
-        {{ recipe.created_at | date : "mediumDate" }}<br />
-        Updated: {{ recipe.updated_at | date : "mediumDate" }}
-      </mat-card-subtitle> -->
-      <!-- <p>{{ recipe.created_at }}</p>
-      <p>{{ recipe.updated_at }}</p> -->
     </mat-card-header>
 
-    <!-- <mat-card-content>
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-    </mat-card-content> -->
+    @if(recipe.description){
+    <mat-card-content>
+      <p class="recipe-description">
+        {{ recipe.description }}
+      </p> </mat-card-content
+    >}
   </div>
   <mat-card-actions class="card-actions">
     <button
