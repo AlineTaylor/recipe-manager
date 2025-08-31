@@ -18,6 +18,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { convertUnits } from '../shared/utils/convert-units';
 import { environment } from '../../environments/environment';
+import imageCompression from 'browser-image-compression';
 
 @Component({
   selector: 'app-add-edit',
@@ -43,39 +44,60 @@ export class AddEditComponent implements OnInit {
     // check if file was selected and if it is in edit mode by checking whether recipeId already exists
     if (input.files && input.files[0] && this.recipeId) {
       const file = input.files[0];
-      // create form data obj and append file under 'picture' key for backend via http
-      const formData = new FormData();
-      formData.append('picture', file);
       this.isLoading.set(true);
-      // send patch request via service
-      this.recipeService
-        .uploadRecipePicture(this.recipeId, formData)
-        .subscribe({
-          next: () => {
-            this.snackBar.open('Recipe picture updated!', 'Close', {
-              duration: 3000,
-              panelClass: ['snackbar-success'],
-            });
-            this.recipeService.getRecipe(this.recipeId!).subscribe({
-              next: (recipe) => {
-                this.recipePictureUrl = recipe.picture_url
-                  ? `${environment.apiUrl}${recipe.picture_url}`
-                  : null;
+      // compress image before uploading
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 800,
+        useWebWorker: true,
+      };
+      imageCompression(file, options)
+        .then((compressedFile) => {
+          // create form data obj and append file under 'picture' key for backend via http
+          const formData = new FormData();
+          formData.append('picture', compressedFile);
+          // send patch request via service
+          this.recipeService
+            .uploadRecipePicture(this.recipeId!, formData)
+            .subscribe({
+              next: () => {
+                this.snackBar.open('Recipe picture updated!', 'Close', {
+                  duration: 3000,
+                  panelClass: ['snackbar-success'],
+                });
+                this.recipeService.getRecipe(this.recipeId!).subscribe({
+                  next: (recipe) => {
+                    this.recipePictureUrl = recipe.picture_url
+                      ? `${environment.apiUrl}${recipe.picture_url}`
+                      : null;
+                    this.isLoading.set(false);
+                  },
+                  error: () => {
+                    this.isLoading.set(false);
+                  },
+                });
+              },
+              error: (err) => {
+                console.error('Recipe picture upload failed', err);
+                this.snackBar.open(
+                  'Failed to upload recipe picture.',
+                  'Close',
+                  {
+                    duration: 5000,
+                    panelClass: ['snackbar-error'],
+                  }
+                );
                 this.isLoading.set(false);
               },
-              error: () => {
-                this.isLoading.set(false);
-              },
             });
-          },
-          error: (err) => {
-            console.error('Recipe picture upload failed', err);
-            this.snackBar.open('Failed to upload recipe picture.', 'Close', {
-              duration: 5000,
-              panelClass: ['snackbar-error'],
-            });
-            this.isLoading.set(false);
-          },
+        })
+        .catch((err) => {
+          console.error('Image compression failed', err);
+          this.snackBar.open('Image compression failed.', 'Close', {
+            duration: 5000,
+            panelClass: ['snackbar-error'],
+          });
+          this.isLoading.set(false);
         });
     }
   }
