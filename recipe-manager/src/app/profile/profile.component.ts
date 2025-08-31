@@ -5,6 +5,7 @@ import { UserService } from '../shared/utils/services/user.service';
 import { AuthService } from '../shared/utils/services/auth.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { environment } from '../../environments/environment';
+import imageCompression from 'browser-image-compression';
 
 @Component({
   selector: 'app-profile',
@@ -76,27 +77,48 @@ export class ProfileComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      const formData = new FormData();
-      formData.append('profile_picture', file);
       this.isUpdating.set(true);
-      this.userService.uploadProfilePicture(formData).subscribe({
-        next: () => {
-          this.snackBar.open('Profile picture updated!', 'Dismiss', {
-            duration: 3000,
-            panelClass: ['snackbar-success'],
+      // compress image before upload
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 800,
+        useWebWorker: true,
+      };
+      imageCompression(file, options)
+        .then((compressedFile) => {
+          const formData = new FormData();
+          formData.append('profile_picture', compressedFile);
+          this.userService.uploadProfilePicture(formData).subscribe({
+            next: () => {
+              this.snackBar.open('Profile picture updated!', 'Dismiss', {
+                duration: 3000,
+                panelClass: ['snackbar-success'],
+              });
+              this.userService.loadUser();
+              this.isUpdating.set(false);
+            },
+            error: (err) => {
+              console.error('Profile picture upload failed', err);
+              this.snackBar.open(
+                'Failed to upload profile picture.',
+                'Dismiss',
+                {
+                  duration: 5000,
+                  panelClass: ['snackbar-error'],
+                }
+              );
+              this.isUpdating.set(false);
+            },
           });
-          this.userService.loadUser();
-          this.isUpdating.set(false);
-        },
-        error: (err) => {
-          console.error('Profile picture upload failed', err);
-          this.snackBar.open('Failed to upload profile picture.', 'Dismiss', {
+        })
+        .catch((err) => {
+          console.error('Image compression failed', err);
+          this.snackBar.open('Image compression failed.', 'Dismiss', {
             duration: 5000,
             panelClass: ['snackbar-error'],
           });
           this.isUpdating.set(false);
-        },
-      });
+        });
     }
   }
 
