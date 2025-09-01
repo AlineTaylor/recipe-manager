@@ -29,6 +29,7 @@ export class RecipeService {
 
   //persistent signal for latest
   private _latestSignal: WritableSignal<Recipe[]> | null = null;
+  private _lastUserId: string | number | null = null;
 
   constructor(
     private http: HttpClient,
@@ -36,17 +37,16 @@ export class RecipeService {
   ) {}
 
   get latestRecipes(): Signal<Recipe[]> {
-    if (!this._latestSignal) {
-      const user = this.userService.getUserSignal()();
-      const userId = user?.id ?? 'anonymous';
-
+    const user = this.userService.getUserSignal()();
+    const userId = user?.id ?? 'anonymous';
+    // ff user changed, reset the signal for the new user
+    if (!this._latestSignal || this._lastUserId !== userId) {
       const signalRef = runInInjectionContext(this.injector, () =>
         persistentSignal<Recipe[]>(`recentlyViewed-${userId}`, [])
       );
-
-      this._latestSignal = signalRef; // now has .set() and .update()
+      this._latestSignal = signalRef;
+      this._lastUserId = userId;
     }
-
     return this._latestSignal;
   }
 
