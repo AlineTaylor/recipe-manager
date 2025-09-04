@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RecipeService } from '../shared/utils/services/recipe.service';
-import { Recipe, IngredientList } from '../shared/utils/recipe.model';
+import { Recipe } from '../shared/utils/recipe.model';
 import { SharedModule } from '../shared/shared.module';
 import { ComponentType } from '@angular/cdk/overlay';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,7 +18,8 @@ export class ShoppingListComponent {
 
   shoppingRecipes = signal<Recipe[]>([]);
   shoppingList = computed(() => {
-    return this.shoppingRecipes()
+    // flatten all ingredients from recipes flagged for shopping list addition
+    const allIngredients = this.shoppingRecipes()
       .filter((r) => r.shopping_list)
       .flatMap((r) =>
         r.ingredient_lists.map((ing) => ({
@@ -26,16 +27,36 @@ export class ShoppingListComponent {
           recipe: r,
         }))
       );
+
+    // aggregate by ingredient_id and unit
+    const aggregateMap = new Map<string, any>();
+    for (const ing of allIngredients) {
+      // use ingredient_id and metric_unit (for now) as key
+      const key = `${ing.ingredient_id || ing.ingredient?.id || ''}|${
+        ing.metric_unit || ''
+      }`;
+      if (aggregateMap.has(key)) {
+        const existing = aggregateMap.get(key);
+        existing.metric_qty += ing.metric_qty || 0;
+        // aggregate imperial_qty if units match
+        if (ing.imperial_unit && existing.imperial_unit === ing.imperial_unit) {
+          existing.imperial_qty += ing.imperial_qty || 0;
+        }
+      } else {
+        // clone to avoid changing original!!!
+        aggregateMap.set(key, { ...ing });
+      }
+    }
+    return Array.from(aggregateMap.values());
   });
 
   constructor() {
-    // Load initial data
     this.loadShoppingRecipes();
 
-    // React to changes in shopping list
+    // watch shopping list and reload when something changes
     effect(() => {
       this.recipeService.shoppingListChanged();
-      this.loadShoppingRecipes(); // reload when something changes
+      this.loadShoppingRecipes();
     });
   }
 
@@ -46,7 +67,7 @@ export class ShoppingListComponent {
   }
 
   removeFromShoppingList(recipe: Recipe) {
-    this.recipeService.toggleShoppingList(recipe); // you already have this!
+    this.recipeService.toggleShoppingList(recipe);
   }
 
   //sharing button group
