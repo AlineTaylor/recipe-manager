@@ -2,6 +2,7 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RecipeService } from '../shared/utils/services/recipe.service';
 import { Recipe } from '../shared/utils/recipe.model';
 import { SharedModule } from '../shared/shared.module';
+import { UnitToggleComponent } from '../shared/layout/unit-toggle/unit-toggle.component';
 import { ComponentType } from '@angular/cdk/overlay';
 import { MatDialog } from '@angular/material/dialog';
 import { EmailSharingComponent } from '../email-sharing/email-sharing.component';
@@ -9,11 +10,22 @@ import { EmailSharingComponent } from '../email-sharing/email-sharing.component'
 @Component({
   selector: 'app-shopping-list',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, UnitToggleComponent],
   templateUrl: './shopping-list.component.html',
   styleUrl: './shopping-list.component.css',
 })
 export class ShoppingListComponent {
+  unitSystem = signal<'metric' | 'imperial'>('metric');
+
+  // new helper to get converted ingredient qty for display
+  getDisplayQty(item: any): { qty: number | null; unit: string } {
+    const system = this.unitSystem();
+    if (system === 'metric') {
+      return { qty: item.metric_qty, unit: item.metric_unit };
+    } else {
+      return { qty: item.imperial_qty, unit: item.imperial_unit };
+    }
+  }
   private recipeService = inject(RecipeService);
 
   shoppingRecipes = signal<Recipe[]>([]);

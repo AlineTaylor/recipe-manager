@@ -1,4 +1,4 @@
-import { Component, Inject, signal, WritableSignal } from '@angular/core';
+import { Component, Inject, signal } from '@angular/core';
 import { SharedModule } from '../../shared.module';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Recipe } from '../../utils/recipe.model';
@@ -7,7 +7,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { RecipeService } from '../../utils/services/recipe.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UnitToggleComponent } from '../unit-toggle/unit-toggle.component';
-import { convertUnits } from '../../utils/convert-units';
+import { getDisplayQty } from '../../utils/get-display-qty';
 
 @Component({
   selector: 'app-recipe-expand',
@@ -17,30 +17,8 @@ import { convertUnits } from '../../utils/convert-units';
   styleUrl: './recipe-expand.component.css',
 })
 export class RecipeExpandComponent {
-  // helper to get converted ingredient value
-  getConvertedIngredient(ing: any): { qty: number | null; unit: string } {
-    const system = this.unitSystem();
-    if (system === 'metric') {
-      if (ing.metric_qty && ing.metric_unit) {
-        return { qty: ing.metric_qty, unit: ing.metric_unit };
-      } else if (ing.imperial_qty && ing.imperial_unit) {
-        const converted = convertUnits(
-          ing.imperial_qty,
-          ing.imperial_unit,
-          'g'
-        );
-        return { qty: converted, unit: 'g' };
-      }
-    } else {
-      if (ing.imperial_qty && ing.imperial_unit) {
-        return { qty: ing.imperial_qty, unit: ing.imperial_unit };
-      } else if (ing.metric_qty && ing.metric_unit) {
-        const converted = convertUnits(ing.metric_qty, ing.metric_unit, 'oz');
-        return { qty: converted, unit: 'oz' };
-      }
-    }
-    return { qty: null, unit: '' };
-  }
+  //new helper method for displaying converted qty
+  public getDisplayQty = getDisplayQty;
   unitSystem = signal<'metric' | 'imperial'>('metric');
   constructor(
     @Inject(MAT_DIALOG_DATA) public recipe: Recipe,
