@@ -9,9 +9,12 @@ import {
   EnvironmentInjector,
 } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IngredientList, Recipe } from '../shared/utils/recipe.model';
+import { Ingredient } from '../shared/utils/recipe.model';
+import { IngredientService } from '../shared/utils/services/ingredient.service';
 import { RecipeService } from '../shared/utils/services/recipe.service';
 import { UnitToggleComponent } from '../shared/layout/unit-toggle/unit-toggle.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -28,11 +31,26 @@ import imageCompression from 'browser-image-compression';
     UnitToggleComponent,
     MatCheckboxModule,
     MatSnackBarModule,
+    MatAutocompleteModule,
   ],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css',
 })
 export class AddEditComponent implements OnInit {
+  // handler for ingredient selection from autocomplete
+  onIngredientSelected(event: any, index: number) {
+    const selectedName = event.option.value;
+    const selected = this.globalIngredients().find(
+      (ing) => ing.ingredient === selectedName
+    );
+    if (selected) {
+      const ingredientGroup = this.ingredients.at(index).get('ingredient');
+      ingredientGroup?.get('id')?.setValue(selected.id);
+      ingredientGroup?.get('ingredient')?.setValue(selected.ingredient);
+    }
+  }
+  private ingredientService = inject(IngredientService);
+  globalIngredients = signal<Ingredient[]>([]);
   recipePictureUrl: string | null = null;
 
   getRecipePictureUrl(): string | null {
@@ -116,6 +134,10 @@ export class AddEditComponent implements OnInit {
   recipeId: number | null = null;
 
   ngOnInit() {
+    // load global ingredients for mat-autocomplete
+    this.ingredientService.getAllIngredients().subscribe((ingredients) => {
+      this.globalIngredients.set(ingredients);
+    });
     this.initializeForm();
     this.setupRouteHandling();
     this.setupUnitConversion();

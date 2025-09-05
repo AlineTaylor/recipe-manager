@@ -1,6 +1,7 @@
 <div class="shopping-list-container">
   <div class="section-header">
     <h1>🛒 Shopping List</h1>
+    <app-unit-toggle [unitSystem]="unitSystem"></app-unit-toggle>
     <div class="button-group">
       <button
         title="Share via email"
@@ -27,12 +28,8 @@
   <div class="ingredient-group">
     <div class="ingredient-card">
       <p class="ingredient-name">{{ item.ingredient?.ingredient }}</p>
-
       <p class="ingredient-qty">
-        {{ item.metric_qty }}
-        {{ item.metric_unit }} @if(item.imperial_qty){<span
-          >| {{ item.imperial_qty }} {{ item.imperial_unit }}</span
-        >}
+        {{ getDisplayQty(item).qty }} {{ getDisplayQty(item).unit }}
       </p>
       <button
         mat-icon-button

@@ -16,13 +16,13 @@
   @for(ing of recipe.ingredient_lists; track ing.id){
   <li>
     {{
-      getConvertedIngredient(ing).qty !== null
-        ? getConvertedIngredient(ing).qty
+      getDisplayQty(ing, unitSystem()).qty !== null
+        ? getDisplayQty(ing, unitSystem()).qty
         : "N/A"
     }}
-    {{ getConvertedIngredient(ing).unit }} —
+    {{ getDisplayQty(ing, unitSystem()).unit }} —
     {{ ing.ingredient?.ingredient }}
-    @if(getConvertedIngredient(ing).qty === null) {
+    @if(getDisplayQty(ing, unitSystem()).qty === null) {
     <em>(no conversion available)</em>
     }
   </li>
