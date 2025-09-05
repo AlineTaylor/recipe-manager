@@ -85,7 +85,20 @@
       <div formGroupName="ingredient">
         <mat-form-field appearance="fill">
           <mat-label>Ingredient</mat-label>
-          <input matInput formControlName="ingredient" />
+          <input
+            type="text"
+            matInput
+            [matAutocomplete]="auto"
+            formControlName="ingredient"
+            (optionSelected)="onIngredientSelected($event, i)"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            @for (option of globalIngredients(); track option.id) {
+            <mat-option [value]="option.ingredient">{{
+              option.ingredient
+            }}</mat-option>
+            }
+          </mat-autocomplete>
         </mat-form-field>
       </div>
 
