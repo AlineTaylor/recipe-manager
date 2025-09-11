@@ -1,5 +1,15 @@
 <section class="all-recipes-container">
   <div class="section-header">
+    <mat-chip-set class="label-chip-list" aria-label="Recipe label filters">
+      @for(option of labelOptions; track option.key){<mat-chip
+        (click)="toggleLabelFilter(option.key)"
+        [class.selected-chip]="labelFilters.includes(option.key)"
+        selectable="true"
+        [removable]="false"
+        [color]="labelFilters.includes(option.key) ? 'primary' : undefined"
+        >{{ option.icon }} {{ option.label }} </mat-chip
+      >}
+    </mat-chip-set>
     <h1>🍲 All Recipes</h1>
     <mat-form-field appearance="fill" class="sort-select">
       <mat-label>Sort by</mat-label>
@@ -11,6 +21,8 @@
         <mat-option value="oldest">Oldest</mat-option>
         <mat-option value="az">A-Z</mat-option>
         <mat-option value="za">Z-A</mat-option>
+        <mat-option value="shortest">Shortest Cooking Time</mat-option>
+        <mat-option value="longest">Longest Cooking Time</mat-option>
       </mat-select>
     </mat-form-field>
     <div class="button-group">
