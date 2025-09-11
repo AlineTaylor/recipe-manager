@@ -1,6 +1,30 @@
 <section class="all-recipes-container">
   <div class="section-header">
+    <mat-chip-set class="label-chip-list" aria-label="Recipe label filters">
+      @for(option of labelOptions; track option.key){<mat-chip
+        (click)="toggleLabelFilter(option.key)"
+        [class.selected-chip]="labelFilters.includes(option.key)"
+        selectable="true"
+        [removable]="false"
+        [color]="labelFilters.includes(option.key) ? 'primary' : undefined"
+        >{{ option.icon }} {{ option.label }} </mat-chip
+      >}
+    </mat-chip-set>
     <h1>🍲 All Recipes</h1>
+    <mat-form-field appearance="fill" class="sort-select">
+      <mat-label>Sort by</mat-label>
+      <mat-select
+        [value]="sortOption"
+        (selectionChange)="onSortChange($event.value)"
+      >
+        <mat-option value="newest">Newest</mat-option>
+        <mat-option value="oldest">Oldest</mat-option>
+        <mat-option value="az">A-Z</mat-option>
+        <mat-option value="za">Z-A</mat-option>
+        <mat-option value="shortest">Shortest Cooking Time</mat-option>
+        <mat-option value="longest">Longest Cooking Time</mat-option>
+      </mat-select>
+    </mat-form-field>
     <div class="button-group">
       <button
         title="Share via email"
@@ -21,15 +45,6 @@
     </div>
   </div>
   <p class="subtitle">All your culinary creations in one place.</p>
-
-  <!-- TODO Update selection once fixed -->
-  <!-- <select (change)="filterByType($event)">
-        <option value="">All Types</option>
-        <option value="vegetarian">Vegetarian</option>
-        <option value="vegan">Vegan</option>
-        <option value="gluten_free">Gluten-free</option>
-        <option value="dairy_free">Dairy-free</option>
-      </select> -->
 
   <div class="recipe-grid results-list">
     @for (recipe of paginatedRecipes; track recipe.id) {
