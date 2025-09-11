@@ -1,6 +1,18 @@
 <section class="all-recipes-container">
   <div class="section-header">
     <h1>🍲 All Recipes</h1>
+    <mat-form-field appearance="fill" class="sort-select">
+      <mat-label>Sort by</mat-label>
+      <mat-select
+        [value]="sortOption"
+        (selectionChange)="onSortChange($event.value)"
+      >
+        <mat-option value="newest">Newest</mat-option>
+        <mat-option value="oldest">Oldest</mat-option>
+        <mat-option value="az">A-Z</mat-option>
+        <mat-option value="za">Z-A</mat-option>
+      </mat-select>
+    </mat-form-field>
     <div class="button-group">
       <button
         title="Share via email"
@@ -21,15 +33,6 @@
     </div>
   </div>
   <p class="subtitle">All your culinary creations in one place.</p>
-
-  <!-- TODO Update selection once fixed -->
-  <!-- <select (change)="filterByType($event)">
-        <option value="">All Types</option>
-        <option value="vegetarian">Vegetarian</option>
-        <option value="vegan">Vegan</option>
-        <option value="gluten_free">Gluten-free</option>
-        <option value="dairy_free">Dairy-free</option>
-      </select> -->
 
   <div class="recipe-grid results-list">
     @for (recipe of paginatedRecipes; track recipe.id) {

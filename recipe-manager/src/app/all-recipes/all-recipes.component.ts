@@ -15,6 +15,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
   styleUrl: './all-recipes.component.css',
 })
 export class AllRecipesComponent {
+  sortOption: string = 'newest';
   @Input({ required: true }) recipes: Recipe[] = [];
   paginatedRecipes: Recipe[] = [];
   private recipeService = inject(RecipeService);
@@ -30,8 +31,46 @@ export class AllRecipesComponent {
   loadRecipes() {
     this.recipeService.getRecipes().subscribe((data) => {
       this.recipes = data;
+      this.sortRecipes();
       this.setPaginatedData();
     });
+  }
+
+  onSortChange(option: string) {
+    this.sortOption = option;
+    this.sortRecipes();
+    this.setPaginatedData(
+      this.paginator?.pageIndex || 0,
+      this.paginator?.pageSize || 5
+    );
+  }
+
+  sortRecipes() {
+    // switch statement for smooth sorting <3
+    switch (this.sortOption) {
+      case 'newest':
+        this.recipes.sort(
+          (a, b) =>
+            new Date(b.created_at || '').getTime() -
+            new Date(a.created_at || '').getTime()
+        );
+        break;
+      case 'oldest':
+        this.recipes.sort(
+          (a, b) =>
+            new Date(a.created_at || '').getTime() -
+            new Date(b.created_at || '').getTime()
+        );
+        break;
+      case 'az':
+        this.recipes.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'za':
+        this.recipes.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      default:
+        break;
+    }
   }
 
   onPageChange(event: PageEvent) {
@@ -44,21 +83,7 @@ export class AllRecipesComponent {
     this.paginatedRecipes = this.recipes.slice(start, end);
   }
 
-  //result filtering
-
-  // results = this.searchService.filteredResults;
-
-  // updateSearch(type: string) {
-  //   this.searchService.setType(type);
-  // }
-
-  // filterByType(event: Event) {
-  //   const value = (event.target as HTMLSelectElement).value;
-  //   this.searchService.setType(value);
-  // }
-
-  //emailing sharing
-
+  //email sharing
   emailSharingComponent = EmailSharingComponent;
   openDialog(
     component: ComponentType<any>,
