@@ -21,25 +21,30 @@ export class EmailSharingComponent {
     if (dialogData && dialogData.type) {
       this.type = dialogData.type;
     }
-    // Handle recipes based on type
+    // Handle recipes or shopping list based on type
     if (this.type === 'favorites') {
       this.recipeService.getFavoriteRecipes().subscribe((recipes) => {
         this.recipes.update(() => recipes);
       });
     } else if (this.type === 'latest') {
-      // latestRecipes is a signal, copy its value into our writable signal
+      // copy latestRecipes signal value into writable signal
       this.recipes.update(() => this.recipeService.latestRecipes());
     } else if (this.type === 'results' && dialogData && dialogData.recipes) {
       // results passed in as dialog data
       this.recipes.update(() => dialogData.recipes);
+    } else if (
+      this.type === 'shopping-list' &&
+      dialogData &&
+      dialogData.shoppingList
+    ) {
+      // shopping list passed in as dialog data
+      this.recipes.update(() => dialogData.shoppingList);
     }
   }
 
   // Use the tag to decide which data to pull
-  // TODO - remember to update types
   @Input()
-  type: 'favorites' | 'latest' | 'results' = 'favorites';
-
+  type: 'favorites' | 'latest' | 'results' | 'shopping-list' = 'favorites';
   // recipes signal is set in constructor
 
   toggleForm() {

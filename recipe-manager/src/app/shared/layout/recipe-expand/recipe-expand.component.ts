@@ -1,4 +1,4 @@
-import { Component, Inject, signal } from '@angular/core';
+import { Component, Inject, signal, inject } from '@angular/core';
 import { SharedModule } from '../../shared.module';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Recipe } from '../../utils/recipe.model';
@@ -8,6 +8,9 @@ import { RecipeService } from '../../utils/services/recipe.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UnitToggleComponent } from '../unit-toggle/unit-toggle.component';
 import { getDisplayQty } from '../../utils/get-display-qty';
+import { MatDialog } from '@angular/material/dialog';
+import { EmailSharingComponent } from '../../../email-sharing/email-sharing.component';
+import { ComponentType } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-recipe-expand',
@@ -20,6 +23,9 @@ export class RecipeExpandComponent {
   //new helper method for displaying converted qty
   public getDisplayQty = getDisplayQty;
   unitSystem = signal<'metric' | 'imperial'>('metric');
+  readonly dialog = inject(MatDialog);
+  emailSharingComponent = EmailSharingComponent;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public recipe: Recipe,
     private dialogRef: MatDialogRef<RecipeExpandComponent>,
@@ -59,5 +65,19 @@ export class RecipeExpandComponent {
         );
       },
     });
+  }
+
+  openDialog(
+    component: ComponentType<any>,
+    type: 'favorites' | 'latest' | 'results'
+  ) {
+    // pass individual recipes as results
+    this.dialog.open(component, {
+      data: { type: 'results', recipes: [this.recipe] },
+    });
+  }
+
+  printPage() {
+    window.print();
   }
 }
