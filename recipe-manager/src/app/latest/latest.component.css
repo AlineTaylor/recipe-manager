@@ -13,7 +13,7 @@ h1 {
   color: var(--font-color-std);
 }
 
-.recently-viewed-container {
+.latest-container {
   background-color: var(--primary-bg);
   margin-bottom: 2rem;
   max-width: 700px;
@@ -54,7 +54,7 @@ h1 {
   transform: scale(1.1);
 }
 
-.recently-viewed-list {
+.latest-list {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
@@ -62,7 +62,7 @@ h1 {
   padding: 0;
 }
 
-.recently-viewed-item {
+.latest-item {
   flex: 1 1 250px;
   background-color: var(--primary-color-light);
   border-radius: 10px;
@@ -82,7 +82,7 @@ h1 {
 
 /* responsive layout */
 @media (min-width: 1024px) {
-  .recently-viewed-container {
+  .latest-container {
     max-width: 100%;
     margin: auto;
     margin-top: 2rem;

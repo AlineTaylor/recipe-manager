@@ -75,7 +75,7 @@ export class FavoritesComponent {
   //email sharing
   openDialog(
     component: ComponentType<any>,
-    type: 'favorites' | 'recently-viewed' | 'results'
+    type: 'favorites' | 'latest' | 'results'
   ) {
     this.dialog.open(component, {
       data: { type },

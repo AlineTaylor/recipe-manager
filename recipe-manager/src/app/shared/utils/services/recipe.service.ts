@@ -42,7 +42,7 @@ export class RecipeService {
     // ff user changed, reset the signal for the new user
     if (!this._latestSignal || this._lastUserId !== userId) {
       const signalRef = runInInjectionContext(this.injector, () =>
-        persistentSignal<Recipe[]>(`recentlyViewed-${userId}`, [])
+        persistentSignal<Recipe[]>(`latest-${userId}`, [])
       );
       this._latestSignal = signalRef;
       this._lastUserId = userId;
