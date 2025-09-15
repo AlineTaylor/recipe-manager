@@ -112,4 +112,13 @@ export class ShareService {
       ...data,
     });
   }
+
+  // snackbar message (public helper)
+  showSnackbar(
+    message: string,
+    action: string = 'Close',
+    duration: number = 4000
+  ) {
+    this.snackBar.open(message, action, { duration });
+  }
 }

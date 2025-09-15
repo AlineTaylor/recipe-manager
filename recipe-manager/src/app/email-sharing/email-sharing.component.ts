@@ -52,9 +52,21 @@ export class EmailSharingComponent {
   }
 
   emailMessage() {
-    // Log the recipes to verify correct data
-    console.log('Recipes to share:', this.recipes());
-    this.shareService.resetShareForm();
-    this.dialogRef.close();
+    this.shareService
+      .shareRecipe({
+        recipient_email: this.shareService.emailAddress(),
+        recipe_id: this.recipes()[0]?.id, // Adjust as needed for your use case
+        message: this.shareService.messageBody(),
+      })
+      .subscribe({
+        next: () => {
+          this.shareService.resetShareForm();
+          this.dialogRef.close();
+        },
+        error: (err) => {
+          // show an error message
+          this.shareService.showSnackbar('Failed to send email');
+        },
+      });
   }
 }
