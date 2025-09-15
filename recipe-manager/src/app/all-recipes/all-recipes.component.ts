@@ -129,11 +129,14 @@ export class AllRecipesComponent {
   emailSharingComponent = EmailSharingComponent;
   openDialog(
     component: ComponentType<any>,
-    type: 'favorites' | 'recently-viewed' | 'results'
+    type: 'favorites' | 'latest' | 'results'
   ) {
-    this.dialog.open(component, {
-      data: { type },
-    });
+    // For 'results', pass filteredRecipes as dialog data
+    const data: any = { type };
+    if (type === 'results') {
+      data.recipes = this.filteredRecipes;
+    }
+    this.dialog.open(component, { data });
   }
 
   //print functionality

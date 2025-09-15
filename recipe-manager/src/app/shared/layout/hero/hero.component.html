@@ -1,13 +1,21 @@
 <section class="hero">
-  <div class="hero-graphic">
-    <img src="/favicon.ico" alt="Cooking Pot and Utensils" />
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-graphic">
+      <img src="/hero-img.png" alt="Fresh Ingredients" />
+    </div>
+    <h1>Welcome to <span>Recipe Manager</span></h1>
+    <p class="hero-tagline">
+      Your personal guide to capturing, managing, and mastering your culinary
+      creations.
+    </p>
+    <ul class="hero-highlights">
+      <li><mat-icon>star</mat-icon> Save & organize your favorite recipes</li>
+      <li><mat-icon>shopping_cart</mat-icon> Auto-generate shopping lists</li>
+      <li><mat-icon>mail</mat-icon> Share & print with one click</li>
+    </ul>
+    <a mat-raised-button color="primary" routerLink="/my-recipes"
+      >View My Recipes</a
+    >
   </div>
-  <h1>Welcome to <span>Recipe Manager</span></h1>
-  <p>
-    Your personal guide to capturing, managing and mastering your culinary
-    creations.
-  </p>
-  <a mat-raised-button color="primary" routerLink="/my-recipes"
-    >View My Recipes</a
-  >
 </section>

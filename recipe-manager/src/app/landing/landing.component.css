@@ -7,9 +7,102 @@
 }
 .landing-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   padding: 3rem 1rem;
   background-color: #fef8f1;
   min-height: 100vh;
+}
+.features-section {
+  margin: 2.5rem 0 2rem 0;
+  text-align: center;
+}
+.features-section h2 {
+  font-size: 2rem;
+  color: #a84311;
+  margin-bottom: 1.5rem;
+}
+.features-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+.feature {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 1.5rem 1.2rem;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s;
+}
+.feature:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 6px 18px rgba(168,67,17,0.12);
+}
+.feature mat-icon {
+  font-size: 2.5rem;
+  color: #d66a33;
+  margin-bottom: 0.5rem;
+}
+.feature h3 {
+  margin: 0.5rem 0 0.3rem 0;
+  font-size: 1.15rem;
+  color: #4e342e;
+}
+.feature p {
+  color: #5d4037;
+  font-size: 0.98rem;
+}
+.carousel-section {
+  margin: 2.5rem 0 2rem 0;
+  text-align: center;
+}
+.carousel-section h2 {
+  color: #a84311;
+  margin-bottom: 1.2rem;
+}
+.carousel {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  overflow-x: auto;
+  padding: 1rem 0;
+}
+.carousel img {
+  height: 120px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: #fff;
+  padding: 0.5rem;
+  transition: transform 0.2s;
+}
+.carousel img:hover {
+  transform: scale(1.07);
+  box-shadow: 0 6px 18px rgba(168,67,17,0.13);
+}
+.cta-section {
+  margin: 2.5rem 0 1.5rem 0;
+  text-align: center;
+}
+.cta-section h2 {
+  color: #4e342e;
+  margin-bottom: 1.2rem;
+}
+.cta-section a[mat-raised-button] {
+  background-color: #d66a33;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.9rem 2.2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  text-transform: none;
+  box-shadow: 0 2px 8px rgba(168,67,17,0.08);
+}
+.cta-section a[mat-raised-button]:hover {
+  background-color: #c35724;
 }

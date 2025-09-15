@@ -87,11 +87,14 @@ export class ShoppingListComponent {
   emailSharingComponent = EmailSharingComponent;
   openDialog(
     component: ComponentType<any>,
-    type: 'favorites' | 'recently-viewed' | 'results'
+    type: 'favorites' | 'latest' | 'results' | 'shopping-list'
   ) {
-    this.dialog.open(component, {
-      data: { type },
-    });
+    // pass the current shopping list as dialog data
+    const data: any = { type };
+    if (type === 'shopping-list') {
+      data.shoppingList = this.shoppingList();
+    }
+    this.dialog.open(component, { data });
   }
 
   //print functionality

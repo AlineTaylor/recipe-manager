@@ -193,7 +193,7 @@ h1 {
 /* adding some responsiveness */
 @media (min-width: 1024px) {
   .favorites-container,
-  .recently-viewed-container {
+  .latest-container {
     max-width: 100%;
     margin: auto;
   }
