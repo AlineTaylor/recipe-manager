@@ -1,5 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -7,6 +8,10 @@ import { environment } from '../../../../environments/environment';
 })
 export class ShareService {
   private snackBar = inject(MatSnackBar);
+  private http = inject(HttpClient);
+
+  // backend API base URL (set in env files)
+  private apiUrl = environment.apiUrl;
   showShareForm = signal(false);
   emailAddress = signal('');
   senderName = signal('');
@@ -65,5 +70,46 @@ export class ShareService {
         verticalPosition: 'bottom',
       }
     );
+  }
+
+  // recipe sharing
+  shareRecipe(data: {
+    recipient_email: string;
+    recipe_id: number | string;
+    sender_email?: string;
+    sender_name?: string;
+    message?: string;
+  }) {
+    return this.http.post(`${this.apiUrl}/share`, {
+      type: 'recipe',
+      ...data,
+    });
+  }
+
+  // shopping list sharing
+  shareShoppingList(data: {
+    recipient_email: string;
+    ingredients: any[] | string;
+    sender_email?: string;
+    sender_name?: string;
+  }) {
+    return this.http.post(`${this.apiUrl}/share`, {
+      type: 'shopping-list',
+      ...data,
+    });
+  }
+
+  //  contact form sharing
+  sendContactMessage(data: {
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+    user_id?: string | number;
+  }) {
+    return this.http.post(`${this.apiUrl}/share`, {
+      type: 'contact',
+      ...data,
+    });
   }
 }
