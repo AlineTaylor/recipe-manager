@@ -1,0 +1,19 @@
+.demo-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(90deg, #fff8e1, #fff3e0);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  color: #333;
+  font-size: 14px;
+}
+
+.demo-content {
+  flex: 1;
+}
+
+.demo-banner button {
+  margin-left: 8px;
+}

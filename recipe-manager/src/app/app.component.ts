@@ -6,11 +6,13 @@ import { SidebarComponent } from './shared/layout/sidebar/sidebar.component';
 import { MatDrawer } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { RouterOutlet } from '@angular/router';
+import { DemoBannerComponent } from './shared/layout/demo-banner/demo-banner.component';
 
 @Component({
   selector: 'app-root',
   imports: [
     SharedModule,
+    DemoBannerComponent,
     HeaderComponent,
     FooterComponent,
     SidebarComponent,
