@@ -10,7 +10,7 @@
   flex-direction: column;
   align-items: center;
   padding: 3rem 1rem;
-  background-color: #fef8f1;
+  background-color: var(--beige-100);
   min-height: 100vh;
 }
 .features-section {
@@ -19,7 +19,7 @@
 }
 .features-section h2 {
   font-size: 2rem;
-  color: #a84311;
+  color: var(--accent);
   margin-bottom: 1.5rem;
 }
 .features-list {
@@ -29,9 +29,9 @@
   gap: 2rem;
 }
 .feature {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   padding: 1.5rem 1.2rem;
   width: 220px;
   display: flex;
@@ -41,20 +41,27 @@
 }
 .feature:hover {
   transform: translateY(-6px) scale(1.04);
-  box-shadow: 0 6px 18px rgba(168,67,17,0.12);
+  box-shadow: 0 6px 18px rgba(162, 73, 25, 0.12);
 }
 .feature mat-icon {
-  font-size: 2.5rem;
-  color: #d66a33;
+  /* Scale icon properly and avoid clipping from default 24px box */
+  font-size: 2.5rem; /* visual size */
+  width: 1em; /* match font-size */
+  height: 1em; /* match font-size */
+  line-height: 1; /* avoid vertical clipping */
+  display: inline-flex; /* easy centering */
+  align-items: center;
+  justify-content: center;
+  color: var(--orange-500);
   margin-bottom: 0.5rem;
 }
 .feature h3 {
   margin: 0.5rem 0 0.3rem 0;
   font-size: 1.15rem;
-  color: #4e342e;
+  color: var(--brown-700);
 }
 .feature p {
-  color: #5d4037;
+  color: var(--brown-600);
   font-size: 0.98rem;
 }
 .carousel-section {
@@ -62,7 +69,7 @@
   text-align: center;
 }
 .carousel-section h2 {
-  color: #a84311;
+  color: var(--accent);
   margin-bottom: 1.2rem;
 }
 .carousel {
@@ -76,33 +83,33 @@
 .carousel img {
   height: 120px;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background: var(--card-bg);
   padding: 0.5rem;
   transition: transform 0.2s;
 }
 .carousel img:hover {
   transform: scale(1.07);
-  box-shadow: 0 6px 18px rgba(168,67,17,0.13);
+  box-shadow: 0 6px 18px rgba(162, 73, 25, 0.13);
 }
 .cta-section {
   margin: 2.5rem 0 1.5rem 0;
   text-align: center;
 }
 .cta-section h2 {
-  color: #4e342e;
+  color: var(--brown-700);
   margin-bottom: 1.2rem;
 }
 .cta-section a[mat-raised-button] {
-  background-color: #d66a33;
-  color: #fff;
+  background-color: var(--orange-500);
+  color: var(--card-bg);
   font-weight: bold;
   padding: 0.9rem 2.2rem;
   border-radius: 8px;
   font-size: 1.1rem;
   text-transform: none;
-  box-shadow: 0 2px 8px rgba(168,67,17,0.08);
+  box-shadow: 0 2px 8px rgba(168, 67, 17, 0.08);
 }
 .cta-section a[mat-raised-button]:hover {
-  background-color: #c35724;
+  background-color: var(--orange-600);
 }

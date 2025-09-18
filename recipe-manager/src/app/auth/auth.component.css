@@ -28,5 +28,5 @@ h1 {
 .toggle-btn {
   margin-top: 4px;
   font-size: 0.875rem;
-  color: #3f51b5;
+  color: var(--blue-500);
 }

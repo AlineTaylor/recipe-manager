@@ -1,19 +1,23 @@
 .sidebar {
-  background: var(--sidebar-bg);
-  padding: 20px;
-  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.04);
-  min-width: 220px;
-  width: 260px;
+  background: transparent; /* use mat-drawer background as single source */
+  padding: 20px 18px;
+  min-width: 200px;
+  width: 100%;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
+  height: 100%; /* fill mat-drawer */
+  box-sizing: border-box;
+  position: relative;
 }
 
 .sidebar h2 {
   font-weight: 700;
-  font-size: 1.6rem;
-  margin-bottom: 2.5rem;
-  color: #61361f;
+  font-size: 1.8rem;
+  margin: 0 0 1.6rem 0;
+  color: var(--font-color-std);
+  letter-spacing: 0.2px;
 }
 
 .sidebar nav {
@@ -21,44 +25,59 @@
 }
 
 .sidebar nav a {
-  transition: 0.2s ease-in-out;
+  transition: color 0.18s ease, transform 0.12s ease;
   display: block;
-  color: #704a29;
+  color: var(--brown-500);
   text-decoration: none;
   font-size: var(--font-size-md);
-  margin-bottom: 1.4rem;
-  transition: color 0.2s;
+  margin: 0 0 1.1rem 0;
+  padding: 8px 6px;
+  border-radius: 6px;
 }
 
-.sidebar nav a:hover {
-  transition: 0.2s ease-in-out;
-  color: var(--accent);
-  font-size: var(--font-size-lg);
+.sidebar nav a:hover,
+.sidebar nav a:focus {
+  color: var(--card-bg);
+  background: linear-gradient(90deg, var(--accent) 0%, var(--orange-600) 100%);
+  transform: translateX(3px);
+  outline: none;
+}
+
+.sidebar nav a.active-link {
+  color: var(--card-bg);
+  background: linear-gradient(
+    90deg,
+    var(--orange-500) 0%,
+    var(--orange-600) 100%
+  );
+  font-weight: 600;
 }
 
 .new-recipe-btn {
-  background: var(--primary-bg);
-  border: 2px solid var(--accent);
+  background: var(--card-bg);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   color: var(--accent);
-  border-radius: var(--border-radius);
-  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  padding: 0.56rem 1rem;
   font-size: var(--font-size-md);
-  font-weight: 600;
-  margin-top: 2rem;
+  font-weight: 700;
+  margin-top: auto; /* push to bottom of sidebar */
+  margin-bottom: 48px; /* give space above footer */
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  align-self: stretch;
+  text-align: center;
+  transition: background 0.18s, color 0.18s, transform 0.12s;
+  z-index: 1200; /* ensure it sits above the footer */
 }
 .new-recipe-btn:hover {
-  background: var(--accent);
+  background: linear-gradient(90deg, var(--orange-500), var(--orange-600));
+  color: var(--card-bg);
+  transform: translateY(-1px);
 }
 
 .new-recipe-btn a {
   text-decoration: none;
-  color: var(--accent);
-}
-
-.new-recipe-btn a:hover {
-  color: #fff;
+  color: inherit;
 }
 @media (max-width: 600px) {
   .sidebar {

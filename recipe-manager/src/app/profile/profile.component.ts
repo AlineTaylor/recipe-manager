@@ -266,10 +266,10 @@ export class ProfileComponent implements OnInit {
         align-items: center;
         gap: 0.5rem;
         padding: 1rem;
-        background-color: #fff3cd;
-        border: 1px solid #ffeaa7;
+        background-color: var(--warning-bg);
+        border: 1px solid var(--warning-border);
         border-radius: 4px;
-        color: #856404;
+        color: var(--warning-text);
         margin-top: 1rem;
       }
 

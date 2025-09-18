@@ -1,10 +1,21 @@
 .drawer-container {
-  border: 1px solid var(--dark-border);
   min-height: 100vh;
+  height: 100vh;
   background: var(--primary-bg);
 }
 
 .main-content {
   padding-top: 64px;
   padding-bottom: 32px;
+  overflow-x: hidden; /* prevent accidental horizontal scroll */
+}
+
+@media (max-width: 960px) {
+  .drawer-container {
+    border: none;
+  }
+  .main-content {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
 }

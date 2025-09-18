@@ -24,11 +24,11 @@
   gap: 1rem;
   padding: 0.75rem;
   border-radius: 8px;
-  background-color: #f5f5f5;
+  background-color: var(--surface-100);
 }
 
 .info-row mat-icon {
-  color: #666;
+  color: var(--text-muted);
   width: 24px;
   height: 24px;
   flex-shrink: 0;
@@ -37,17 +37,16 @@
 .info-row .label {
   font-weight: 500;
   min-width: 120px;
-  color: #555;
+  color: var(--muted-500);
 }
 
 .info-row .value {
   font-weight: 400;
-  color: #333;
+  color: var(--text-dark);
 }
 
 .edit-form {
   display: flex;
-  flex-direction: column;
   gap: 1rem;
   margin: 1rem 0;
 }
@@ -68,18 +67,18 @@
 .password-section {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid rgba(224, 224, 224, 1);
 }
 
 .password-section h3 {
   margin: 0 0 0.5rem 0;
-  color: #333;
+  color: var(--text-dark);
   font-size: 1.1rem;
 }
 
 .helper-text {
   margin: 0 0 1rem 0;
-  color: #666;
+  color: var(--text-muted);
   font-size: 0.9rem;
   font-style: italic;
 }
@@ -97,7 +96,7 @@
   align-items: center;
   justify-content: center;
   padding: 3rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .loading-spinner mat-icon {
@@ -123,28 +122,23 @@
     padding: 0.5rem;
     margin: 1rem auto;
   }
-
   .form-row {
     flex-direction: column;
     gap: 0;
   }
-
   .info-row {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-
   .info-row .label {
     min-width: auto;
     font-size: 0.9rem;
   }
-
   .card-actions {
     flex-direction: column;
     align-items: stretch;
   }
-
   .card-actions button {
     width: 100%;
   }

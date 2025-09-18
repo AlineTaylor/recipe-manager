@@ -5,15 +5,22 @@
   margin: 0 auto;
   padding: 2.5rem 2rem 2rem 2rem;
   border-radius: 18px;
-  background: linear-gradient(120deg, #fffbe6 60%, #ffe0c1 100%);
-  box-shadow: 0 6px 24px rgba(168,67,17,0.08);
+  background: linear-gradient(
+    120deg,
+    var(--beige-100) 60%,
+    var(--beige-300) 100%
+  );
+  box-shadow: 0 6px 24px rgba(162, 73, 25, 0.08);
   overflow: hidden;
 }
 
 .hero-bg {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: url('/hero-img.png') center 40%/cover no-repeat;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("/hero-img.png") center 40% / cover no-repeat;
   opacity: 0.08;
   z-index: 1;
   pointer-events: none;
@@ -28,25 +35,25 @@
   width: 160px;
   margin-bottom: 1.5rem;
   border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(168,67,17,0.10);
-  background: #fff;
+  box-shadow: 0 2px 12px rgba(168, 67, 17, 0.1);
+  background: var(--card-bg);
   padding: 0.5rem;
 }
 
 .hero h1 {
   font-size: 2.3rem;
   font-weight: 700;
-  color: #4e342e;
+  color: var(--brown-700);
   margin-bottom: 0.7rem;
 }
 
 .hero h1 span {
-  color: #d66a33;
+  color: var(--orange-500);
 }
 
 .hero-tagline {
   font-size: 1.18rem;
-  color: #5d4037;
+  color: var(--brown-600);
   margin-bottom: 1.5rem;
 }
 
@@ -61,28 +68,28 @@
 }
 
 .hero-highlights li {
-  background: #fff7f0;
-  color: #a84311;
+  background: var(--beige-300);
+  color: var(--accent);
   border-radius: 8px;
   padding: 0.5rem 1.1rem;
   font-size: 1.05rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: 0 1px 4px rgba(168,67,17,0.06);
+  box-shadow: 0 1px 4px rgba(162, 73, 25, 0.06);
 }
 
 a[mat-raised-button] {
-  background-color: #d66a33;
-  color: #fff;
+  background-color: var(--orange-500);
+  color: var(--card-bg);
   font-weight: bold;
   padding: 0.9rem 2.2rem;
   border-radius: 8px;
   text-transform: none;
   font-size: 1.1rem;
-  box-shadow: 0 2px 8px rgba(168,67,17,0.08);
+  box-shadow: 0 2px 8px rgba(162, 73, 25, 0.08);
 }
 
 a[mat-raised-button]:hover {
-  background-color: #c35724;
+  background-color: var(--orange-600);
 }
