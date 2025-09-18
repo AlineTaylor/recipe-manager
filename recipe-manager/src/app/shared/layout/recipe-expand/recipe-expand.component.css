@@ -36,3 +36,15 @@ ol {
   list-style: none;
   padding: 0;
 }
+
+.meta-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  color: var(--accent-tint);
+  margin-bottom: 0.5rem;
+}
+
+.meta-row span {
+  font-size: 0.9rem;
+}

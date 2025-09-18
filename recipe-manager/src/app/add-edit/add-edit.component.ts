@@ -74,24 +74,18 @@ export class AddEditComponent implements OnInit {
         .then((compressedFile) => {
           // create form data obj and append file under 'picture' key for backend via http
           const formData = new FormData();
-          formData.append('picture', compressedFile);
+          // send as nested param to satisfy Rails strong params
+          formData.append('recipe[picture]', compressedFile);
           // send patch request via service
           this.recipeService
             .uploadRecipePicture(this.recipeId!, formData)
             .subscribe({
-              next: () => {
+              next: (updated) => {
                 this.notifications.success('Recipe picture updated!');
-                this.recipeService.getRecipe(this.recipeId!).subscribe({
-                  next: (recipe) => {
-                    this.recipePictureUrl = recipe.picture_url
-                      ? `${environment.apiUrl}${recipe.picture_url}`
-                      : null;
-                    this.isLoading.set(false);
-                  },
-                  error: () => {
-                    this.isLoading.set(false);
-                  },
-                });
+                this.recipePictureUrl = updated.picture_url
+                  ? `${environment.apiUrl}${updated.picture_url}`
+                  : null;
+                this.isLoading.set(false);
               },
               error: (err) => {
                 console.error('Recipe picture upload failed', err);
@@ -196,10 +190,10 @@ export class AddEditComponent implements OnInit {
     this.ingredients.push(
       this.fb.group({
         id: [data?.id || null], // include the ID of the ingredient if editing so that the correct ingredient is referenced when editing
-        metric_qty: [data?.metric_qty || null, Validators.required],
-        metric_unit: [data?.metric_unit || '', Validators.required],
-        imperial_qty: [data?.imperial_qty || null],
-        imperial_unit: [data?.imperial_unit || ''],
+        metric_qty: [data?.metric_qty ?? null],
+        metric_unit: [data?.metric_unit ?? ''],
+        imperial_qty: [data?.imperial_qty ?? null],
+        imperial_unit: [data?.imperial_unit ?? ''],
         ingredient: this.fb.group({
           id: [data?.ingredient?.id || null],
           ingredient: [data?.ingredient?.ingredient || '', Validators.required],
@@ -263,6 +257,21 @@ export class AddEditComponent implements OnInit {
 
     const raw = this.recipeForm.value;
 
+    // enforce that the active system has both qty and unit per ingredient
+    const system = this.unitSystem();
+    for (const ctrl of this.ingredients.controls) {
+      const group = ctrl as FormGroup;
+      const qty = group.get(`${system}_qty`)?.value;
+      const unit = group.get(`${system}_unit`)?.value;
+      if (!(qty != null && qty > 0 && unit)) {
+        this.notifications.error(
+          `Each ingredient needs a ${system} quantity and unit.`
+        );
+        group.markAllAsTouched();
+        return;
+      }
+    }
+
     // clean up payload for smooth backend communication
     const payload = {
       title: raw.title,
@@ -315,7 +324,9 @@ export class AddEditComponent implements OnInit {
     req.subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.notifications.success(this.isEdit() ? 'Recipe updated!' : 'Recipe created!');
+        this.notifications.success(
+          this.isEdit() ? 'Recipe updated!' : 'Recipe created!'
+        );
         this.router.navigate(['/my-recipes']);
       },
       error: (err) => {

@@ -114,6 +114,18 @@ export class AllRecipesComponent {
     );
   }
 
+  onFilterSelectionChange(selected: boolean, label: keyof Label) {
+    if (selected && !this.labelFilters.includes(label)) {
+      this.labelFilters = [...this.labelFilters, label];
+    } else if (!selected && this.labelFilters.includes(label)) {
+      this.labelFilters = this.labelFilters.filter((l) => l !== label);
+    }
+    this.setPaginatedData(
+      this.paginator?.pageIndex || 0,
+      this.paginator?.pageSize || 5
+    );
+  }
+
   //pagination logic
   onPageChange(event: PageEvent) {
     this.setPaginatedData(event.pageIndex, event.pageSize);

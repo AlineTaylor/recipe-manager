@@ -22,7 +22,7 @@ h1 {
   margin-top: 0;
   margin-bottom: 0;
   padding: 1.5rem;
-  background-color: #fcf9f9;
+  background-color: var(--beige-200);
   border-radius: 12px;
   box-shadow: var(--shadow);
   text-align: center;
@@ -79,7 +79,7 @@ h1 {
 
 .empty-state {
   margin-top: 2rem;
-  color: #a36b58;
+  color: var(--muted-500);
 }
 
 @media (min-width: 1024px) {

@@ -27,7 +27,38 @@ h2 {
   max-width: 700px;
   margin: 3rem auto;
   padding: 1.5rem;
-  background-color: #fcf9f9;
+  background-color: var(--beige-200);
   border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+/* header row with title on left and unit toggle on right */
+.form-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-title {
+  margin: 0;
+}
+
+.header-toggle {
+  margin-left: auto;
+}
+
+.recipe-picture-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.recipe-picture {
+  max-height: 120px;
+  border-radius: 8px;
   box-shadow: var(--shadow);
 }

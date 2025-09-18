@@ -4,9 +4,9 @@
   justify-content: space-between;
   gap: 12px;
   padding: 10px 16px;
-  background: linear-gradient(90deg, #fff8e1, #fff3e0);
+  background: linear-gradient(90deg, var(--beige-100), var(--beige-200));
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  color: #333;
+  color: var(--text-dark);
   font-size: 14px;
 }
 

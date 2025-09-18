@@ -3,13 +3,13 @@
   background: var(--sidebar-bg);
   padding: 1.2rem 2.5rem;
   font-weight: 500;
-  color: #704a29;
+  color: var(--brown-500);
 }
 
 .header {
   font-size: 1.6rem;
   letter-spacing: 0.5px;
-  border-bottom: 1px solid #ebdfd0;
+  border-bottom: 1px solid rgba(235, 223, 208, 1);
   position: fixed;
   top: 0;
   left: 0;
@@ -23,11 +23,19 @@
 
 .footer {
   font-size: var(--font-size-sm);
-  border-top: 1px solid #ebdfd0;
+  border-top: 1px solid rgba(235, 223, 208, 1);
   text-align: center;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   z-index: 1001;
+}
+
+/* avatar in header */
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
 }

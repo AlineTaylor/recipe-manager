@@ -1,3 +1,29 @@
+@if(recipe.picture_url){
+<img
+  [src]="environment.apiUrl + recipe.picture_url"
+  alt="Recipe Picture"
+  style="
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  "
+/>
+} @else {
+<img
+  src="https://images.unsplash.com/photo-1504674900247-0877df9cc836"
+  alt="Default Recipe Picture"
+  style="
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  "
+/>
+}
+
 <h2>{{ recipe.title }}</h2>
 <p><strong>Servings:</strong> {{ recipe.servings }}</p>
 <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} min</p>
@@ -50,6 +76,17 @@
   <li>🥛❌ Dairy Free</li>
   }
 </ul>
+
+<div class="meta-row">
+  <span>
+    <strong>Created:</strong>
+    {{ recipe.created_at ? (recipe.created_at | date : "mediumDate") : "N/A" }}
+  </span>
+  <span>
+    <strong>Last updated:</strong>
+    {{ recipe.updated_at ? (recipe.updated_at | date : "medium") : "N/A" }}
+  </span>
+</div>
 
 <div class="dialog-actions">
   <button mat-button color="primary" (click)="editRecipe()">

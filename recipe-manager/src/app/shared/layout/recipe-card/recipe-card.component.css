@@ -19,12 +19,12 @@
 }
 
 .recipe-card mat-icon {
-  color: #e4c1a2;
+  color: var(--accent-tint);
 }
 
 .favorite-button.active mat-icon,
 .shopping-list-button.active mat-icon {
-  color: #704a29;
+  color: var(--brown-500);
 }
 
 @media (max-width: 900px) {

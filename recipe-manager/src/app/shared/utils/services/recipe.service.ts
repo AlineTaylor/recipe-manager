@@ -64,11 +64,15 @@ export class RecipeService {
       .pipe(tap((recipe) => this.addToLatest(recipe)));
   }
 
-  uploadRecipePicture(recipeId: number, formData: FormData) {
-    return this.http.patch(
-      `${environment.apiUrl}/recipes/${recipeId}`,
-      formData
-    );
+  uploadRecipePicture(recipeId: number, formData: FormData): Observable<Recipe> {
+    return this.http
+      .patch<Recipe>(`${environment.apiUrl}/recipes/${recipeId}`, formData)
+      .pipe(
+        tap((updated) => {
+          // keep latest cache fresh
+          this.addToLatest(updated);
+        })
+      );
   }
 
   updateRecipe(

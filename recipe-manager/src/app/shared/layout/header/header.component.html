@@ -28,9 +28,17 @@
   <button
     mat-icon-button
     [matMenuTriggerFor]="menu"
-    aria-label="Example icon-button with a menu"
+    aria-label="Profile menu"
   >
-    <mat-icon>account_circle</mat-icon>
+    @if(avatarUrl()){ 
+      <img
+        [src]="avatarUrl()!"
+        alt="User avatar"
+        class="avatar"
+      />
+    } @else { 
+      <mat-icon>account_circle</mat-icon>
+    }
   </button>
   <mat-menu #menu="matMenu">
     <button

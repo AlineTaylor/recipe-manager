@@ -11,6 +11,7 @@ import { getDisplayQty } from '../../utils/get-display-qty';
 import { MatDialog } from '@angular/material/dialog';
 import { EmailSharingComponent } from '../../../email-sharing/email-sharing.component';
 import { ComponentType } from '@angular/cdk/overlay';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-recipe-expand',
@@ -26,6 +27,7 @@ export class RecipeExpandComponent {
   readonly dialog = inject(MatDialog);
   emailSharingComponent = EmailSharingComponent;
   private notifications = inject(NotificationService);
+  environment = environment;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public recipe: Recipe,
