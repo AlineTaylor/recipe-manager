@@ -18,7 +18,8 @@ import { IngredientService } from '../shared/utils/services/ingredient.service';
 import { RecipeService } from '../shared/utils/services/recipe.service';
 import { UnitToggleComponent } from '../shared/layout/unit-toggle/unit-toggle.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from '../shared/utils/services/notification.service';
 import { convertUnits } from '../shared/utils/convert-units';
 import { environment } from '../../environments/environment';
 import imageCompression from 'browser-image-compression';
@@ -79,10 +80,7 @@ export class AddEditComponent implements OnInit {
             .uploadRecipePicture(this.recipeId!, formData)
             .subscribe({
               next: () => {
-                this.snackBar.open('Recipe picture updated!', 'Close', {
-                  duration: 3000,
-                  panelClass: ['snackbar-success'],
-                });
+                this.notifications.success('Recipe picture updated!');
                 this.recipeService.getRecipe(this.recipeId!).subscribe({
                   next: (recipe) => {
                     this.recipePictureUrl = recipe.picture_url
@@ -97,24 +95,14 @@ export class AddEditComponent implements OnInit {
               },
               error: (err) => {
                 console.error('Recipe picture upload failed', err);
-                this.snackBar.open(
-                  'Failed to upload recipe picture.',
-                  'Close',
-                  {
-                    duration: 5000,
-                    panelClass: ['snackbar-error'],
-                  }
-                );
+                this.notifications.error('Failed to upload recipe picture.');
                 this.isLoading.set(false);
               },
             });
         })
         .catch((err) => {
           console.error('Image compression failed', err);
-          this.snackBar.open('Image compression failed.', 'Close', {
-            duration: 5000,
-            panelClass: ['snackbar-error'],
-          });
+          this.notifications.error('Image compression failed.');
           this.isLoading.set(false);
         });
     }
@@ -123,7 +111,7 @@ export class AddEditComponent implements OnInit {
   private recipeService = inject(RecipeService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-  private snackBar = inject(MatSnackBar);
+  private notifications = inject(NotificationService);
   private injector = inject(EnvironmentInjector);
 
   recipeForm!: FormGroup;
@@ -176,14 +164,7 @@ export class AddEditComponent implements OnInit {
         error: (err) => {
           console.error('Error retrieving recipe:', err);
           this.isLoading.set(false);
-          this.snackBar.open(
-            'Unable to load recipe. Please try again.',
-            'Close',
-            {
-              duration: 3000,
-              panelClass: ['snackbar-error'],
-            }
-          );
+          this.notifications.error('Unable to load recipe. Please try again.');
           this.router.navigate(['/my-recipes']);
         },
       });
@@ -276,10 +257,7 @@ export class AddEditComponent implements OnInit {
     if (this.recipeForm.invalid) {
       // Mark all fields as touched to show validation errors
       this.recipeForm.markAllAsTouched();
-      this.snackBar.open('Please fill in all required fields', 'Close', {
-        duration: 4000,
-        panelClass: ['snackbar-error'],
-      });
+      this.notifications.error('Please fill in all required fields');
       return;
     }
 
@@ -337,25 +315,13 @@ export class AddEditComponent implements OnInit {
     req.subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.snackBar.open(
-          this.isEdit() ? 'Recipe updated!' : 'Recipe created!',
-          'Close',
-          { duration: 3000, verticalPosition: 'top' }
-        );
+        this.notifications.success(this.isEdit() ? 'Recipe updated!' : 'Recipe created!');
         this.router.navigate(['/my-recipes']);
       },
       error: (err) => {
         console.error(err);
         this.isLoading.set(false);
-        this.snackBar.open(
-          'Something went wrong, please try again',
-          'Dismiss',
-          {
-            duration: 4000,
-            verticalPosition: 'top',
-            panelClass: ['snackbar-error'],
-          }
-        );
+        this.notifications.error('Something went wrong, please try again');
       },
     });
   }

@@ -5,7 +5,7 @@ import { Recipe } from '../../utils/recipe.model';
 import { Router } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { RecipeService } from '../../utils/services/recipe.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../../utils/services/notification.service';
 import { UnitToggleComponent } from '../unit-toggle/unit-toggle.component';
 import { getDisplayQty } from '../../utils/get-display-qty';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,13 +25,13 @@ export class RecipeExpandComponent {
   unitSystem = signal<'metric' | 'imperial'>('metric');
   readonly dialog = inject(MatDialog);
   emailSharingComponent = EmailSharingComponent;
+  private notifications = inject(NotificationService);
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public recipe: Recipe,
     private dialogRef: MatDialogRef<RecipeExpandComponent>,
     private router: Router,
-    private recipeService: RecipeService,
-    private snackBar: MatSnackBar
+    private recipeService: RecipeService
   ) {}
 
   close() {
@@ -48,21 +48,11 @@ export class RecipeExpandComponent {
 
     this.recipeService.deleteRecipe(this.recipe.id).subscribe({
       next: () => {
-        this.snackBar.open('Recipe deleted 🗑️', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-success'],
-        });
+        this.notifications.success('Recipe deleted 🗑️');
         this.dialogRef.close(true); // option to refresh the list
       },
       error: () => {
-        this.snackBar.open(
-          'Failed to delete recipe. Please try again.',
-          'Dismiss',
-          {
-            duration: 4000,
-            panelClass: ['snackbar-error'],
-          }
-        );
+        this.notifications.error('Failed to delete recipe. Please try again.');
       },
     });
   }

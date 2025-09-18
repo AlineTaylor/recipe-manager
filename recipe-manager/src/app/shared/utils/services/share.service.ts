@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from './notification.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
@@ -7,7 +7,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root',
 })
 export class ShareService {
-  private snackBar = inject(MatSnackBar);
+  private notifications = inject(NotificationService);
   private http = inject(HttpClient);
 
   // backend API base URL (set in env files)
@@ -40,19 +40,6 @@ export class ShareService {
     this.messageBody.set('');
   }
 
-  logSharedItems(items: any[]) {
-    // Development logging only
-    if (!environment.production) {
-      console.log(`Sharing parts list with: ${this.emailAddress()}`);
-      console.log(JSON.stringify(items, null, 2));
-    }
-    this.snackBar.open('Parts list shared!', 'Close', {
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'bottom',
-    });
-  }
-
   logMessage(message: any) {
     // Development logging only
     if (!environment.production) {
@@ -61,14 +48,8 @@ export class ShareService {
       );
       console.log(JSON.stringify(message, null, 2));
     }
-    this.snackBar.open(
-      'Thank you for your message! One of us will be reaching out to you shortly. ',
-      'Close',
-      {
-        duration: 10000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-      }
+    this.notifications.success(
+      'Thank you for your message! One of us will be reaching out to you shortly.'
     );
   }
 
@@ -119,6 +100,6 @@ export class ShareService {
     action: string = 'Close',
     duration: number = 4000
   ) {
-    this.snackBar.open(message, action, { duration });
+    this.notifications.info(message, action, duration);
   }
 }

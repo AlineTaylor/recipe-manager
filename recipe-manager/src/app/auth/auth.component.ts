@@ -4,7 +4,7 @@ import { AuthService } from '../shared/utils/services/auth.service';
 import { DEMO_CONFIG } from '../shared/utils/demo.config';
 import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../shared/utils/services/notification.service';
 
 @Component({
   selector: 'app-auth',
@@ -31,7 +31,7 @@ export class AuthComponent {
     private authService: AuthService,
     private router: Router,
     private dialogRef: MatDialogRef<AuthComponent>,
-    private snackBar: MatSnackBar
+    private notifications: NotificationService
   ) {}
 
   toggleAuthForm() {
@@ -70,22 +70,14 @@ export class AuthComponent {
         },
         error: (error: any) => {
           console.error('Login error', error);
-          this.snackBar.open(
-            'Login failed. Please double-check your email and password and try again.',
-            'Dismiss',
-            {
-              duration: 5000,
-              panelClass: ['snackbar-error'],
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-            }
+          this.notifications.error(
+            'Login failed. Please double-check your email and password and try again.'
           );
         },
       });
   }
 
   // signing up new users
-
   user = {
     email: '',
     email_confirmation: '',
@@ -94,9 +86,7 @@ export class AuthComponent {
   };
   onSubmit() {
     if (this.password !== this.password_confirmation) {
-      this.snackBar.open('Passwords do not match', 'Dismiss', {
-        duration: 3000,
-      });
+      this.notifications.error('Passwords do not match');
       return;
     }
 
@@ -112,21 +102,12 @@ export class AuthComponent {
       })
       .subscribe({
         next: (res) => {
-          this.snackBar.open(
-            'Account created! You can now log in.',
-            'Dismiss',
-            {
-              duration: 3000,
-            }
-          );
+          this.notifications.success('Account created! You can now log in.');
           this.isSignup.set(false); // switch back to login view
         },
         error: (err) => {
           console.error('Signup failed', err);
-          this.snackBar.open('Signup failed. Please try again.', 'Dismiss', {
-            duration: 5000,
-            panelClass: ['snackbar-error'],
-          });
+          this.notifications.error('Signup failed. Please try again.');
         },
       });
   }
