@@ -26,7 +26,7 @@ import { UserService } from '../../utils/services/user.service';
 export class HeaderComponent {
   public authService = inject(AuthService);
   private userService = inject(UserService);
-  // TODO is this okay???
+
   @Input() drawer!: MatDrawer; // take drawer from parent
 
   // login dialog logic

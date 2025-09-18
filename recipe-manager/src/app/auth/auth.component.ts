@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { AuthService } from '../shared/utils/services/auth.service';
+import { DEMO_CONFIG } from '../shared/utils/demo.config';
 import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -24,6 +25,7 @@ export class AuthComponent {
   first_name = '';
   last_name = '';
   preferred_system = '';
+  demoLoginChecked = false;
 
   constructor(
     private authService: AuthService,
@@ -34,6 +36,24 @@ export class AuthComponent {
 
   toggleAuthForm() {
     this.isSignup.update((val) => !val);
+  }
+
+  // autofill logic for demo user
+  onDemoLoginToggle(event: any) {
+    if (event.checked) {
+      this.email = DEMO_CONFIG.demoEmail;
+      this.password = DEMO_CONFIG.demoPassword;
+      // clear signup-only fields if switching back
+      this.email_confirmation = '';
+      this.password_confirmation = '';
+      this.first_name = '';
+      this.last_name = '';
+      this.preferred_system = '';
+      this.login();
+    } else {
+      this.email = '';
+      this.password = '';
+    }
   }
 
   // authentication for existing users

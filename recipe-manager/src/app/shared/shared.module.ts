@@ -16,6 +16,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [],
@@ -39,6 +40,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatMenuModule,
     MatDialogModule,
     MatChipsModule,
+    MatCheckbox,
   ],
   exports: [
     CommonModule,
@@ -60,6 +62,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatMenuModule,
     MatDialogModule,
     MatChipsModule,
+    MatCheckbox,
   ],
 })
 export class SharedModule {}

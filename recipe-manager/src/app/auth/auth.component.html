@@ -139,6 +139,14 @@
       >} </mat-form-field
     >}
 
+    <mat-checkbox
+      [(ngModel)]="demoLoginChecked"
+      name="demoLogin"
+      (change)="onDemoLoginToggle($event)"
+    >
+      Log in as Demo
+    </mat-checkbox>
+
     <button mat-raised-button color="primary" type="submit">
       {{ isSignup() ? "Sign Up" : "Log In" }}
     </button>
