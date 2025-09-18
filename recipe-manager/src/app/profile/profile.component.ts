@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit, computed } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../shared/utils/services/notification.service';
 import { UserService } from '../shared/utils/services/user.service';
 import { AuthService } from '../shared/utils/services/auth.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -39,7 +39,7 @@ export class ProfileComponent implements OnInit {
     preferred_system: 'metric',
   });
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private notifications: NotificationService) {}
 
   ngOnInit() {
     this.loadUserData();
@@ -90,33 +90,20 @@ export class ProfileComponent implements OnInit {
           formData.append('profile_picture', compressedFile);
           this.userService.uploadProfilePicture(formData).subscribe({
             next: () => {
-              this.snackBar.open('Profile picture updated!', 'Dismiss', {
-                duration: 3000,
-                panelClass: ['snackbar-success'],
-              });
+              this.notifications.success('Profile picture updated!');
               this.userService.loadUser();
               this.isUpdating.set(false);
             },
             error: (err) => {
               console.error('Profile picture upload failed', err);
-              this.snackBar.open(
-                'Failed to upload profile picture.',
-                'Dismiss',
-                {
-                  duration: 5000,
-                  panelClass: ['snackbar-error'],
-                }
-              );
+              this.notifications.error('Failed to upload profile picture.');
               this.isUpdating.set(false);
             },
           });
         })
         .catch((err) => {
           console.error('Image compression failed', err);
-          this.snackBar.open('Image compression failed.', 'Dismiss', {
-            duration: 5000,
-            panelClass: ['snackbar-error'],
-          });
+          this.notifications.error('Image compression failed.');
           this.isUpdating.set(false);
         });
     }
@@ -152,26 +139,17 @@ export class ProfileComponent implements OnInit {
       !form.last_name.trim() ||
       !form.email.trim()
     ) {
-      this.snackBar.open('Please fill in all required fields', 'Dismiss', {
-        duration: 3000,
-        panelClass: ['snackbar-error'],
-      });
+      this.notifications.error('Please fill in all required fields');
       return;
     }
 
     if (form.email !== form.email_confirmation) {
-      this.snackBar.open('Email addresses do not match', 'Dismiss', {
-        duration: 3000,
-        panelClass: ['snackbar-error'],
-      });
+      this.notifications.error('Email addresses do not match');
       return;
     }
 
     if (form.password && form.password !== form.password_confirmation) {
-      this.snackBar.open('Passwords do not match', 'Dismiss', {
-        duration: 3000,
-        panelClass: ['snackbar-error'],
-      });
+      this.notifications.error('Passwords do not match');
       return;
     }
 
@@ -193,10 +171,7 @@ export class ProfileComponent implements OnInit {
 
     this.userService.editUser(updateData).subscribe({
       next: (res) => {
-        this.snackBar.open('Profile updated successfully!', 'Dismiss', {
-          duration: 3000,
-          panelClass: ['snackbar-success'],
-        });
+        this.notifications.success('Profile updated successfully!');
         this.isEditing.set(false);
         this.isUpdating.set(false);
         // reload to reflect changes
@@ -204,13 +179,8 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Update failed', err);
-        this.snackBar.open(
-          err.error?.message || 'Update failed. Please try again.',
-          'Dismiss',
-          {
-            duration: 5000,
-            panelClass: ['snackbar-error'],
-          }
+        this.notifications.error(
+          err.error?.message || 'Update failed. Please try again.'
         );
         this.isUpdating.set(false);
       },
@@ -236,25 +206,15 @@ export class ProfileComponent implements OnInit {
 
     this.userService.deleteUser(currentUser).subscribe({
       next: (res) => {
-        this.snackBar.open(
-          "Account deleted successfully. We'll miss you!",
-          'Dismiss',
-          {
-            duration: 3000,
-            panelClass: ['snackbar-success'],
-          }
+        this.notifications.success(
+          "Account deleted successfully. We'll miss you!"
         );
         this.authService.logout();
       },
       error: (err) => {
         console.error('Deletion failed', err);
-        this.snackBar.open(
-          err.error?.message || 'Deletion failed. Please try again.',
-          'Dismiss',
-          {
-            duration: 5000,
-            panelClass: ['snackbar-error'],
-          }
+        this.notifications.error(
+          err.error?.message || 'Deletion failed. Please try again.'
         );
       },
     });

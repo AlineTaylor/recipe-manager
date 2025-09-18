@@ -58,3 +58,8 @@ button.icon:hover {
   color: white;
   font-weight: 500;
 }
+
+.snackbar-info {
+  background-color: #2196f3; /* blue */
+  color: white;
+}

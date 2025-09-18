@@ -1,4 +1,8 @@
-import { HttpInterceptorFn, HttpRequest, HttpEvent } from '@angular/common/http';
+import {
+  HttpInterceptorFn,
+  HttpRequest,
+  HttpEvent,
+} from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 import { EMPTY, Observable, throwError } from 'rxjs';
@@ -17,7 +21,7 @@ export const authTokenInterceptor: HttpInterceptorFn = (
       })
     : req;
 
-  // Call next and catch 401 responses. If the app has already cleared local auth
+  // Troubleshooting notes: call next and catch 401 responses. If the app has already cleared local auth
   // state (user logged out), suppress 401s for safe, idempotent requests (GET/HEAD)
   // to avoid noise from in-flight or immediately-triggered requests during logout.
   return next(authReq).pipe(
