@@ -6,7 +6,7 @@
       <button
         title="Share via email"
         matTooltip="Share via email"
-        class="share-button share-favorites-button"
+        class="share-button"
         mat-button
         (click)="openDialog(emailSharingComponent, 'shopping-list')"
       >
@@ -24,19 +24,19 @@
   </div>
   <p class="subtitle">All the ingredients you need from your saved recipes.</p>
 
-  @for(item of shoppingList(); track item.id){
+  @for(item of visibleShoppingList(); track item.id){
   <div class="ingredient-group">
     <div class="ingredient-card">
       <p class="ingredient-name">{{ item.ingredient?.ingredient }}</p>
       <p class="ingredient-qty">
-        {{ getDisplayQty(item).qty }} {{ getDisplayQty(item).unit }}
+        {{ getQty(item).qty }} {{ getQty(item).unit }}
       </p>
       <button
         mat-icon-button
-        title="Remove from shopping list"
-        (click)="removeFromShoppingList(item.recipe)"
+        title="Hide this ingredient from the shopping list"
+        (click)="toggleIngredient(item)"
       >
-        <mat-icon>remove_shopping_cart</mat-icon>
+        <mat-icon>remove_circle_outline</mat-icon>
       </button>
     </div>
   </div>

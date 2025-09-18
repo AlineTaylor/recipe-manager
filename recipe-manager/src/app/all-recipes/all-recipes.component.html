@@ -1,15 +1,5 @@
 <section class="all-recipes-container">
   <div class="section-header">
-    <mat-chip-set class="label-chip-list" aria-label="Recipe label filters">
-      @for(option of labelOptions; track option.key){<mat-chip
-        (click)="toggleLabelFilter(option.key)"
-        [class.selected-chip]="labelFilters.includes(option.key)"
-        selectable="true"
-        [removable]="false"
-        [color]="labelFilters.includes(option.key) ? 'primary' : undefined"
-        >{{ option.icon }} {{ option.label }} </mat-chip
-      >}
-    </mat-chip-set>
     <h1>🍲 All Recipes</h1>
     <mat-form-field appearance="fill" class="sort-select">
       <mat-label>Sort by</mat-label>
@@ -29,7 +19,7 @@
       <button
         title="Share via email"
         matTooltip="Share via email"
-        class="share-button share-latest-button"
+        class="share-button"
         mat-button
         (click)="openDialog(emailSharingComponent, 'latest')"
       >
@@ -44,6 +34,19 @@
       </button>
     </div>
   </div>
+  <mat-chip-set class="label-chip-list" aria-label="Recipe label filters">
+    @for(option of labelOptions; track option.key){
+      <mat-chip-option
+        class="filter-chip"
+        [selected]="labelFilters.includes(option.key)"
+        (selectionChange)="onFilterSelectionChange($event.selected, option.key)"
+        [disableRipple]="false"
+      >
+        <span class="chip-icon">{{ option.icon }}</span>
+        <span class="chip-label">{{ option.label }}</span>
+      </mat-chip-option>
+    }
+  </mat-chip-set>
   <p class="subtitle">All your culinary creations in one place.</p>
 
   <div class="recipe-grid results-list">

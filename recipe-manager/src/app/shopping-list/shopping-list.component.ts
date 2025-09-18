@@ -6,6 +6,8 @@ import { UnitToggleComponent } from '../shared/layout/unit-toggle/unit-toggle.co
 import { ComponentType } from '@angular/cdk/overlay';
 import { MatDialog } from '@angular/material/dialog';
 import { EmailSharingComponent } from '../email-sharing/email-sharing.component';
+import { getDisplayQty } from '../shared/utils/get-display-qty';
+import { persistentSignal } from '../shared/persistent-signal';
 
 @Component({
   selector: 'app-shopping-list',
@@ -17,14 +19,9 @@ import { EmailSharingComponent } from '../email-sharing/email-sharing.component'
 export class ShoppingListComponent {
   unitSystem = signal<'metric' | 'imperial'>('metric');
 
-  // new helper to get converted ingredient qty for display
-  getDisplayQty(item: any): { qty: number | null; unit: string } {
-    const system = this.unitSystem();
-    if (system === 'metric') {
-      return { qty: item.metric_qty, unit: item.metric_unit };
-    } else {
-      return { qty: item.imperial_qty, unit: item.imperial_unit };
-    }
+  // expose helper for template with current system
+  getQty(item: any) {
+    return getDisplayQty(item, this.unitSystem());
   }
   private recipeService = inject(RecipeService);
 
@@ -62,6 +59,35 @@ export class ShoppingListComponent {
     return Array.from(aggregateMap.values());
   });
 
+  // persist a list of excluded ingredient keys so users can hide individual items
+  private excludedKeys = persistentSignal<string[]>('shopping-excluded', []);
+
+  private makeKey(item: any): string {
+    const ingId = item.ingredient_id || item.ingredient?.id || '';
+    const unitKey = item.metric_unit || item.imperial_unit || '';
+    return `${ingId}|${unitKey}`;
+  }
+
+  isExcluded(item: any): boolean {
+    const key = this.makeKey(item);
+    return this.excludedKeys().includes(key);
+  }
+
+  toggleIngredient(item: any) {
+    const key = this.makeKey(item);
+    const list = this.excludedKeys();
+    if (list.includes(key)) {
+      this.excludedKeys.set(list.filter((k) => k !== key));
+    } else {
+      this.excludedKeys.set([...list, key]);
+    }
+  }
+
+  // underlying recipe selection remains unchanged while maintianng excluded items
+  visibleShoppingList = computed(() =>
+    this.shoppingList().filter((item) => !this.isExcluded(item))
+  );
+
   constructor() {
     this.loadShoppingRecipes();
 
@@ -92,7 +118,7 @@ export class ShoppingListComponent {
     // pass the current shopping list as dialog data
     const data: any = { type };
     if (type === 'shopping-list') {
-      data.shoppingList = this.shoppingList();
+      data.shoppingList = this.visibleShoppingList();
     }
     this.dialog.open(component, { data });
   }

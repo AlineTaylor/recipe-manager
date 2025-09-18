@@ -1,24 +1,8 @@
 <div class="form-container" [formGroup]="recipeForm">
-  <div class="recipe-picture-row">
-    <label for="recipePictureInput">Recipe Picture</label>
-    <input
-      type="file"
-      id="recipePictureInput"
-      (change)="onRecipeFileSelected($event)"
-      accept="image/*"
-      [disabled]="isLoading()"
-    />
-    @if(getRecipePictureUrl()){
-    <div>
-      <img
-        [src]="getRecipePictureUrl()"
-        alt="Recipe Picture"
-        class="recipe-picture"
-      />
-    </div>
-    }
+  <div class="form-header">
+    <h1 class="form-title">{{ isEdit() ? "Edit Recipe" : "Add Recipe" }}</h1>
+    <app-unit-toggle class="header-toggle" [unitSystem]="unitSystem" />
   </div>
-  <h1>{{ isEdit() ? "Edit Recipe" : "Add Recipe" }}</h1>
 
   <mat-form-field appearance="fill">
     <mat-label>Title</mat-label>
@@ -29,6 +13,19 @@
     />
     @if (recipeForm.get('title')?.invalid && recipeForm.get('title')?.touched) {
     <mat-error>Recipe title is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      formControlName="description"
+      placeholder="Enter a short description of your recipe"
+    ></textarea>
+    @if (recipeForm.get('description')?.invalid &&
+    recipeForm.get('description')?.touched) {
+    <mat-error>Description is required</mat-error>
     }
   </mat-form-field>
 
@@ -56,7 +53,25 @@
     }
   </mat-form-field>
 
-  <app-unit-toggle [unitSystem]="unitSystem" />
+  <div class="recipe-picture-row">
+    <label for="recipePictureInput">Recipe Picture</label>
+    <input
+      type="file"
+      id="recipePictureInput"
+      (change)="onRecipeFileSelected($event)"
+      accept="image/*"
+      [disabled]="isLoading()"
+    />
+    @if(getRecipePictureUrl()){
+    <div>
+      <img
+        [src]="getRecipePictureUrl()"
+        alt="Recipe Picture"
+        class="recipe-picture"
+      />
+    </div>
+    }
+  </div>
 
   <h2>Ingredients</h2>
   <div formArrayName="ingredient_lists">
@@ -69,6 +84,9 @@
           type="number"
           [formControlName]="unitSystem() + '_qty'"
         />
+        @if ((ing.get(unitSystem() + '_qty')?.touched) && !(ing.get(unitSystem() + '_qty')?.value > 0)) {
+          <mat-error>Enter a quantity greater than 0</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="fill">
@@ -80,6 +98,9 @@
             {{ unit }} </mat-option
           >}
         </mat-select>
+        @if ((ing.get(unitSystem() + '_unit')?.touched) && !(ing.get(unitSystem() + '_unit')?.value)) {
+          <mat-error>Select a unit</mat-error>
+        }
       </mat-form-field>
 
       <div formGroupName="ingredient">
@@ -139,19 +160,6 @@
 
   <mat-checkbox formControlName="favorite">Favorite</mat-checkbox>
   <mat-checkbox formControlName="shopping_list">Shopping List</mat-checkbox>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Description</mat-label>
-    <textarea
-      matInput
-      formControlName="description"
-      placeholder="Enter a short description of your recipe"
-    ></textarea>
-    @if (recipeForm.get('description')?.invalid &&
-    recipeForm.get('description')?.touched) {
-    <mat-error>Description is required</mat-error>
-    }
-  </mat-form-field>
 
   <button mat-raised-button color="primary" (click)="saveRecipe()">
     {{ isEdit() ? "Update Recipe" : "Create Recipe" }}

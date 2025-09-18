@@ -27,6 +27,11 @@
   background-color: var(--surface-100);
 }
 
+.profile-picture-fallback {
+  font-size: 120px;
+  color: var(--accent-tint);
+}
+
 .info-row mat-icon {
   color: var(--text-muted);
   width: 24px;
@@ -47,6 +52,7 @@
 
 .edit-form {
   display: flex;
+  flex-direction: column;
   gap: 1rem;
   margin: 1rem 0;
 }
@@ -54,6 +60,7 @@
 .form-row {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .full-width {
@@ -61,7 +68,12 @@
 }
 
 .half-width {
-  flex: 1;
+  flex: 1 1 300px;
+  min-width: 240px;
+}
+
+mat-form-field.full-width, .full-width mat-form-field {
+  width: 100%;
 }
 
 .password-section {

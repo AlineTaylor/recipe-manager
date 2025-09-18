@@ -31,3 +31,11 @@
   width: 100%;
   z-index: 1001;
 }
+
+/* avatar in header */
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}

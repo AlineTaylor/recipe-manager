@@ -114,6 +114,40 @@ mat-paginator {
   border-radius: 10px;
 }
 
+/* filter chips */
+.label-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 0.5rem 0 1rem;
+}
+
+.filter-chip {
+  --selected-bg: var(--primary-color);
+  --selected-fg: #fff;
+  --chip-bg: var(--input-background-color);
+  --chip-fg: var(--text-color-dark);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  border-radius: 16px;
+  transition: transform 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.filter-chip.mat-mdc-chip-selected {
+  background: var(--selected-bg) !important;
+  color: var(--selected-fg) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filter-chip:hover {
+  transform: translateY(-1px);
+}
+
+.chip-icon {
+  margin-right: 4px;
+}
+
 /* adding some responsiveness */
 @media (min-width: 1024px) {
   .results-container {

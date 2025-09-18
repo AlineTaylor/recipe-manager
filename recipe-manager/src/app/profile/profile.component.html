@@ -16,15 +16,17 @@
       } @else if (!isEditing()) {
       <!-- profile viewing -->
       <div class="profile-view">
-        @if(user()?.profile_picture_url){
         <div class="profile-picture-row">
+          @if(user()?.profile_picture_url){
           <img
             [src]="getProfilePictureUrl()"
             alt="Profile Picture"
             class="profile-picture"
           />
+          } @else {
+          <mat-icon class="profile-picture-fallback">account_circle</mat-icon>
+          }
         </div>
-        }
         <div class="profile-info">
           <div class="info-row">
             <mat-icon>person</mat-icon>
