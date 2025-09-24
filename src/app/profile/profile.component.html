@@ -60,7 +60,7 @@
             type="file"
             id="profilePictureInput"
             (change)="onFileSelected($event)"
-            accept="image/png,image/jpeg,image/webp"
+            accept="image/*"
             [disabled]="isUpdating()"
           />
           @if(user()?.profile_picture_url){

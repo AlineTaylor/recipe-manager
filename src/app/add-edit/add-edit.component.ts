@@ -63,21 +63,6 @@ export class AddEditComponent implements OnInit {
     // check if file was selected and if it is in edit mode by checking whether recipeId already exists
     if (input.files && input.files[0] && this.recipeId) {
       const file = input.files[0];
-      // basic image validation (still enforced on backend) on client side too
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-      if (!allowedTypes.includes(file.type)) {
-        this.notifications.error(
-          'Unsupported image type. Use JPEG, PNG, or WebP.'
-        );
-        input.value = '';
-        return;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        // 5MB
-        this.notifications.error('Image too large (max 5 MB).');
-        input.value = '';
-        return;
-      }
       this.isLoading.set(true);
       // compress image before uploading
       const options = {

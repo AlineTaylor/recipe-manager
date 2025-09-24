@@ -77,20 +77,6 @@ export class ProfileComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      // implementing file type (and size) restrictions on client side too
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-      if (!allowedTypes.includes(file.type)) {
-        this.notifications.error(
-          'Unsupported image type. Use JPEG, PNG, or WebP.'
-        );
-        input.value = '';
-        return;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        this.notifications.error('Image too large (max 5 MB).');
-        input.value = '';
-        return;
-      }
       this.isUpdating.set(true);
       // compress image before upload
       const options = {

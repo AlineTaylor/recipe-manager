@@ -1,0 +1,26 @@
+# Node / Angular
+node_modules/
+.dist/
+dist/
+.angular/
+
+# IDE/editor
+.vscode/
+*.code-workspace
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backups
+pre-fix-backup-*/
+
+# Environment / secrets
+.env
+.env.*
+
