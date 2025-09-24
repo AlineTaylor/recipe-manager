@@ -6,6 +6,13 @@ This app was developed as a my first project for a full-stack coding bootcamp, f
 
 ---
 
+## 🚀 Live Demo
+
+🌐 Frontend: [https://recipe-manager-eight-indol.vercel.app](https://recipe-manager-eight-indol.vercel.app)  
+🔗 Backend API: [https://recipe-manager-m2th.onrender.com](https://recipe-manager-m2th.onrender.com)
+
+---
+
 ## ✨ Features
 
 - **User Authentication** with JWT (signup/login/logout)
@@ -92,13 +99,6 @@ This update also enhances the backend for demo stability, improves UX/UI interac
 - **bcrypt** for password security
 - **Blueprinter** for JSON serialization
 - **RSpec + Postman** for testing
-
----
-
-## 🚀 Live Demo
-
-🌐 Frontend: [https://recipe-manager-eight-indol.vercel.app](https://recipe-manager-eight-indol.vercel.app)  
-🔗 Backend API: [https://recipe-manager-m2th.onrender.com](https://recipe-manager-m2th.onrender.com)
 
 ---
 
