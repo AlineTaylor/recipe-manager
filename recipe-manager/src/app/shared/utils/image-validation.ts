@@ -1,4 +1,4 @@
-// Reusable image file validation helper
+// reusable image validation helper
 // Returns null if valid, otherwise a human-readable error string.
 export interface ImageValidationOptions {
   allowedMime?: string[]; // list of allowed mime types
