@@ -9,7 +9,7 @@ import {
   EnvironmentInjector,
 } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IngredientList, Recipe } from '../shared/utils/recipe.model';
@@ -40,8 +40,8 @@ import { validateImageFile } from '../shared/utils/image-validation';
 })
 export class AddEditComponent implements OnInit {
   // handler for ingredient selection from autocomplete
-  onIngredientSelected(event: { option: { value: string } }, index: number) {
-    const selectedName = event.option.value;
+  onIngredientSelected(event: MatAutocompleteSelectedEvent, index: number) {
+    const selectedName = (event.option.value as string) ?? '';
     const selected = this.globalIngredients().find(
       (ing) => ing.ingredient === selectedName
     );

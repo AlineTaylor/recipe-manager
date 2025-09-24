@@ -111,9 +111,8 @@
             matInput
             [matAutocomplete]="auto"
             formControlName="ingredient"
-            (optionSelected)="onIngredientSelected($event, i)"
           />
-          <mat-autocomplete #auto="matAutocomplete">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onIngredientSelected($event, i)">
             @for (option of globalIngredients(); track option.id) {
             <mat-option [value]="option.ingredient">{{
               option.ingredient
