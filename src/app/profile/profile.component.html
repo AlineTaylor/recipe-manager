@@ -1,0 +1,235 @@
+<div class="profile-container">
+  <mat-card class="profile-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>person</mat-icon>
+        My Profile
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (isLoading()) {
+      <div class="loading-spinner">
+        <mat-icon>refresh</mat-icon>
+        <p>Loading profile...</p>
+      </div>
+      } @else if (!isEditing()) {
+      <!-- profile viewing -->
+      <div class="profile-view">
+        <div class="profile-picture-row">
+          @if(user()?.profile_picture_url){
+          <img
+            [src]="getProfilePictureUrl()"
+            alt="Profile Picture"
+            class="profile-picture"
+          />
+          } @else {
+          <mat-icon class="profile-picture-fallback">account_circle</mat-icon>
+          }
+        </div>
+        <div class="profile-info">
+          <div class="info-row">
+            <mat-icon>person</mat-icon>
+            <span class="label">Name:</span>
+            <span class="value"
+              >{{ user()?.first_name }} {{ user()?.last_name }}</span
+            >
+          </div>
+
+          <div class="info-row">
+            <mat-icon>email</mat-icon>
+            <span class="label">Email:</span>
+            <span class="value">{{ user()?.email }}</span>
+          </div>
+
+          <div class="info-row">
+            <mat-icon>straighten</mat-icon>
+            <span class="label">Measurement System:</span>
+            <span class="value">{{
+              user()?.preferred_system | titlecase
+            }}</span>
+          </div>
+        </div>
+      </div>
+      } @else {
+      <!-- editing mode -->
+      <form (ngSubmit)="onSubmit()" #profileForm="ngForm" class="edit-form">
+        <div class="form-row">
+          <label for="profilePictureInput">Profile Picture</label>
+          <input
+            type="file"
+            id="profilePictureInput"
+            (change)="onFileSelected($event)"
+            accept="image/png,image/jpeg,image/webp"
+            [disabled]="isUpdating()"
+          />
+          @if(user()?.profile_picture_url){
+          <div>
+            <img
+              [src]="getProfilePictureUrl()"
+              alt="Profile Picture"
+              class="profile-picture"
+            />
+          </div>
+          }
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="fill" class="half-width">
+            <mat-label>First Name</mat-label>
+            <input
+              matInput
+              type="text"
+              name="first_name"
+              [(ngModel)]="editForm().first_name"
+              required
+              #firstNameInput="ngModel"
+            />
+            @if (profileForm.submitted && firstNameInput.invalid) {
+            <mat-error>First name is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="half-width">
+            <mat-label>Last Name</mat-label>
+            <input
+              matInput
+              type="text"
+              name="last_name"
+              [(ngModel)]="editForm().last_name"
+              required
+              #lastNameInput="ngModel"
+            />
+            @if (profileForm.submitted && lastNameInput.invalid) {
+            <mat-error>Last name is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            name="email"
+            [(ngModel)]="editForm().email"
+            required
+            #emailInput="ngModel"
+          />
+          @if (profileForm.submitted && emailInput.invalid) {
+          <mat-error>Valid email is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Confirm Email</mat-label>
+          <input
+            matInput
+            type="email"
+            name="email_confirmation"
+            [(ngModel)]="editForm().email_confirmation"
+            required
+            #emailConfirmInput="ngModel"
+          />
+          @if (profileForm.submitted && emailConfirmInput.invalid) {
+          <mat-error>Email confirmation is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Preferred Measurement System</mat-label>
+          <mat-select
+            name="preferred_system"
+            [(ngModel)]="editForm().preferred_system"
+            required
+          >
+            <mat-option value="metric">Metric (kg, L)</mat-option>
+            <mat-option value="imperial">Imperial (lbs, oz)</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="password-section">
+          <h3>Change Password (Optional)</h3>
+          <p class="helper-text">Leave blank to keep current password</p>
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>New Password</mat-label>
+            <input
+              matInput
+              [type]="showPassword() ? 'text' : 'password'"
+              name="password"
+              [(ngModel)]="editForm().password"
+              #passwordInput="ngModel"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="showPassword.set(!showPassword())"
+              [attr.aria-label]="'Toggle password visibility'"
+            >
+              <mat-icon>{{
+                showPassword() ? "visibility_off" : "visibility"
+              }}</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Confirm New Password</mat-label>
+            <input
+              matInput
+              [type]="showPasswordConfirm() ? 'text' : 'password'"
+              name="password_confirmation"
+              [(ngModel)]="editForm().password_confirmation"
+              #passwordConfirmInput="ngModel"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="showPasswordConfirm.set(!showPasswordConfirm())"
+              [attr.aria-label]="'Toggle password confirmation visibility'"
+            >
+              <mat-icon>{{
+                showPasswordConfirm() ? "visibility_off" : "visibility"
+              }}</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+      </form>
+      }
+    </mat-card-content>
+
+    <mat-card-actions class="card-actions">
+      @if (!isEditing()) {
+      <button mat-raised-button color="primary" (click)="startEditing()">
+        <mat-icon>edit</mat-icon>
+        Edit Profile
+      </button>
+      <button mat-button color="warn" (click)="confirmDeleteAccount()">
+        <mat-icon>delete</mat-icon>
+        Delete Account
+      </button>
+      } @else {
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        (click)="onSubmit()"
+        [disabled]="isUpdating()"
+      >
+        <ng-container>
+          @if (isUpdating()) {
+          <mat-icon>refresh</mat-icon>
+          Updating... } @else {
+          <mat-icon>save</mat-icon>
+          Save Changes }
+        </ng-container>
+      </button>
+      <button mat-button (click)="cancelEditing()" [disabled]="isUpdating()">
+        <mat-icon>cancel</mat-icon>
+        Cancel
+      </button>
+      }
+    </mat-card-actions>
+  </mat-card>
+</div>
