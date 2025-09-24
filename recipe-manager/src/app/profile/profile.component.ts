@@ -6,6 +6,7 @@ import { AuthService } from '../shared/utils/services/auth.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { environment } from '../../environments/environment';
 import imageCompression from 'browser-image-compression';
+import { validateImageFile } from '../shared/utils/image-validation';
 
 @Component({
   selector: 'app-profile',
@@ -75,38 +76,47 @@ export class ProfileComponent implements OnInit {
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      this.isUpdating.set(true);
-      // compress image before upload
-      const options = {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 800,
-        useWebWorker: true,
-      };
-      imageCompression(file, options)
-        .then((compressedFile) => {
-          const formData = new FormData();
-          formData.append('profile_picture', compressedFile);
-          this.userService.uploadProfilePicture(formData).subscribe({
-            next: () => {
-              this.notifications.success('Profile picture updated!');
-              this.userService.loadUser();
-              this.isUpdating.set(false);
-            },
-            error: (err) => {
-              console.error('Profile picture upload failed', err);
-              this.notifications.error('Failed to upload profile picture.');
-              this.isUpdating.set(false);
-            },
-          });
-        })
-        .catch((err) => {
-          console.error('Image compression failed', err);
-          this.notifications.error('Image compression failed.');
-          this.isUpdating.set(false);
-        });
+    if (!(input.files && input.files[0])) return;
+    const file = input.files[0];
+
+    const validationError = validateImageFile(file, {
+      allowedMime: ['image/png', 'image/jpeg', 'image/webp'],
+      maxSizeMB: 5,
+    });
+    if (validationError) {
+      this.notifications.error(validationError);
+      input.value = '';
+      return;
     }
+
+    this.isUpdating.set(true);
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 800,
+      useWebWorker: true,
+    };
+    imageCompression(file, options)
+      .then((compressedFile) => {
+        const formData = new FormData();
+        formData.append('profile_picture', compressedFile);
+        this.userService.uploadProfilePicture(formData).subscribe({
+          next: () => {
+            this.notifications.success('Profile picture updated!');
+            this.userService.loadUser();
+            this.isUpdating.set(false);
+          },
+          error: (err: unknown) => {
+            console.error('Profile picture upload failed', err);
+            this.notifications.error('Failed to upload profile picture.');
+            this.isUpdating.set(false);
+          },
+        });
+      })
+      .catch((err) => {
+        console.error('Image compression failed', err);
+        this.notifications.error('Image compression failed.');
+        this.isUpdating.set(false);
+      });
   }
 
   startEditing() {
@@ -170,14 +180,14 @@ export class ProfileComponent implements OnInit {
     }
 
     this.userService.editUser(updateData).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         this.notifications.success('Profile updated successfully!');
         this.isEditing.set(false);
         this.isUpdating.set(false);
         // reload to reflect changes
         this.userService.loadUser();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Update failed', err);
         this.notifications.error(
           err.error?.message || 'Update failed. Please try again.'
@@ -193,7 +203,7 @@ export class ProfileComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((confirmed) => {
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.deleteAccount();
       }
@@ -205,13 +215,13 @@ export class ProfileComponent implements OnInit {
     if (!currentUser) return;
 
     this.userService.deleteUser(currentUser).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         this.notifications.success(
           "Account deleted successfully. We'll miss you!"
         );
         this.authService.logout();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Deletion failed', err);
         this.notifications.error(
           err.error?.message || 'Deletion failed. Please try again.'

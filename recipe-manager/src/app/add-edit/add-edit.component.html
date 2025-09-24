@@ -59,7 +59,7 @@
       type="file"
       id="recipePictureInput"
       (change)="onRecipeFileSelected($event)"
-      accept="image/*"
+      accept=".png,.jpg,.jpeg,.webp"
       [disabled]="isLoading()"
     />
     @if(getRecipePictureUrl()){

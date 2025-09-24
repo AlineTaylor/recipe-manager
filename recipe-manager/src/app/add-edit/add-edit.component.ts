@@ -23,6 +23,7 @@ import { NotificationService } from '../shared/utils/services/notification.servi
 import { convertUnits } from '../shared/utils/convert-units';
 import { environment } from '../../environments/environment';
 import imageCompression from 'browser-image-compression';
+import { validateImageFile } from '../shared/utils/image-validation';
 
 @Component({
   selector: 'app-add-edit',
@@ -39,7 +40,7 @@ import imageCompression from 'browser-image-compression';
 })
 export class AddEditComponent implements OnInit {
   // handler for ingredient selection from autocomplete
-  onIngredientSelected(event: any, index: number) {
+  onIngredientSelected(event: { option: { value: string } }, index: number) {
     const selectedName = event.option.value;
     const selected = this.globalIngredients().find(
       (ing) => ing.ingredient === selectedName
@@ -60,46 +61,57 @@ export class AddEditComponent implements OnInit {
 
   onRecipeFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    // check if file was selected and if it is in edit mode by checking whether recipeId already exists
-    if (input.files && input.files[0] && this.recipeId) {
-      const file = input.files[0];
-      this.isLoading.set(true);
-      // compress image before uploading
-      const options = {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 800,
-        useWebWorker: true,
-      };
-      imageCompression(file, options)
-        .then((compressedFile) => {
-          // create form data obj and append file under 'picture' key for backend via http
-          const formData = new FormData();
-          // send as nested param to satisfy Rails strong params
-          formData.append('recipe[picture]', compressedFile);
-          // send patch request via service
-          this.recipeService
-            .uploadRecipePicture(this.recipeId!, formData)
-            .subscribe({
-              next: (updated) => {
-                this.notifications.success('Recipe picture updated!');
-                this.recipePictureUrl = updated.picture_url
-                  ? `${environment.apiUrl}${updated.picture_url}`
-                  : null;
-                this.isLoading.set(false);
-              },
-              error: (err) => {
-                console.error('Recipe picture upload failed', err);
-                this.notifications.error('Failed to upload recipe picture.');
-                this.isLoading.set(false);
-              },
-            });
-        })
-        .catch((err) => {
-          console.error('Image compression failed', err);
-          this.notifications.error('Image compression failed.');
-          this.isLoading.set(false);
-        });
+    if (!(input.files && input.files[0])) return;
+
+    if (!this.recipeId) {
+      this.notifications.error(
+        'You can only add a picture after creating the recipe. Save first.'
+      );
+      input.value = '';
+      return;
     }
+
+    const file = input.files[0];
+    const validationError = validateImageFile(file, {
+      allowedMime: ['image/png', 'image/jpeg', 'image/webp'],
+      maxSizeMB: 5,
+    });
+    if (validationError) {
+      this.notifications.error(validationError);
+      input.value = '';
+      return;
+    }
+
+    this.isLoading.set(true);
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 800,
+      useWebWorker: true,
+    };
+    imageCompression(file, options)
+      .then((compressedFile) => {
+        const formData = new FormData();
+        formData.append('recipe[picture]', compressedFile);
+        this.recipeService.uploadRecipePicture(this.recipeId!, formData).subscribe({
+          next: (updated: Partial<Recipe> & { picture_url?: string | null }) => {
+            this.notifications.success('Recipe picture updated!');
+            this.recipePictureUrl = updated.picture_url
+              ? `${environment.apiUrl}${updated.picture_url}`
+              : null;
+            this.isLoading.set(false);
+          },
+          error: (err: unknown) => {
+            console.error('Recipe picture upload failed', err);
+            this.notifications.error('Failed to upload recipe picture.');
+            this.isLoading.set(false);
+          },
+        });
+      })
+      .catch((err) => {
+        console.error('Image compression failed', err);
+        this.notifications.error('Image compression failed.');
+        this.isLoading.set(false);
+      });
   }
   private route = inject(ActivatedRoute);
   private recipeService = inject(RecipeService);
@@ -151,11 +163,11 @@ export class AddEditComponent implements OnInit {
       this.isEdit.set(true);
       this.isLoading.set(true);
       this.recipeService.getRecipe(this.recipeId).subscribe({
-        next: (recipe) => {
+        next: (recipe: Recipe) => {
           this.populateForm(recipe);
           this.isLoading.set(false);
         },
-        error: (err) => {
+        error: (err: unknown) => {
           console.error('Error retrieving recipe:', err);
           this.isLoading.set(false);
           this.notifications.error('Unable to load recipe. Please try again.');
