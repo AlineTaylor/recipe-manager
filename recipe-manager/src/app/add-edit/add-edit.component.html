@@ -62,7 +62,7 @@
       accept=".png,.jpg,.jpeg,.webp"
       [disabled]="isLoading()"
     />
-    @if(getRecipePictureUrl()){
+  @if (getRecipePictureUrl()) {
     <div>
       <img
         [src]="getRecipePictureUrl()"
@@ -134,7 +134,7 @@
 
   <h2>Instructions</h2>
   <div formArrayName="instructions">
-    @for(step of instructions.controls; track step; let i = $index){
+  @for (step of instructions.controls; track step; let i = $index) {
     <div [formGroupName]="i">
       <mat-form-field appearance="fill">
         <mat-label>Step {{ i + 1 }}</mat-label>

@@ -17,7 +17,7 @@
       <!-- profile viewing -->
       <div class="profile-view">
         <div class="profile-picture-row">
-          @if(user()?.profile_picture_url){
+          @if (user()?.profile_picture_url) {
           <img
             [src]="getProfilePictureUrl()"
             alt="Profile Picture"
@@ -63,7 +63,7 @@
             accept=".png,.jpg,.jpeg,.webp"
             [disabled]="isUpdating()"
           />
-          @if(user()?.profile_picture_url){
+          @if (user()?.profile_picture_url) {
           <div>
             <img
               [src]="getProfilePictureUrl()"

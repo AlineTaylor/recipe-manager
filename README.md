@@ -28,7 +28,6 @@ This app was developed as a my first project for a full-stack coding bootcamp, f
 - **Responsive UI** with Angular Material and custom theming
 
 ---
-
 ## ✌🏻 Version 2 Updates
 
 Version 2 introduces **demo mode, improved recipe management, advanced shopping list handling, and fully functional email sharing**.  
@@ -37,55 +36,48 @@ This update also enhances the backend for demo stability, improves UX/UI interac
 ---
 
 ### Backend & Deployment
-
-- **API redeployed on SQLite (ephemeral data)** for demoing.
-  - This avoids the 1-month free Postgres limit on Render by using an intentionally restructured setup.
-- **Improved backend structure** for readability, maintainability, and separation of concerns.
+- **API redeployed on SQLite (ephemeral data)** for demoing.  
+  - This avoids the 1-month free Postgres limit on Render by using an intentionally restructured setup.  
+- **Improved backend structure** for readability, maintainability, and separation of concerns.  
   - Flattened data structure and extracted helper methods.
 
 ### Demo Mode
-
-- Added a **Demo Mode** for testing the app without account creation.
-  - Seeded demo data resets daily.
-  - Data is ephemeral, designed purely for trying out features.
+- Added a **Demo Mode** for testing the app without account creation.  
+  - Seeded demo data resets daily.  
+  - Data is ephemeral, designed purely for trying out features.  
 
 ### Recipes
-
-- **Filtering & Sorting**
-  - Recipes can be filtered by label.
-  - Sorting options: alphabetical, creation date, and cooking time.
-- **Additional Data Input**
-  - Recipes now support descriptions and image uploads.
-- **Recipe Metadata**
-  - Creation date and most recent update date are now visible in expanded recipe view.
-- **Unit Conversion**
-  - Full metric ↔ imperial conversion in both recipe view and shopping list.
-- **Global Ingredients**
-  - Ingredients are shared across users and available globally when creating new recipes.
+- **Filtering & Sorting**  
+  - Recipes can be filtered by label.  
+  - Sorting options: alphabetical, creation date, and cooking time.  
+- **Additional Data Input**  
+  - Recipes now support descriptions and image uploads.  
+- **Recipe Metadata**  
+  - Creation date and most recent update date are now visible in expanded recipe view.  
+- **Unit Conversion**  
+  - Full metric ↔ imperial conversion in both recipe view and shopping list.  
+- **Global Ingredients**  
+  - Ingredients are shared across users and available globally when creating new recipes.  
   - Enables auto-fill during recipe submission.
 
 ### Shopping List
-
-- Quantities are now **aggregated and combined** for identical ingredients.
-- Converted units respect the user’s selected measurement system.
+- Quantities are now **aggregated and combined** for identical ingredients.  
+- Converted units respect the user’s selected measurement system.  
 
 ### User Accounts
-
-- **Profile Management**
-  - Edit user data, delete accounts, and upload profile pictures.
+- **Profile Management**  
+  - Edit user data, delete accounts, and upload profile pictures.  
 
 ### Frontend & UX
-
-- **Image compression** with `browser-image-compression` for recipe and profile uploads.
-- **Improved visuals & user notifications**
-  - Added better error handling, confirmations, and snackbars for feedback.
+- **Image compression** with `browser-image-compression` for recipe and profile uploads.  
+- **Improved visuals & user notifications**  
+  - Added better error handling, confirmations, and snackbars for feedback.  
 
 ### Email Features
-
-- **SMTP via Gmail** set up for:
-  - Sharing recipes and shopping lists via email.
-  - Contact form submissions.
-- ✅ **Now fully functional!**
+- **SMTP via Gmail** set up for:  
+  - Sharing recipes and shopping lists via email.  
+  - Contact form submissions.  
+- ✅ **Now fully functional!**  
 
 ---
 
